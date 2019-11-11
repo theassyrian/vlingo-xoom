@@ -1,7 +1,6 @@
 package io.vlingo;
 
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -22,7 +21,14 @@ import java.net.URL;
 import java.util.stream.Stream;
 
 /**
- * The {@link VlingoServer} is a bootstrapper for loading and auto-configuring a vlingo/http server.
+ * The {@link VlingoServer} is a Micronaut bootstrapper for loading and auto-configuring a vlingo/http server.
+ * Vlingo/http is a reactive client-server framework built on the actor model. Micronaut is a JVM microframework
+ * for building light-weight compile-time native JVM applications. This class implements an
+ * {@link EmbeddedServer} and provides lifecycle application context management and configuration classes at
+ * startup.
+ *
+ * @author Kenny Bastani
+ * @author Graeme Rocher
  */
 @Context
 public class VlingoServer implements EmbeddedServer {
@@ -34,6 +40,14 @@ public class VlingoServer implements EmbeddedServer {
     private ApplicationConfiguration applicationConfiguration;
     private boolean isRunning = false;
 
+    /**
+     * Bootstrap the application context and configuration for starting the vlingo/http server.
+     *
+     * @param applicationContext       is the Micronaut application context.
+     * @param applicationConfiguration is the application configuration for vlingo/http.
+     * @param vlingoScene              is the vlingo/actors scene for the vlingo/http server.
+     * @param endpoints                is a stream of HTTP request/response endpoints for the vlingo/http server.
+     */
     public VlingoServer(ApplicationContext applicationContext, ApplicationConfiguration applicationConfiguration,
                         VlingoScene vlingoScene, Stream<Endpoint> endpoints) {
         // Load the world context with auto-configured settings
@@ -105,20 +119,23 @@ public class VlingoServer implements EmbeddedServer {
     public @Nonnull
     VlingoServer start() {
         if (!isRunning) {
-            if(!vlingoScene.isRunning()) {
+            if (!vlingoScene.isRunning()) {
                 vlingoScene.start();
             }
             // Start the server with auto-configured settings
             this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
-                    vlingoScene.getServerConfiguration().getPort().intValue(),
+                    vlingoScene.getServerConfiguration().getPort(),
                     new Configuration.Sizing(vlingoScene.getServerConfiguration()
                             .getProcessorsConfiguration().getPoolSize(),
                             vlingoScene.getServerConfiguration().getDispatchersConfiguration().getPoolSize(),
                             vlingoScene.getServerConfiguration().getMaxBufferPoolSize(),
                             vlingoScene.getServerConfiguration().getMaxMessageSize()),
                     new Configuration.Timing(vlingoScene.getServerConfiguration()
-                            .getActorsConfiguration().getProbeInterval(),
-                            vlingoScene.getServerConfiguration().getActorsConfiguration().getRequestMissingTimeout()));
+                            .getActorsConfiguration().getProbeInterval().longValue(),
+                            vlingoScene.getServerConfiguration()
+                                    .getActorsConfiguration().getProbeTimeout().longValue(),
+                            vlingoScene.getServerConfiguration()
+                                    .getActorsConfiguration().getRequestMissingTimeout().longValue()));
             isRunning = true;
             log.info(ServerConfiguration.getBanner());
             log.info("Started embedded Vlingo Zoom server at " + getURI().toASCIIString());
@@ -139,6 +156,7 @@ public class VlingoServer implements EmbeddedServer {
     @PreDestroy
     public void close() {
         if (isRunning) {
+            vlingoScene.close();
             server.stop();
             isRunning = false;
             log.info("Stopped embedded Vlingo Zoom server at " + getURI().toASCIIString());

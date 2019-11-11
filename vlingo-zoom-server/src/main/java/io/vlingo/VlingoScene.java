@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 
+/**
+ * The {@link VlingoScene} is a lifecycle management class for the vlingo/actors context used in vlingo/http.
+ *
+ * @author Kenny Bastani
+ */
 @Context
 public class VlingoScene implements LifeCycle<VlingoScene> {
     private static Logger log = LoggerFactory.getLogger(VlingoScene.class);
@@ -45,7 +50,7 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     @Override
     public VlingoScene start() {
         if (!isRunning) {
-            if(world == null || world.isTerminated()) {
+            if (world == null || world.isTerminated()) {
                 this.world = World.start(this.applicationConfiguration.getName(), io.vlingo.actors.Configuration.define()
                         .with(ConcurrentQueueMailboxPlugin.ConcurrentQueueMailboxPluginConfiguration.define()
                                 .defaultMailbox()
@@ -71,8 +76,6 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
             world.stage().stop();
             world.terminate();
             isRunning = false;
-        } else {
-            throw new RuntimeException("A Vlingo Zoom scene is not running in the current Micronaut context");
         }
         return this;
     }

@@ -24,9 +24,6 @@ public class Address extends BaseEntity {
     private Integer zipCode;
     private AddressType type;
 
-    /**
-     * Instantiates a new {@link Address} entity.
-     */
     public Address() {
     }
 

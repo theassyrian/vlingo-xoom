@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * The {@link Account} is the entity representation of an aggregate for a customer's account. This class is used
- * for both persistence and business logic that is exposed and controlled from the {@link AccountContext}.
+ * for both persistence and business logic that is exposed and controlled from the {@link AccountService}.
  *
  * @author Kenny Bastani
  */
@@ -26,9 +26,6 @@ public class Account extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Address> addresses = new HashSet<>();
 
-    /**
-     * Instantiates a new {@link Account} entity.
-     */
     public Account() {
     }
 

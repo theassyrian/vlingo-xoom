@@ -4,6 +4,8 @@ import io.micronaut.context.annotation.BootstrapContextCompatible;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.Primary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link ServerConfiguration} class loads application properties from the application.yml file on the
@@ -14,10 +16,11 @@ import io.micronaut.context.annotation.Primary;
 @BootstrapContextCompatible
 @Context
 public class ServerConfiguration {
-
+    private static final Logger log = LoggerFactory.getLogger(ServerConfiguration.class);
     public static final String PREFIX = "server";
 
-    private Long port;
+    private Integer port = 8080;
+    private String scheme = "http";
     private Integer maxBufferPoolSize;
     private Integer maxMessageSize;
 
@@ -33,12 +36,25 @@ public class ServerConfiguration {
         this.actorsConfiguration = actorsConfiguration;
     }
 
-    public Long getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(Long port) {
+    public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        if (!scheme.equals("http") && !scheme.equals("https")) {
+            log.warn("The configured URL scheme must be either http or https. Defaulting to http.");
+            this.scheme = "http";
+        } else {
+            this.scheme = scheme;
+        }
     }
 
     public Integer getMaxBufferPoolSize() {
@@ -62,7 +78,7 @@ public class ServerConfiguration {
     }
 
     public void setDispatchersConfiguration(DispatchersConfiguration dispatchersConfiguration) {
-        if(dispatchersConfiguration != null) {
+        if (dispatchersConfiguration != null) {
             this.dispatchersConfiguration = dispatchersConfiguration;
         }
     }
@@ -158,6 +174,7 @@ public class ServerConfiguration {
         public static final String PREFIX = "actors";
 
         private Integer probeInterval;
+        private Integer probeTimeout;
         private Integer requestMissingTimeout;
 
         public Integer getProbeInterval() {
@@ -166,6 +183,14 @@ public class ServerConfiguration {
 
         public void setProbeInterval(Integer probeInterval) {
             this.probeInterval = probeInterval;
+        }
+
+        public Integer getProbeTimeout() {
+            return probeTimeout;
+        }
+
+        public void setProbeTimeout(Integer probeTimeout) {
+            this.probeTimeout = probeTimeout;
         }
 
         public Integer getRequestMissingTimeout() {
@@ -184,7 +209,7 @@ public class ServerConfiguration {
             " ▒░▒░▒   ░▒░▒░  \\ \\ / / | | '_ \\ / _` |/ _ \\\n" +
             "     ▒░▒░▒       \\ V /| | | | | | (_| | (_) |\n" +
             "     ░▒░▒░        \\_/ |_|_|_| |_|\\__, |\\___/\n" +
-            "                                  __/ | Zoom v0.1.0\n" +
+            "                                  __/ | Xoom v0.1.0\n" +
             "                                 |___/";
 
     public static String getBanner() {

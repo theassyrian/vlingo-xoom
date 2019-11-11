@@ -8,6 +8,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
     id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
+    id 'com.bmuschko.docker-remote-api' version '3.2.3'
 }
 
 apply plugin: 'org.hibernate.orm'
@@ -72,4 +73,9 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add('-parameters')
 }
 
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
+task buildImage(type: DockerBuildImage) {
+    inputDir = projectDir
+    tag = "account-service"
+}
