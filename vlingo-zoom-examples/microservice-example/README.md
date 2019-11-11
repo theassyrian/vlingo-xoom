@@ -15,20 +15,18 @@ The following tree structure is from the project's `./src/main/java` directory. 
             └── account
                 ├── data
                 │   ├── Auditable.java
-                │   └── BaseEntity.java (Entity Persistence)
+                │   └── BaseEntity.java
                 ├── domain
-                │   ├── Account.java (Aggregate Root)
+                │   ├── Account.java (Aggregate Entity)
+                │   ├── AccountService.java (Business Logic)
                 │   ├── Address.java
-                │   ├── CreditCard.java
-                │   └── context
-                │       ├── AccountContext.java (Business Logic)
-                │       └── AccountService.java (Anti-corruption Layer)
+                │   └── CreditCard.java
                 ├── endpoint
-                │   ├── AccountEndpoint.java (Versioned Endpoint)
+                │   ├── AccountEndpoint.java (Anti-corruption Layer)
                 │   └── v1
-                │       └── AccountResource.java (v1 API)
+                │       └── AccountResource.java
                 └── repository
-                    └── AccountRepository.java (Data Management)
+                    └── AccountRepository.java (Entity Persistence)
 
 In addition to the tree structure above, you will find `./src/main/tests` for unit tests and `./src/main/java/resources/application.yml` for externalized configuration.
 
