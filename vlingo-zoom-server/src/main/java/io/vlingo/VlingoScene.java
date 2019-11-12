@@ -2,8 +2,8 @@ package io.vlingo;
 
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Context;
+import io.micronaut.runtime.ApplicationConfiguration;
 import io.vlingo.actors.World;
-import io.vlingo.config.ApplicationConfiguration;
 import io.vlingo.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,8 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     private final ServerConfiguration serverConfiguration;
     private boolean isRunning;
 
-    public VlingoScene(ApplicationConfiguration applicationConfiguration, ServerConfiguration serverConfiguration) {
+    public VlingoScene(ServerConfiguration serverConfiguration,
+                       ApplicationConfiguration applicationConfiguration) {
         this.applicationConfiguration = applicationConfiguration;
         this.serverConfiguration = serverConfiguration;
     }
@@ -49,7 +50,7 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     @Override
     public VlingoScene start() {
         if (!isRunning) {
-            this.world = World.startWithDefaults(applicationConfiguration.getName());
+            this.world = World.startWithDefaults(applicationConfiguration.getName().orElse("application"));
             log.info("New scene created: " + this.world.stage().name());
             this.isRunning = true;
         } else {

@@ -1,3 +1,5 @@
 includeBuild "vlingo-zoom-server"
 include "vlingo-zoom-examples:basic-microservice"
 include "vlingo-zoom-examples:basic-mailbox"
+include "vlingo-zoom-examples:advanced-microservice"
+include "vlingo-zoom-examples:advanced-microservice:account-service"
