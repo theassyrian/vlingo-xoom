@@ -1,6 +1,6 @@
 package io.examples.account.domain;
 
-import io.examples.account.data.BaseEntity;
+import io.examples.account.data.Identity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,11 +13,8 @@ import java.util.Set;
  * @author Kenny Bastani
  */
 @Entity
-public class Account extends BaseEntity {
+public class Account extends Identity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String accountNumber;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -47,24 +44,6 @@ public class Account extends BaseEntity {
      */
     public Account(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    /**
-     * Get the {@link Account} entity's unique identifier.
-     *
-     * @return a unique identifier for the customer's account.
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Set the {@link Account} identity for this entity.
-     *
-     * @param id is a unique identifier for the customer's account.
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /**
@@ -124,10 +103,9 @@ public class Account extends BaseEntity {
     @Override
     public String toString() {
         return "Account{" +
-                "id=" + id +
-                ", accountNumber='" + accountNumber + '\'' +
+                "accountNumber='" + accountNumber + '\'' +
                 ", creditCards=" + creditCards +
                 ", addresses=" + addresses +
-                '}';
+                "} " + super.toString();
     }
 }

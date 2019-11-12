@@ -1,6 +1,6 @@
 package io.examples.account.domain;
 
-import io.examples.account.data.BaseEntity;
+import io.examples.account.data.Identity;
 
 import javax.persistence.*;
 
@@ -11,11 +11,8 @@ import javax.persistence.*;
  * @see Account
  */
 @Entity
-public class Address extends BaseEntity {
+public class Address extends Identity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String street1;
     private String street2;
     private String state;
@@ -39,24 +36,6 @@ public class Address extends BaseEntity {
         this.country = country;
         this.type = type;
         this.zipCode = zipCode;
-    }
-
-    /**
-     * Get the {@link Address} entity's unique identifier.
-     *
-     * @return a unique identifier for the address.
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Set the {@link Address} identity for this entity.
-     *
-     * @param id is a unique identifier for the address.
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStreet1() {
@@ -118,15 +97,14 @@ public class Address extends BaseEntity {
     @Override
     public String toString() {
         return "Address{" +
-                "id=" + id +
-                ", street1='" + street1 + '\'' +
+                "street1='" + street1 + '\'' +
                 ", street2='" + street2 + '\'' +
                 ", state='" + state + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", zipCode=" + zipCode +
                 ", type=" + type +
-                '}';
+                "} " + super.toString();
     }
 
     /**

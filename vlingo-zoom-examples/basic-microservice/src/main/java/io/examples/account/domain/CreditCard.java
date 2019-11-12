@@ -1,6 +1,6 @@
 package io.examples.account.domain;
 
-import io.examples.account.data.BaseEntity;
+import io.examples.account.data.Identity;
 
 import javax.persistence.*;
 
@@ -12,11 +12,7 @@ import javax.persistence.*;
  * @see CreditCardType
  */
 @Entity
-public class CreditCard extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class CreditCard extends Identity {
 
     private String number;
     private CreditCardType type;
@@ -27,14 +23,6 @@ public class CreditCard extends BaseEntity {
     public CreditCard(String number, CreditCardType type) {
         this.number = number;
         this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNumber() {
@@ -56,10 +44,9 @@ public class CreditCard extends BaseEntity {
     @Override
     public String toString() {
         return "CreditCard{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
+                "number='" + number + '\'' +
                 ", type=" + type +
-                '}';
+                "} " + super.toString();
     }
 
     /**

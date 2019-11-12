@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * entity query model for created and updated timestamps.
  *
  * @author Kenny Bastani
- * @see BaseEntity
+ * @see Identity
  */
 public interface Auditable {
 
