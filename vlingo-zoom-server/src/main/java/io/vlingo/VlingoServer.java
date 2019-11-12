@@ -81,7 +81,7 @@ public class VlingoServer implements EmbeddedServer {
 
     @Override
     public String getScheme() {
-        return "http";
+        return vlingoScene.getServerConfiguration().getScheme();
     }
 
     @Override
@@ -124,18 +124,7 @@ public class VlingoServer implements EmbeddedServer {
             }
             // Start the server with auto-configured settings
             this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
-                    vlingoScene.getServerConfiguration().getPort(),
-                    new Configuration.Sizing(vlingoScene.getServerConfiguration()
-                            .getProcessorsConfiguration().getPoolSize(),
-                            vlingoScene.getServerConfiguration().getDispatchersConfiguration().getPoolSize(),
-                            vlingoScene.getServerConfiguration().getMaxBufferPoolSize(),
-                            vlingoScene.getServerConfiguration().getMaxMessageSize()),
-                    new Configuration.Timing(vlingoScene.getServerConfiguration()
-                            .getActorsConfiguration().getProbeInterval().longValue(),
-                            vlingoScene.getServerConfiguration()
-                                    .getActorsConfiguration().getProbeTimeout().longValue(),
-                            vlingoScene.getServerConfiguration()
-                                    .getActorsConfiguration().getRequestMissingTimeout().longValue()));
+                    vlingoScene.getServerConfiguration().getPort(), Configuration.Sizing.define(), Configuration.Timing.define());
             isRunning = true;
             log.info(ServerConfiguration.getBanner());
             log.info("Started embedded Vlingo Zoom server at " + getURI().toASCIIString());

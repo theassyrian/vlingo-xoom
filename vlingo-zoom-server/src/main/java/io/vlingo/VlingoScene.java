@@ -3,7 +3,6 @@ package io.vlingo;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Context;
 import io.vlingo.actors.World;
-import io.vlingo.actors.plugin.mailbox.concurrentqueue.ConcurrentQueueMailboxPlugin;
 import io.vlingo.config.ApplicationConfiguration;
 import io.vlingo.config.ServerConfiguration;
 import org.slf4j.Logger;
@@ -50,18 +49,8 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     @Override
     public VlingoScene start() {
         if (!isRunning) {
-            if (world == null || world.isTerminated()) {
-                this.world = World.start(this.applicationConfiguration.getName(), io.vlingo.actors.Configuration.define()
-                        .with(ConcurrentQueueMailboxPlugin.ConcurrentQueueMailboxPluginConfiguration.define()
-                                .defaultMailbox()
-                                .numberOfDispatchersFactor(this.serverConfiguration.getDispatchersConfiguration()
-                                        .getFactor())
-                                .numberOfDispatchers(this.serverConfiguration.getDispatchersConfiguration()
-                                        .getCount())
-                                .dispatcherThrottlingCount(this.serverConfiguration.getDispatchersConfiguration()
-                                        .getThrottlingCount())));
-                log.info("New scene created: " + this.world.stage().name());
-            }
+            this.world = World.startWithDefaults(applicationConfiguration.getName());
+            log.info("New scene created: " + this.world.stage().name());
             this.isRunning = true;
         } else {
             throw new RuntimeException("A Vlingo Zoom scene is already running in the current Micronaut context");

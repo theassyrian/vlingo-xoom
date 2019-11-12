@@ -2,19 +2,6 @@ application:
   name: "account-service"
 server:
   port: 8080
-  maxBufferPoolSize: 100
-  maxMessageSize: 131072
-  dispatchers:
-    factor: 1.5f
-    count: 16
-    throttlingCount: 4
-    poolSize: 100
-  processors:
-    poolSize: 100
-  actors:
-    probeInterval: 3
-    probeTimeout: 2
-    requestMissingTimeout: 100
 datasources:
   default:
     url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
