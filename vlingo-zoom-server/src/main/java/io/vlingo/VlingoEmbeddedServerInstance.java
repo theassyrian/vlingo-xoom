@@ -9,15 +9,13 @@ import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadata;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
+import io.micronaut.health.HealthStatus;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
 
 import javax.annotation.Nullable;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Implements the {@link EmbeddedServerInstance} interface for Vlingo.
@@ -25,8 +23,8 @@ import java.util.Optional;
  * @author graemerocher
  * @since 1.0
  */
-@Prototype
 @Internal
+@Prototype
 class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
 
     private final String id;
@@ -34,6 +32,7 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
     private final Environment environment;
     private final ComputeInstanceMetadataResolver computeInstanceMetadataResolver;
     private final List<ServiceInstanceMetadataContributor> metadataContributors;
+    private static String instanceId = UUID.randomUUID().toString();
 
     private ConvertibleValues<String> instanceMetadata;
 
@@ -98,5 +97,45 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
             instanceMetadata = ConvertibleValues.of(cloudMetadata);
         }
         return instanceMetadata;
+    }
+
+    @Override
+    public HealthStatus getHealthStatus() {
+        return HealthStatus.UP;
+    }
+
+    @Override
+    public Optional<String> getInstanceId() {
+        return Optional.of(instanceId);
+    }
+
+    @Override
+    public Optional<String> getZone() {
+        return vlingoServer.getApplicationConfiguration().getInstance().getZone();
+    }
+
+    @Override
+    public Optional<String> getRegion() {
+        return Optional.of("AWS-EAST-1");
+    }
+
+    @Override
+    public Optional<String> getGroup() {
+        return vlingoServer.getApplicationConfiguration().getInstance().getGroup();
+    }
+
+    @Override
+    public String getHost() {
+        return vlingoServer.getHost();
+    }
+
+    @Override
+    public boolean isSecure() {
+        return vlingoServer.getScheme().equals("https");
+    }
+
+    @Override
+    public int getPort() {
+        return vlingoServer.getPort();
     }
 }

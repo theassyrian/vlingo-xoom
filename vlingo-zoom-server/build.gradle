@@ -18,6 +18,8 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-validation:$micronautVersion"
     implementation "io.micronaut:micronaut-inject-java:$micronautVersion"
     implementation "io.micronaut:micronaut-validation:$micronautVersion"
+    implementation "io.micronaut:micronaut-management:$micronautVersion"
+    compile "io.micronaut:micronaut-http-client:$micronautVersion"
     compile "io.micronaut:micronaut-runtime:$micronautVersion"
     compile "io.vlingo:vlingo-http:$vlingoVersion"
     compile "io.vlingo:vlingo-actors:$vlingoVersion"

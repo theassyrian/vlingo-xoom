@@ -1,9 +1,7 @@
 package io.vlingo;
 
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.annotation.BootstrapContextCompatible;
-import io.micronaut.context.annotation.Context;
-import io.micronaut.context.annotation.Primary;
+import io.micronaut.discovery.event.ServiceShutdownEvent;
 import io.micronaut.discovery.event.ServiceStartedEvent;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -19,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -34,9 +33,7 @@ import java.util.stream.Stream;
  * @author Kenny Bastani
  * @author Graeme Rocher
  */
-@Primary
-@BootstrapContextCompatible
-@Context
+@Singleton
 public class VlingoServer implements EmbeddedServer {
     private static final Logger log = LoggerFactory.getLogger(VlingoServer.class);
     private Server server;
@@ -131,14 +128,16 @@ public class VlingoServer implements EmbeddedServer {
             }
             // Start the server with auto-configured settings
             this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
-                    vlingoScene.getServerConfiguration().getPort(), Configuration.Sizing.define(), Configuration.Timing.define());
-            isRunning = true;
+                    vlingoScene.getServerConfiguration().getPort(),
+                    Configuration.Sizing.defineWith(10, 10, 100, 65535 * 2),
+                    Configuration.Timing.define());
             applicationContext.publishEvent(new ServerStartupEvent(this));
             vlingoScene.getApplicationConfiguration().getName().ifPresent(id -> {
                 this.serviceInstance = applicationContext
                         .createBean(VlingoEmbeddedServerInstance.class, id, this);
                 applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
             });
+            isRunning = true;
             log.info(ServerConfiguration.getBanner());
             log.info("Started embedded Vlingo Zoom server at " + getURI().toASCIIString());
         } else {
@@ -148,14 +147,20 @@ public class VlingoServer implements EmbeddedServer {
     }
 
     @Override
-    public @Nonnull
+    public synchronized @Nonnull
     VlingoServer stop() {
-        applicationContext.stop();
+        //applicationContext.publishEvent(new ServerShutdownEvent(this));
+        if (serviceInstance != null) {
+            applicationContext.publishEvent(new ServiceShutdownEvent(serviceInstance));
+        }
+        if (applicationContext.isRunning()) {
+            applicationContext.stop();
+        }
         return this;
     }
 
-    @Override
     @PreDestroy
+    @Override
     public void close() {
         if (isRunning) {
             vlingoScene.close();
@@ -167,4 +172,8 @@ public class VlingoServer implements EmbeddedServer {
         }
     }
 
+    @Override
+    public boolean isKeepAlive() {
+        return false;
+    }
 }

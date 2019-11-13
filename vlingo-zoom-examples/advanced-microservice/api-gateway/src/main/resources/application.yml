@@ -1,8 +1,6 @@
 micronaut:
   application:
     name: "account-service"
-    instance:
-      id: ${random.shortuuid}
 ---
 server:
   port: 8080
@@ -26,10 +24,6 @@ eureka:
   client:
     registration:
       enabled: true
-      retry-count: 5
-      fail-fast: true
-      leaseInfo:
-        durationInSecs: 1
     defaultZone: "${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}"
 ribbon:
   max-auto-retries: 2
