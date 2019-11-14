@@ -17,6 +17,29 @@ This example has three applications, as shown in the diagram.
   
 The `discovery-service` and `api-gateway` applications are platform services used to scale and expose functionality of your core domain applications. The domain application in this example would be `account-service`. It's important to note that the `account-service` does not use Spring (microframework) or Netty (embedded servlet container). The `account-service` implements all of the functionality of a microservice using Vlingo (embedded server) and Micronaut (compile-time microframework).
 
+## Running the Example
+
+To compile this example, clone this repository and execute the following command in your terminal from the project root.
+
+    $ ./gradlew clean assemble docker
+
+This command will build the example projects and corresponding docker images. You must have docker running on your development machine. After the build is completed, run the following commands.
+
+    $ cd ./vlingo-xoom-examples/advanced-microservice
+    $ docker-compose up -d
+    $ docker-compose scale account-service=3
+
+The commands above will spin up the applications listed in the architecture section of this guide and scale the `account-service` to three nodes. You can view the log output by running the following command.
+
+    $ docker-compose logs -f
+
+To verify that the applications routing is being load-balanced between multiple nodes of the `account-service`, you can run the following curl command to communicate with the `account-service` through the `api-gateway`.
+
+    $ while true; do curl http://localhost:9000/account-service/port; echo "\n"; sleep .1; done
+
+The command will run a loop that outputs a request to the `api-proxy` that will route to one of the running nodes of the `account-service` and return the node's port per request. This demonstrates which requests are being routed to which of the running `account-service` nodes.
+
+
 ## Capabilities
 
 This microservice example will demonstrate a basic set of capabilities for operating cloud-native microservices. The `vlingo-xoom` project is meant to provide you with the simplest developer abstractions for building high-performance networked applications. 
@@ -58,28 +81,6 @@ This microservice example demonstrates the following capabilities that are enabl
 Within this application you'll find the recommended implementation patterns for creating a basic microservice for managing a bounded context for a user's account. This is the first tier of multiple examples that will add additional capabilities from vlingo/platform, in addition to DDD patterns and framework abstractions.
 
 This microservice is also an example of an anemic domain model, that is, it only covers basic CRUD operations on `Account` entities. This was done intentionally to magnify the capabilities listed in the previous section with minimal code. The examples that follow this one will iterate from this anemic domain model and provide a rich command-driven interface.
-
-## Running the Example
-
-To compile this example, clone this repository and execute the following command in your terminal from the project root.
-
-    $ ./gradlew clean assemble docker
-
-This command will build the example projects and corresponding docker images. You must have docker running on your development machine. After the build is completed, run the following commands.
-
-    $ cd ./vlingo-xoom-examples/advanced-microservice
-    $ docker-compose up -d
-    $ docker-compose scale account-service=3
-
-The commands above will spin up the applications listed in the architecture section of this guide and scale the `account-service` to three nodes. You can view the log output by running the following command.
-
-    $ docker-compose logs -f
-
-To verify that the applications routing is being load-balanced between multiple nodes of the `account-service`, you can run the following curl command to communicate with the `account-service` through the `api-gateway`.
-
-    $ while true; do curl http://localhost:9000/account-service/port; echo "\n"; sleep .1; done
-
-The command will run a loop that outputs a request to the `api-proxy` that will route to one of the running nodes of the `account-service` and return the node's port per request. This demonstrates which requests are being routed to which of the running `account-service` nodes.
 
 ## Client Usage Examples
  
