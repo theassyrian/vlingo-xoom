@@ -1,12 +1,12 @@
 {
     "package": {
-        "name": "vlingo-zoom",
+        "name": "vlingo-xoom",
         "repo": "vlingo-platform-java",
         "subject": "vlingo",
         "desc": "The vlingo/PLATFORM adoption accelerator for Java and other JVM languages.",
-        "website_url": "https://github.com/vlingo/vlingo-zoom",
-        "issue_tracker_url": "https://github.com/vlingo/vlingo-zoom/issues",
-        "vcs_url": "https://github.com/vlingo/vlingo-zoom.git",
+        "website_url": "https://github.com/vlingo/vlingo-xoom",
+        "issue_tracker_url": "https://github.com/vlingo/vlingo-xoom/issues",
+        "vcs_url": "https://github.com/vlingo/vlingo-xoom.git",
         "licenses": ["MPL-2.0"],
         "public_download_numbers": true,
         "public_stats": true
@@ -20,14 +20,14 @@
     "files": [
         {
             "includePattern": "build/libs/(.*).jar",
-            "uploadPattern": "/io/vlingo/vlingo-zoom-server/0.1.1-SNAPSHOT/$1.jar",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/0.1.1-SNAPSHOT/$1.jar",
             "matrixParams": {
                 "override": 1
             }
         },
         {
             "includePattern": "build/poms/pom(.*).xml",
-            "uploadPattern": "/io/vlingo/vlingo-zoom-server/0.1.1-SNAPSHOT/vlingo-zoom-server-0.1.1-SNAPSHOT.pom",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/0.1.1-SNAPSHOT/vlingo-xoom-server-0.1.1-SNAPSHOT.pom",
             "matrixParams": {
                 "override": 1
             }
