@@ -26,11 +26,8 @@ eureka:
   client:
     registration:
       enabled: true
-      retry-count: 5
-      fail-fast: true
+      fail-fast: false
       leaseInfo:
-        durationInSecs: 1
+        durationInSecs: 10
     defaultZone: "${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}"
-ribbon:
-  max-auto-retries: 2
 

@@ -1,17 +1,24 @@
 buildscript {
+    repositories {
+        mavenCentral()
+    }
     dependencies {
         classpath "org.hibernate:hibernate-gradle-plugin:5.4.3.Final"
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
     }
 }
 
 plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
-    id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
-    id 'com.bmuschko.docker-remote-api' version '3.2.3'
 }
 
+apply plugin: 'java'
 apply plugin: 'org.hibernate.orm'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 group = 'io.examples'
 version = '1.0.0-SNAPSHOT'
@@ -44,7 +51,6 @@ dependencies {
 
 
     compile 'io.micronaut.data:micronaut-data-hibernate-jpa:1.0.0.M4'
-    compile "io.micronaut.configuration:micronaut-netflix-ribbon"
 
     runtime "io.micronaut.configuration:micronaut-jdbc-hikari"
     runtime "ch.qos.logback:logback-classic:1.2.3"
@@ -62,6 +68,7 @@ dependencies {
 test.classpath += configurations.developmentOnly
 
 mainClassName = "io.examples.AccountApplication"
+
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
@@ -79,9 +86,10 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add('-parameters')
 }
 
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+apply plugin: 'com.palantir.docker'
 
-task buildImage(type: DockerBuildImage) {
-    inputDir = projectDir
-    tag = "account-service"
+docker {
+    copySpec.from(tasks.shadowJar.outputs).into("dependency")
+    dockerfile project.file('Dockerfile')
+    name "vlingo/${property("projectName")}"
 }
