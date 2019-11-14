@@ -47,15 +47,15 @@ This microservice example demonstrates the following capabilities that are enabl
 - Dependency Injection and Compile-time Annotations
 - Externalized Twelve-factor Configuration ([12factor.net](https://12factor.net/config))
 - Repository-based Persistence with JPA/Hibernate
-- Embedded Client-Server HTTP Framework with Vlingo xoom Server
+- Embedded Client-Server HTTP Framework with Vlingo Xoom Server
 - Embedded In-Memory Database with H2
 - Unit Testing with Micronaut's HTTP Client
 
-### Vlingo xoom
+### Vlingo Xoom
  
-Vlingo provides a high-performance reactive toolkit for the JVM that is based on the actor model and Domain-Driven Design. Vlingo xoom brings together the multiple core libraries contained in [vlingo/platform](https://docs.vlingo.io/) for different types of application use cases, such as building reactive microservices. Vlingo focuses on providing an application framework, toolkit, and methodology that enables teams to successfully practice and benefit from DDD.
+Vlingo provides a high-performance reactive toolkit for the JVM that is based on the actor model and Domain-Driven Design. Vlingo Xoom brings together the multiple core libraries contained in [vlingo/platform](https://docs.vlingo.io/) for different types of application use cases, such as building reactive microservices. Vlingo focuses on providing an application framework, toolkit, and methodology that enables teams to successfully practice and benefit from DDD.
 
-#### Example Capabilities (Vlingo xoom)
+#### Example Capabilities (Vlingo Xoom)
 
 This microservice example demonstrates the following capabilities that are enabled by [vlingo/platform](http://docs.vlingo.io).
 
@@ -113,9 +113,9 @@ If everything was a success, you should see the following terminal output.
      ▒░▒░▒   ░▒░▒░  \ \ / / | | '_ \ / _` |/ _ \
          ▒░▒░▒       \ V /| | | | | | (_| | (_) |
          ░▒░▒░        \_/ |_|_|_| |_|\__, |\___/
-                                      __/ | xoom v0.1.0
+                                      __/ | Xoom v0.1.0
                                      |___/
-    2019-11-06 09:46:44 [main] INFO  io.vlingo.VlingoServer - Started embedded Vlingo xoom server at http://localhost:8080
+    2019-11-06 09:46:44 [main] INFO  io.vlingo.VlingoServer - Started embedded Vlingo Xoom server at http://localhost:8080
     2019-11-06 09:46:44 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1846ms. Server Running: http://localhost:8080
  
 ## Client Usage Examples

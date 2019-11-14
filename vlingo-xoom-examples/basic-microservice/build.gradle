@@ -1,17 +1,20 @@
 buildscript {
+    repositories {
+        mavenCentral()
+    }
     dependencies {
         classpath "org.hibernate:hibernate-gradle-plugin:5.4.3.Final"
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
     }
 }
 
 plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
-    id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
-    id 'com.bmuschko.docker-remote-api' version '3.2.3'
 }
 
 apply plugin: 'org.hibernate.orm'
+apply plugin: 'application'
 
 group = 'io.examples'
 version = '1.0.0-SNAPSHOT'
@@ -56,6 +59,7 @@ dependencies {
 test.classpath += configurations.developmentOnly
 
 mainClassName = "io.examples.AccountApplication"
+applicationName = "$projectName"
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
@@ -73,9 +77,11 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add('-parameters')
 }
 
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+apply plugin: 'com.palantir.docker'
 
-task buildImage(type: DockerBuildImage) {
-    inputDir = projectDir
-    tag = "account-service"
+docker {
+    dependsOn shadowJar
+    copySpec.from(tasks.shadowJar.outputs).into("dependency")
+    dockerfile project.file('Dockerfile')
+    name "vlingo/${property("projectName")}"
 }

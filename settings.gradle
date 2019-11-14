@@ -1,3 +1,4 @@
+rootProject.name="vlingo-xoom-parent"
 includeBuild "vlingo-xoom-server"
 include "vlingo-xoom-examples:basic-microservice"
 include "vlingo-xoom-examples:basic-mailbox"

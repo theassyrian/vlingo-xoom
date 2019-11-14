@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.BootstrapContextCompatible;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.Primary;
+import io.micronaut.core.io.socket.SocketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +21,10 @@ public class ServerConfiguration {
     public static final String PREFIX = "server";
 
     private Integer port = 8080;
+    private String host;
     private String scheme = "http";
-    private Integer maxBufferPoolSize;
-    private Integer maxMessageSize;
+    private Integer maxBufferPoolSize = 100;
+    private Integer maxMessageSize = 65535 * 2;
 
     private DispatchersConfiguration dispatchersConfiguration;
     private ProcessorsConfiguration processorsConfiguration;
@@ -37,6 +39,9 @@ public class ServerConfiguration {
     }
 
     public Integer getPort() {
+        if (port == -1) {
+            port = SocketUtils.findAvailableTcpPort();
+        }
         return port;
     }
 
@@ -55,6 +60,14 @@ public class ServerConfiguration {
         } else {
             this.scheme = scheme;
         }
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public Integer getMaxBufferPoolSize() {
@@ -110,10 +123,10 @@ public class ServerConfiguration {
 
         public static final String PREFIX = "dispatchers";
 
-        private Float factor;
-        private Integer count;
-        private Integer throttlingCount;
-        private Integer poolSize;
+        private Float factor = 1.5f;
+        private Integer count = 16;
+        private Integer throttlingCount = 16;
+        private Integer poolSize = 10;
 
         public Float getFactor() {
             return factor;
@@ -155,7 +168,7 @@ public class ServerConfiguration {
 
         public static final String PREFIX = "processors";
 
-        private Integer poolSize;
+        private Integer poolSize = 10;
 
         public Integer getPoolSize() {
             return poolSize;
@@ -173,9 +186,9 @@ public class ServerConfiguration {
 
         public static final String PREFIX = "actors";
 
-        private Integer probeInterval;
-        private Integer probeTimeout;
-        private Integer requestMissingTimeout;
+        private Integer probeInterval = 2;
+        private Integer probeTimeout = 3;
+        private Integer requestMissingTimeout = 100;
 
         public Integer getProbeInterval() {
             return probeInterval;

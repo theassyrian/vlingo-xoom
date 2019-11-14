@@ -54,7 +54,7 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
             log.info("New scene created: " + this.world.stage().name());
             this.isRunning = true;
         } else {
-            throw new RuntimeException("A Vlingo xoom scene is already running in the current Micronaut context");
+            throw new RuntimeException("A Vlingo Xoom scene is already running in the current Micronaut context");
         }
         return this;
     }

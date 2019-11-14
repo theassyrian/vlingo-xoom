@@ -1,3 +1,0 @@
-rootProject.name="vlingo-xoom-parent"
-include "vlingo-xoom-server"
-include "basic-microservice"

@@ -1,6 +1,8 @@
 package io.vlingo;
 
 import io.micronaut.context.ApplicationContext;
+import io.micronaut.context.env.Environment;
+import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.discovery.event.ServiceShutdownEvent;
 import io.micronaut.discovery.event.ServiceStartedEvent;
 import io.micronaut.runtime.ApplicationConfiguration;
@@ -21,6 +23,7 @@ import javax.inject.Singleton;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -80,7 +83,9 @@ public class VlingoServer implements EmbeddedServer {
 
     @Override
     public String getHost() {
-        return "localhost";
+        return Optional.ofNullable(vlingoScene.getServerConfiguration().getHost())
+                .orElseGet(() -> Optional.ofNullable(System.getenv(Environment.HOSTNAME))
+                        .orElse(SocketUtils.LOCALHOST));
     }
 
     @Override
@@ -129,7 +134,8 @@ public class VlingoServer implements EmbeddedServer {
             // Start the server with auto-configured settings
             this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
                     vlingoScene.getServerConfiguration().getPort(),
-                    Configuration.Sizing.defineWith(10, 10, 100, 65535 * 2),
+                    Configuration.Sizing.defineWith(10, 10, 100,
+                            65535 * 2),
                     Configuration.Timing.define());
             applicationContext.publishEvent(new ServerStartupEvent(this));
             vlingoScene.getApplicationConfiguration().getName().ifPresent(id -> {
@@ -139,9 +145,9 @@ public class VlingoServer implements EmbeddedServer {
             });
             isRunning = true;
             log.info(ServerConfiguration.getBanner());
-            log.info("Started embedded Vlingo xoom server at " + getURI().toASCIIString());
+            log.info("Started embedded Vlingo Xoom server at " + getURI().toASCIIString());
         } else {
-            throw new RuntimeException("A Vlingo xoom server is already running in the current Micronaut context");
+            throw new RuntimeException("A Vlingo Xoom server is already running in the current Micronaut context");
         }
         return this;
     }
@@ -166,9 +172,9 @@ public class VlingoServer implements EmbeddedServer {
             vlingoScene.close();
             server.stop();
             isRunning = false;
-            log.info("Stopped embedded Vlingo xoom server at " + getURI().toASCIIString());
+            log.info("Stopped embedded Vlingo Xoom server at " + getURI().toASCIIString());
         } else {
-            throw new RuntimeException("A Vlingo xoom server is not running in the current Micronaut context");
+            throw new RuntimeException("A Vlingo Xoom server is not running in the current Micronaut context");
         }
     }
 
