@@ -4,6 +4,8 @@
 
 Vlingo Xoom provides a JVM microframework based on Micronaut and vlingo/PLATFORM for building high-performance reactive microservices.
 
+![](https://imgur.com/4PuwXjG.png)
+
 ### Bintray
 
 ```xml
