@@ -10,7 +10,12 @@ Xoom is currently in incubation mode. This repository is considered experimental
 
 - [Basic Microservice Example](https://github.com/vlingo/vlingo-xoom/tree/master/vlingo-xoom-examples/basic-microservice)
 - [Advanced Microservice Example](https://github.com/vlingo/vlingo-xoom/tree/master/vlingo-xoom-examples/advanced-microservice)
-- Domain-driven Microservices (Coming soon)
+- Domain-driven Microservices (Coming sooner)
+- Event Sourcing Microservices (Coming sooner)
+- Event Router Registry (Coming later)
+- Schema Registry (Coming later)
+- Monolith to Microservices (Coming later)
+- Microservice Recomposition (Coming later)
 
 ### Bintray
 
