@@ -6,6 +6,12 @@ Vlingo Xoom provides a JVM microframework based on Micronaut and vlingo/PLATFORM
 
 ![](https://imgur.com/YFVeIz1.png)
 
+Xoom is currently in incubation mode. This repository is considered experimental and constantly evolving. To build a Xoom microservice, check out the available examples.
+
+- [Basic Microservice Example](https://github.com/vlingo/vlingo-xoom/tree/master/vlingo-xoom-examples/basic-microservice)
+- [Advanced Microservice Example](https://github.com/vlingo/vlingo-xoom/tree/master/vlingo-xoom-examples/advanced-microservice)
+- Domain-driven Microservices (Coming soon)
+
 ### Bintray
 
 ```xml
