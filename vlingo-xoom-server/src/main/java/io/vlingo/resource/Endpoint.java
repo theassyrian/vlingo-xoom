@@ -13,7 +13,6 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceBuilder;
 
 import java.util.Collections;
-import java.util.function.Supplier;
 
 import static io.vlingo.common.Completes.withSuccess;
 import static io.vlingo.http.Response.Status.BadRequest;
@@ -27,7 +26,6 @@ import static io.vlingo.http.Response.of;
  * An {@link Endpoint} is a versioned definition of a set of request/response handlers that forms an anti-corruption
  * layer between HTTP API consumers and your internal services. An endpoint can be used to route requests to different
  * versions of your internal services.
- *
  */
 public interface Endpoint {
     String getName();
@@ -42,22 +40,21 @@ public interface Endpoint {
         return ResourceBuilder.resource(getName() + " Endpoint Resource v" + getVersion(), getHandlers());
     }
 
-    default <T> Completes<Response> getResponse(Response.Status status, Supplier<T> handle) {
-        String body = serialize(handle);
-        Header.Headers<ResponseHeader> headers = Header.Headers.of(getContentTypeResponseHeader());
-        Response response = of(status, headers, body);
-        return withSuccess(response);
+    default <T> Completes<Response> response(Response.Status status, Completes<T> handle) {
+        return handle
+                .andThen(this::serialize)
+                .andThen((body) -> of(status, Header.Headers.of(getContentTypeResponseHeader()), body));
     }
 
-    default Completes<Response> getResponse(Response.Status status, Procedure handle) {
-        handle.invoke();
-        Header.Headers<ResponseHeader> headers = Header.Headers.of(getContentTypeResponseHeader());
-        Response response = of(status, headers);
-        return withSuccess(response);
+    default Completes<Response> emptyResponse(Response.Status status, Completes<Procedure> handle) {
+        return handle.andThen(procedure -> {
+            procedure.invoke();
+            return of(status, Header.Headers.of(getContentTypeResponseHeader()));
+        });
     }
 
     default Response getErrorResponse(Throwable error) {
-        return getResponse(BadRequest, () -> new ErrorInfo(error)).outcome();
+        return response(BadRequest, withSuccess(new ErrorInfo(error))).outcome();
     }
 
     default ResponseHeader getContentTypeResponseHeader() {
@@ -70,11 +67,11 @@ public interface Endpoint {
         return "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     }
 
-    default <T> String serialize(Supplier<T> handle) {
+    default String serialize(Object body) {
         return setPrettyPrinting(new GsonBuilder())
                 .setDateFormat(getSerializedDateFormat())
                 .create()
-                .toJson(handle.get());
+                .toJson(body);
     }
 
     default GsonBuilder setPrettyPrinting(GsonBuilder gsonBuilder) {

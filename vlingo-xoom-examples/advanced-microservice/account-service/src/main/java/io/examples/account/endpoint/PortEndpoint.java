@@ -46,6 +46,6 @@ public class PortEndpoint implements Endpoint {
     }
 
     private Completes<Response> getPort() {
-        return getResponse(Ok, serverConfiguration::getPort);
+        return response(Ok, Completes.withSuccess(serverConfiguration.getPort()));
     }
 }

@@ -9,6 +9,7 @@ import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.resource.Endpoint;
 
+import static io.vlingo.common.Completes.withSuccess;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 
@@ -78,26 +79,26 @@ public class AccountResource implements AccountEndpoint {
 
     @Override
     public Completes<Response> findAllAccounts() {
-        return getResponse(Ok, accountService::getAccounts);
+        return response(Ok, accountService.getAccounts());
     }
 
     @Override
     public Completes<Response> findAccountById(Long id) {
-        return getResponse(Ok, () -> accountService.getAccount(id));
+        return response(Ok, accountService.getAccount(id));
     }
 
     @Override
     public Completes<Response> createAccount(Account account) {
-        return getResponse(Created, () -> accountService.createAccount(account));
+        return response(Created, accountService.createAccount(account));
     }
 
     @Override
     public Completes<Response> updateAccount(Long id, Account account) {
-        return getResponse(Ok, () -> accountService.updateAccount(id, account));
+        return response(Ok, accountService.updateAccount(id, account));
     }
 
     @Override
     public Completes<Response> deleteAccount(Long id) {
-        return getResponse(NoContent, () -> accountService.deleteAccount(id));
+        return emptyResponse(NoContent, withSuccess(() -> accountService.deleteAccount(id)));
     }
 }

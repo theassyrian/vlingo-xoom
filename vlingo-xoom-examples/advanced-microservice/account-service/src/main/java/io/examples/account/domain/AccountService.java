@@ -4,6 +4,7 @@ import io.examples.account.endpoint.AccountEndpoint;
 import io.examples.account.endpoint.v1.AccountResource;
 import io.examples.account.repository.AccountRepository;
 import io.reactivex.Observable;
+import io.vlingo.common.Completes;
 
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
@@ -31,8 +32,9 @@ public class AccountService {
      *
      * @return a list of {@link Account} entities.
      */
-    public List<Account> getAccounts() {
-        return Observable.fromIterable(accountRepository.findAll()).toList().blockingGet();
+    public Completes<List<Account>> getAccounts() {
+        return Completes.withSuccess(accountRepository.findAll())
+                .andThen(accounts -> Observable.fromIterable(accounts).toList().blockingGet());
     }
 
     /**
@@ -41,8 +43,8 @@ public class AccountService {
      * @param id is the unique identifier of the {@link Account}.
      * @return the {@link Account} or throw a {@link RuntimeException} if one does not exist.
      */
-    public Account getAccount(Long id) {
-        return accountRepository.findById(id).orElseThrow(() ->
+    public Completes<Account> getAccount(Long id) {
+        return accountRepository.findById(id).map(Completes::withSuccess).orElseThrow(() ->
                 new RuntimeException("Account with id[" + id + "] does not exist"));
     }
 
@@ -52,8 +54,8 @@ public class AccountService {
      * @param account is the {@link Account} to create.
      * @return the created {@link Account}.
      */
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public Completes<Account> createAccount(Account account) {
+        return Completes.withSuccess(accountRepository.save(account));
     }
 
     /**
@@ -63,7 +65,7 @@ public class AccountService {
      * @param account is the {@link Account} entity containing the fields to update.
      * @return the updated {@link Account}.
      */
-    public Account updateAccount(@NotNull Long id, @NotNull Account account) {
+    public Completes<Account> updateAccount(@NotNull Long id, @NotNull Account account) {
         accountRepository.update(id, account.getAccountNumber());
         return getAccount(id);
     }

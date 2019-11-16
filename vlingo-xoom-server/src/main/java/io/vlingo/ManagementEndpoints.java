@@ -7,6 +7,7 @@ import io.micronaut.management.endpoint.health.HealthEndpoint;
 import io.micronaut.management.endpoint.loggers.LoggersEndpoint;
 import io.micronaut.management.endpoint.routes.RoutesEndpoint;
 import io.vlingo.annotations.Resource;
+import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.resource.Endpoint;
 
@@ -24,24 +25,24 @@ public class ManagementEndpoints implements Endpoint {
         this.applicationContext = applicationContext;
     }
 
-    public BeansEndpoint getBeansEndpoint() {
-        return applicationContext.getBean(BeansEndpoint.class);
+    public Completes<BeansEndpoint> getBeansEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(BeansEndpoint.class));
     }
 
-    public HealthEndpoint getHealthEndpoint() {
-        return applicationContext.getBean(HealthEndpoint.class);
+    public Completes<HealthEndpoint> getHealthEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(HealthEndpoint.class));
     }
 
-    public RoutesEndpoint getRoutesEndpoint() {
-        return applicationContext.getBean(RoutesEndpoint.class);
+    public Completes<RoutesEndpoint> getRoutesEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(RoutesEndpoint.class));
     }
 
-    public EnvironmentEndpoint getEnvironmentEndpoint() {
-        return applicationContext.getBean(EnvironmentEndpoint.class);
+    public Completes<EnvironmentEndpoint> getEnvironmentEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(EnvironmentEndpoint.class));
     }
 
-    public LoggersEndpoint getLoggersEndpoint() {
-        return applicationContext.getBean(LoggersEndpoint.class);
+    public Completes<LoggersEndpoint> getLoggersEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(LoggersEndpoint.class));
     }
 
     @Override
@@ -57,20 +58,20 @@ public class ManagementEndpoints implements Endpoint {
     @Override
     public RequestHandler[] getHandlers() {
         return new RequestHandler[]{
-                get("/health")
-                        .handle(() -> getResponse(Ok, () -> getHealthEndpoint().getHealth(null).blockingGet()))
+                get("/health").handle(() -> response(Ok, getHealthEndpoint()
+                        .andThen(healthEndpoint -> healthEndpoint.getHealth(null).blockingGet())))
                         .onError(this::getErrorResponse),
-                get("/beans")
-                        .handle(() -> getResponse(Ok, () -> getBeansEndpoint().getBeans().blockingGet()))
+                get("/beans").handle(() -> response(Ok, getBeansEndpoint()
+                        .andThen(beansEndpoint -> beansEndpoint.getBeans().blockingGet())))
                         .onError(this::getErrorResponse),
-                get("/routes")
-                        .handle(() -> getResponse(Ok, () -> getRoutesEndpoint().getRoutes().blockingGet()))
+                get("/routes").handle(() -> response(Ok, getRoutesEndpoint()
+                        .andThen(routesEndpoint -> routesEndpoint.getRoutes().blockingGet())))
                         .onError(this::getErrorResponse),
-                get("/env")
-                        .handle(() -> getResponse(Ok, () -> getEnvironmentEndpoint().getEnvironmentInfo()))
+                get("/env").handle(() -> response(Ok, getEnvironmentEndpoint()
+                        .andThen(EnvironmentEndpoint::getEnvironmentInfo)))
                         .onError(this::getErrorResponse),
-                get("/loggers")
-                        .handle(() -> getResponse(Ok, () -> getLoggersEndpoint().loggers().blockingGet()))
+                get("/loggers").handle(() -> response(Ok, getLoggersEndpoint()
+                        .andThen(loggersEndpoint -> loggersEndpoint.loggers().blockingGet())))
                         .onError(this::getErrorResponse)
 
         };
