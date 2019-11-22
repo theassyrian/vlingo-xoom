@@ -134,7 +134,7 @@ public class VlingoServer implements EmbeddedServer {
             // Start the server with auto-configured settings
             this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
                     vlingoScene.getServerConfiguration().getPort(),
-                    Configuration.Sizing.defineWith(10, 10, 100,
+                    Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
                     Configuration.Timing.define());
             applicationContext.publishEvent(new ServerStartupEvent(this));
