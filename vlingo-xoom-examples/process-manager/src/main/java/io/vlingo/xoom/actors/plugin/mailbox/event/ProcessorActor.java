@@ -9,6 +9,11 @@ import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.State;
 
 import java.util.List;
 
+/**
+ * The {@link ProcessorActor} is the default {@link Actor} implementation for a {@link Processor}.
+ *
+ * @author Kenny Bastani
+ */
 public abstract class ProcessorActor extends Actor implements Processor {
 
     private final List<State> states;

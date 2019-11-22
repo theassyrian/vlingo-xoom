@@ -8,6 +8,8 @@ import java.util.function.Function;
  * A {@link StateTransition} is a resource specification that defines an input state and output state, while providing
  * a validation error if an input state cannot progress to an output state.
  *
+ * @param <T> is the source state
+ * @param <R> is the target state
  * @author Kenny Bastani
  */
 public class StateTransition<T extends State, R extends State> implements Transition {

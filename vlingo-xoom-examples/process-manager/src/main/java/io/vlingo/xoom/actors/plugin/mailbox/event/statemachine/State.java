@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 
 /**
  * A {@link State} is an interface definition that should describe a collection of input states and output states.
+ *
+ * @author Kenny Bastani
  */
 public abstract class State<T> {
 

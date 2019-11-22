@@ -1,6 +1,5 @@
 package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
 
-import io.vlingo.actors.Message;
 import io.vlingo.common.Completes;
 
 import java.util.List;
@@ -30,7 +29,7 @@ import java.util.List;
  * incremented.
  * </p>
  *
- * @param <T> is the generic type specification that extends {@link Message}.
+ * @author Kenny Bastani
  */
 public interface Kernel {
 

@@ -5,6 +5,13 @@ import io.vlingo.actors.Message;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * The {@link ExchangeMailboxAdapter} provides storage support for underlying stores that support the exchange
+ * message protocol.
+ *
+ * @param <T> is a generic type that extends {@link Message}.
+ * @author Kenny Bastani
+ */
 public class ExchangeMailboxAdapter<T extends Message> extends EventMailboxStateAdapter<T> {
 
     private final String MAILBOX_NAME = "exchangeMailbox";

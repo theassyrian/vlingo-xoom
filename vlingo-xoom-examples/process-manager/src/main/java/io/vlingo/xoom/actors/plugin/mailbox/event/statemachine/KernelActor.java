@@ -2,6 +2,7 @@ package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.common.Completes;
+import io.vlingo.xoom.actors.plugin.mailbox.event.Processor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The default {@link Kernel} {@link Actor} implementation.
+ *
+ * @author Kenny Bastani
+ * @see Actor
+ * @see Kernel
+ * @see Processor
+ */
 public class KernelActor extends Actor implements Kernel {
     private List<State> stateList = new ArrayList<>();
 

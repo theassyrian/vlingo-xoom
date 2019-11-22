@@ -2,6 +2,14 @@ package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
 
 import io.vlingo.common.Completes;
 
+/**
+ * A {@link TransitionHandler} subscribes to a {@link StateTransition} and is used to perform a transaction in response
+ * to a {@link StateTransition}.
+ *
+ * @param <T> is the source state
+ * @param <R> is the target state
+ * @author Kenny Bastani
+ */
 public class TransitionHandler<T extends State, R extends State> {
 
     private String path;

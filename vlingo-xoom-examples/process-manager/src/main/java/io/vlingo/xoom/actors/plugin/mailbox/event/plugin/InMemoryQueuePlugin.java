@@ -8,8 +8,15 @@ import io.vlingo.actors.plugin.AbstractPlugin;
 import io.vlingo.actors.plugin.Plugin;
 import io.vlingo.actors.plugin.PluginConfiguration;
 import io.vlingo.actors.plugin.PluginProperties;
+import io.vlingo.xoom.actors.plugin.mailbox.event.adapter.EventMailboxStateAdapter;
 import io.vlingo.xoom.actors.plugin.mailbox.event.adapter.InMemoryMailboxAdapter;
 
+/**
+ * The {@link InMemoryQueuePlugin} is a mailbox queue that configures an in-memory queue of messages for the
+ * {@link EventMailboxStateAdapter}.
+ *
+ * @author Kenny Bastani
+ */
 public class InMemoryQueuePlugin extends AbstractPlugin implements EventMailboxStatePlugin {
 
     private final InMemoryQueuePlugin.InMemoryQueuePluginConfiguration configuration;

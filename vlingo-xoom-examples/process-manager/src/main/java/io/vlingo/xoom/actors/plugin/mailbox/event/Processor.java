@@ -11,14 +11,18 @@ import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
  * address-referencable functions that are invoked through a protocol definition. Processors manage a registry of
  * handlers that pipe together other processor implementations. Processor dispatchers are discoverable through a
  * processor registry. A processor registry can advertise dispatcher functions across the boundary of the network.
+ * </p>
+ *
  * <p>
  * Dispatchers are a collection of contracts made between a producing processor subscribing processors. Subscribing
  * processors negotiate a lease on a remote dispatcher. Dispatchers are responsible for pushing events to
  * subscribers. An application with a processor implementation advertises the health of a handler by its port
  * definition and URI. Handlers provide health statuses to a service registry to adjust backpressure on the producer.
- * <p>
- * Processors connect handlers to a kernel definition.</p>
+ * </p>
  *
+ * <p>
+ * Processors connect handlers to a kernel definition.
+ * </p>
  *
  * <p>
  * When state mutations are applied to the underlying store, the storage mechanism must store the message in the same
@@ -63,6 +67,8 @@ import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
  * <p>
  * Backpressure can be applied by consumers as a part of the subscription to a producer using server-sent events.
  * </p>
+ *
+ * @author Kenny Bastani
  */
 public interface Processor extends Stoppable {
 

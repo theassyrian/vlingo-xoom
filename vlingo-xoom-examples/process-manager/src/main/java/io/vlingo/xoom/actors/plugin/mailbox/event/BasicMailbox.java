@@ -8,6 +8,13 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * A {@link BasicMailbox} provides basic mailbox support for an {@link Actor}.
+ *
+ * @param <T> is a generic type that extends {@link Message}
+ * @author Kenny Bastani
+ * @author Vaughn Vernon
+ */
 public interface BasicMailbox<T extends Message> extends Mailbox {
     final AtomicBoolean closed = new AtomicBoolean(false);
     final AtomicBoolean delivering = new AtomicBoolean(false);
