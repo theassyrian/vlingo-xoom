@@ -54,7 +54,8 @@ public abstract class ProcessorActor extends Actor implements Processor, Schedul
 
     @Override
     public Completes<StateTransition> applyEvent(Event event) {
-        return completes().with(this.kernel.applyEvent(event).await());
+        return Completes.withSuccess((StateTransition) completes()
+                .with(this.kernel.applyEvent(event).await()).outcome());
     }
 
     @Override

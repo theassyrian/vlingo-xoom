@@ -10,6 +10,7 @@ import io.vlingo.common.Completes;
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The {@link AccountService} exposes operations and business logic that pertains to the {@link Account} entity and
@@ -58,9 +59,9 @@ public class AccountService {
      * @return the created {@link Account}.
      */
     public Completes<Account> createAccount(Account account) {
-        account = account.createAccount(accountProcessor.getProcessor()).await();
         account = accountRepository.save(account);
-        return Completes.withSuccess(account);
+        execute(account.getId(), result -> result.create(accountProcessor.getProcessor()));
+        return getAccount(account.getId());
     }
 
     /**
@@ -85,11 +86,27 @@ public class AccountService {
     }
 
     public Completes<Account> confirmAccount(@NotNull Long id) {
-        getAccount(id).andThenConsume(account -> account.confirmAccount(accountProcessor.getProcessor()).await())
+        return execute(id, account -> account.confirm(accountProcessor.getProcessor()));
+    }
+
+    public Completes<Account> activateAccount(@NotNull Long id) {
+        return execute(id, account -> account.activate(accountProcessor.getProcessor()));
+    }
+
+    public Completes<Account> suspendAccount(@NotNull Long id) {
+        return execute(id, account -> account.suspend(accountProcessor.getProcessor()));
+    }
+
+    public Completes<Account> archiveAccount(@NotNull Long id) {
+        return execute(id, account -> account.archive(accountProcessor.getProcessor()));
+    }
+
+    private Completes<Account> execute(@NotNull Long id, Consumer<Account> commandHandler) {
+        return getAccount(id)
+                .andThenConsume(commandHandler)
                 .andThenConsume(account ->
                         accountRepository.update(id, account.getAccountStatus(), account.getVersion()))
-                .await();
-
-        return getAccount(id);
+                .andThenConsume(Completes::withSuccess)
+                .otherwiseConsume(Completes::withFailure);
     }
 }

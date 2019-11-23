@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest(application=AccountApplication.class)
 public class AccountServiceTests {
+
     @Inject
     EmbeddedServer server;
 
@@ -84,6 +85,22 @@ public class AccountServiceTests {
         request = HttpRequest.GET("/accounts/" + id + "/confirm");
         accountResponse = client.toBlocking().retrieve(request, Account.class);
         assertEquals(AccountStatus.ACCOUNT_CONFIRMED, accountResponse.getAccountStatus());
+
+        request = HttpRequest.GET("/accounts/" + id + "/activate");
+        accountResponse = client.toBlocking().retrieve(request, Account.class);
+        assertEquals(AccountStatus.ACCOUNT_ACTIVATED, accountResponse.getAccountStatus());
+
+        request = HttpRequest.GET("/accounts/" + id + "/suspend");
+        accountResponse = client.toBlocking().retrieve(request, Account.class);
+        assertEquals(AccountStatus.ACCOUNT_SUSPENDED, accountResponse.getAccountStatus());
+
+        request = HttpRequest.GET("/accounts/" + id + "/activate");
+        accountResponse = client.toBlocking().retrieve(request, Account.class);
+        assertEquals(AccountStatus.ACCOUNT_ACTIVATED, accountResponse.getAccountStatus());
+
+        request = HttpRequest.GET("/accounts/" + id + "/archive");
+        accountResponse = client.toBlocking().retrieve(request, Account.class);
+        assertEquals(AccountStatus.ACCOUNT_ARCHIVED, accountResponse.getAccountStatus());
 
         request = HttpRequest.GET("/accounts");
         List<Account> accounts = client.toBlocking().retrieve(request, Argument.of(List.class, Account.class));

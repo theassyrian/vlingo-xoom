@@ -72,4 +72,10 @@ public interface AccountEndpoint extends Endpoint {
     Completes<Response> deleteAccount(Long id);
 
     Completes<Response> confirmAccount(Long id);
+
+    Completes<Response> activateAccount(Long id);
+
+    Completes<Response> archiveAccount(Long id);
+
+    Completes<Response> suspendAccount(Long id);
 }

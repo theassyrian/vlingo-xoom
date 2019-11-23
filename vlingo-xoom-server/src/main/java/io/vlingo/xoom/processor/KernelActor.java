@@ -73,10 +73,15 @@ public class KernelActor extends Actor implements Kernel {
     @Override
     public <T extends Event> Completes<StateTransition> applyEvent(T event) {
         TransitionHandler handler = transitionHandlerMap.get(event.getEventType());
-        if (handler == null)
-            throw new IllegalArgumentException("The event with type [" + event.getEventType() + "] does not match a" +
-                    " valid transition handler in the processor kernel.");
-        return completes().with(handler.getStateTransition());
+        try {
+            if (handler == null)
+                throw new RuntimeException("The event with type [" + event.getEventType() + "] does not match a" +
+                        " valid transition handler in the processor kernel.");
+            return completes().with(handler.getStateTransition());
+        } catch (Exception ex) {
+            logger().error(ex.getMessage(), ex);
+            return completes().with(null);
+        }
     }
 
     @Override

@@ -76,8 +76,19 @@ public class AccountResource implements AccountEndpoint {
                 get("/v1/accounts/{id}/confirm")
                         .param(Long.class)
                         .handle(this::confirmAccount)
+                        .onError(this::getErrorResponse),
+                get("/v1/accounts/{id}/activate")
+                        .param(Long.class)
+                        .handle(this::activateAccount)
+                        .onError(this::getErrorResponse),
+                get("/v1/accounts/{id}/suspend")
+                        .param(Long.class)
+                        .handle(this::suspendAccount)
+                        .onError(this::getErrorResponse),
+                get("/v1/accounts/{id}/archive")
+                        .param(Long.class)
+                        .handle(this::archiveAccount)
                         .onError(this::getErrorResponse)
-
         };
     }
 
@@ -109,5 +120,20 @@ public class AccountResource implements AccountEndpoint {
     @Override
     public Completes<Response> confirmAccount(Long id) {
         return response(Ok, accountService.confirmAccount(id));
+    }
+
+    @Override
+    public Completes<Response> activateAccount(Long id) {
+        return response(Ok, accountService.activateAccount(id));
+    }
+
+    @Override
+    public Completes<Response> archiveAccount(Long id) {
+        return response(Ok, accountService.archiveAccount(id));
+    }
+
+    @Override
+    public Completes<Response> suspendAccount(Long id) {
+        return response(Ok, accountService.suspendAccount(id));
     }
 }

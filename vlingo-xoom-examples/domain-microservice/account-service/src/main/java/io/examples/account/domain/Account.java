@@ -2,11 +2,7 @@ package io.examples.account.domain;
 
 import io.examples.account.data.Identity;
 import io.examples.account.domain.event.AccountEvent;
-import io.examples.account.domain.state.AccountConfirmed;
-import io.examples.account.domain.state.AccountPending;
-import io.examples.account.domain.state.AccountState;
-import io.examples.account.domain.state.AccountStatus;
-import io.vlingo.common.Completes;
+import io.examples.account.domain.state.*;
 import io.vlingo.xoom.processor.Processor;
 
 import javax.persistence.CascadeType;
@@ -14,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -120,26 +117,38 @@ public class Account extends Identity {
         this.addresses = addresses;
     }
 
-    public Completes<Account> createAccount(Processor processor) {
-        return Completes.withSuccess(processor
-                .applyEvent(new AccountEvent(this.accountStatus, AccountStatus.ACCOUNT_PENDING))
-                .andThenConsume(stateTransition -> {
-                    AccountState state = new AccountPending();
-                    stateTransition.apply(state).await();
-                    this.accountStatus = AccountStatus.valueOf(stateTransition.getTargetName());
-                    this.version = state.getVersion().toString();
-                }).await()).with(this);
+    public Account create(Processor processor) {
+        return sendEvent(processor, new AccountPending());
     }
 
-    public Completes<Account> confirmAccount(Processor processor) {
-        return Completes.withSuccess(processor
-                .applyEvent(new AccountEvent(this.accountStatus, AccountStatus.ACCOUNT_CONFIRMED))
+    public Account confirm(Processor processor) {
+        return sendEvent(processor, new AccountConfirmed());
+    }
+
+    public Account activate(Processor processor) {
+        return sendEvent(processor, new AccountActivated());
+    }
+
+    public Account suspend(Processor processor) {
+        return sendEvent(processor, new AccountSuspended());
+    }
+
+    public Account archive(Processor processor) {
+        return sendEvent(processor, new AccountArchived());
+    }
+
+    private Account sendEvent(Processor processor, AccountState targetState) {
+        AccountEvent event = new AccountEvent(accountStatus, targetState.getType());
+        return Optional.ofNullable(processor.applyEvent(event)
                 .andThenConsume(stateTransition -> {
-                    AccountState state = new AccountConfirmed();
-                    stateTransition.apply(state).await();
+                    stateTransition.apply(targetState).await();
                     this.accountStatus = AccountStatus.valueOf(stateTransition.getTargetName());
-                    this.version = state.getVersion().toString();
-                }).await()).with(this);
+                    this.version = targetState.getVersion().toString();
+                }).otherwise(transition -> null).await())
+                .map(transition -> this)
+                .orElseThrow(() ->
+                        new RuntimeException("The event with type [" + event.getEventType() + "] does not match a" +
+                                " valid transition handler in the processor kernel."));
     }
 
     @Override
