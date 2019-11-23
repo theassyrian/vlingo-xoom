@@ -1,11 +1,11 @@
 package io.examples.account.endpoint;
 
 import io.examples.account.domain.Account;
-import io.vlingo.annotations.Resource;
+import io.vlingo.xoom.annotations.Resource;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.resource.Endpoint;
+import io.vlingo.xoom.resource.Endpoint;
 
 /**
  * The {@link AccountEndpoint} describes a base REST API contract that is used to evolve versions of your API without

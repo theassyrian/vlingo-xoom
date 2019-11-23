@@ -72,6 +72,10 @@ public class AccountResource implements AccountEndpoint {
                 delete("/v1/accounts/{id}")
                         .param(Long.class)
                         .handle(this::deleteAccount)
+                        .onError(this::getErrorResponse),
+                get("/v1/accounts/{id}/confirm")
+                        .param(Long.class)
+                        .handle(this::confirmAccount)
                         .onError(this::getErrorResponse)
 
         };
@@ -100,5 +104,10 @@ public class AccountResource implements AccountEndpoint {
     @Override
     public Completes<Response> deleteAccount(Long id) {
         return emptyResponse(NoContent, withSuccess(() -> accountService.deleteAccount(id)));
+    }
+
+    @Override
+    public Completes<Response> confirmAccount(Long id) {
+        return response(Ok, accountService.confirmAccount(id));
     }
 }

@@ -70,4 +70,6 @@ public interface AccountEndpoint extends Endpoint {
      * @return a {@link Completes<Response>} with the JSON result.
      */
     Completes<Response> deleteAccount(Long id);
+
+    Completes<Response> confirmAccount(Long id);
 }

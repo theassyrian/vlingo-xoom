@@ -1,10 +1,10 @@
 package io.examples.account.endpoint;
 
-import io.vlingo.xoom.annotations.Resource;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
+import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.xoom.resource.Endpoint;
 
 import static io.vlingo.http.Response.Status.Ok;

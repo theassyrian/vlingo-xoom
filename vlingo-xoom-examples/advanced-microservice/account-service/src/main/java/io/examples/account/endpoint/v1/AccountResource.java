@@ -3,11 +3,11 @@ package io.examples.account.endpoint.v1;
 import io.examples.account.domain.Account;
 import io.examples.account.domain.AccountService;
 import io.examples.account.endpoint.AccountEndpoint;
-import io.vlingo.annotations.Resource;
+import io.vlingo.xoom.annotations.Resource;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.resource.Endpoint;
+import io.vlingo.xoom.resource.Endpoint;
 
 import static io.vlingo.common.Completes.withSuccess;
 import static io.vlingo.http.Response.Status.*;
