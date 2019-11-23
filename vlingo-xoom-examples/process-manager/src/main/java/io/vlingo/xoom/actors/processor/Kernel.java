@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 import io.vlingo.common.Completes;
 
@@ -33,9 +33,15 @@ import java.util.List;
  */
 public interface Kernel {
 
+    Completes<String> getName();
+
+    void setName(String name);
+
     void registerStates(State... states);
 
     Completes<List<State>> getStates();
 
     Completes<List<StateTransition>> getStateTransitions();
+
+    <T extends Event> Completes<StateTransition> applyEvent(T event);
 }

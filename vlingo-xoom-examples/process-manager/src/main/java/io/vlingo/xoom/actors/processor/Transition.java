@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 /**
  * A {@link Transition} is a base interface for a {@link StateTransition} and describes the identity of a source

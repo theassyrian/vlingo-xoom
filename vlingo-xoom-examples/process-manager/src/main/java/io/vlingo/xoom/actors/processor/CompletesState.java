@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 import io.vlingo.common.Completes;
 
@@ -9,6 +9,7 @@ import io.vlingo.common.Completes;
  * @param <R> is the target {@link State}
  * @author Kenny Bastani
  */
+@FunctionalInterface
 public interface CompletesState<T extends State, R extends State> {
     Completes<StateTransition<T, R>> apply(StateTransition<T, R> transition);
 }

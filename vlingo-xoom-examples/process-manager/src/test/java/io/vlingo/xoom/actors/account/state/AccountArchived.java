@@ -1,10 +1,8 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.state;
+package io.vlingo.xoom.actors.account.state;
 
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.StateTransition;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.TransitionHandler;
-
-import static io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.TransitionHandler.handleFor;
+import io.vlingo.xoom.actors.processor.StateTransition;
+import io.vlingo.xoom.actors.processor.TransitionHandler;
 
 public class AccountArchived extends AccountState<AccountArchived> {
 
@@ -18,14 +16,22 @@ public class AccountArchived extends AccountState<AccountArchived> {
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                handleFor(AccountArchived.class, AccountActivated.class)
+                TransitionHandler.handleFor(AccountArchived.class, AccountActivated.class)
                         .withPath(AccountActivated.TYPE.name())
                         .withTransition(this::toActivated)
         };
     }
 
     private Completes<StateTransition<AccountArchived, AccountActivated>> toActivated() {
-        return Completes.withSuccess(new StateTransition<>(this, new AccountActivated()));
+        return StateTransition.transition(this, new AccountActivated())
+                .onSuccess(transition -> {
+                    log.info("Transitioned from [" + transition.getSourceName() + "] to " +
+                            "[" + transition.getTargetName() + "]");
+
+                    return Completes.withSuccess(transition);
+                })
+                .onError(Completes::withFailure)
+                .build();
     }
 
     @Override

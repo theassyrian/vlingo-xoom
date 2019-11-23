@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public abstract class State<T> {
         Map<String, Set<String>> result = new HashMap<>();
 
         Stream.of(getTransitionHandlers())
-                .map(t -> (Transition) t.getStateTransition().outcome())
+                .map(t -> (Transition) t.getStateTransition())
                 .forEach(t -> result.compute(t.getSourceName(), (k, v) -> {
                     Set<String> values = Optional.ofNullable(v)
                             .orElseGet(HashSet::new);
@@ -55,7 +55,7 @@ public abstract class State<T> {
 
     @Override
     public String toString() {
-        return "State{" +
+        return this.getName() + "{" +
                 "createdAt=" + createdAt +
                 ", version=" + version +
                 '}';

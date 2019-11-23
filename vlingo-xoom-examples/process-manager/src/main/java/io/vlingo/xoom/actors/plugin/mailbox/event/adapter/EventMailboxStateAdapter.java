@@ -3,7 +3,7 @@ package io.vlingo.xoom.actors.plugin.mailbox.event.adapter;
 import io.vlingo.actors.Message;
 import io.vlingo.xoom.actors.plugin.mailbox.event.BasicMailbox;
 import io.vlingo.xoom.actors.plugin.mailbox.event.EventMailbox;
-import io.vlingo.xoom.actors.plugin.mailbox.event.Processor;
+import io.vlingo.xoom.actors.processor.Processor;
 
 /**
  * The {@link EventMailboxStateAdapter} provides storage implementation support for {@link EventMailbox} used to

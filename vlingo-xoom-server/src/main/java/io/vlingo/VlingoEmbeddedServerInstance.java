@@ -3,7 +3,6 @@ package io.vlingo;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadata;
@@ -23,7 +22,6 @@ import java.util.*;
  * @author graemerocher
  * @since 1.0
  */
-@Internal
 @Prototype
 class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
 

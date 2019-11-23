@@ -1,7 +1,8 @@
 package io.vlingo.xoom.actors.plugin.mailbox.event;
 
 import io.vlingo.actors.Message;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
+import io.vlingo.xoom.actors.processor.Kernel;
+import io.vlingo.xoom.actors.processor.Processor;
 
 import java.util.Queue;
 

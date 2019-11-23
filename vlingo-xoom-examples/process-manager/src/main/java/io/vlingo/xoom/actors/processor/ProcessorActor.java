@@ -1,12 +1,11 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event;
+package io.vlingo.xoom.actors.processor;
 
 import io.vlingo.actors.Actor;
+import io.vlingo.actors.Message;
 import io.vlingo.common.Completes;
 import io.vlingo.common.Scheduled;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.KernelActor;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.State;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,10 +13,14 @@ import java.util.List;
  *
  * @author Kenny Bastani
  */
-public abstract class ProcessorActor extends Actor implements Processor {
+public abstract class ProcessorActor extends Actor implements Processor, Scheduled<Message> {
 
     private final List<State> states;
     private Kernel kernel;
+
+    public ProcessorActor() {
+        states = new ArrayList<>();
+    }
 
     protected ProcessorActor(List<State> states) {
         this.states = states;
@@ -35,6 +38,7 @@ public abstract class ProcessorActor extends Actor implements Processor {
         logger().info("Starting " + this.definition().actorName() + "...");
         stage().scheduler().schedule(selfAs(Scheduled.class), null, 1000L, 100);
         this.kernel = stage().actorFor(Kernel.class, KernelActor.class);
+        this.kernel.setName(getName().outcome() + "/Kernel");
         this.kernel.registerStates(states.toArray(new State[]{}));
         return completes().with(true);
     }
@@ -46,5 +50,14 @@ public abstract class ProcessorActor extends Actor implements Processor {
         } else {
             throw new IllegalStateException("The processor's kernel has not been initialized.");
         }
+    }
+
+    @Override
+    public Completes<StateTransition> applyEvent(Event event) {
+        return completes().with(this.kernel.applyEvent(event).await());
+    }
+
+    @Override
+    public void intervalSignal(Scheduled scheduled, Message data) {
     }
 }

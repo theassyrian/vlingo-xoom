@@ -38,4 +38,22 @@ public class InMemoryMailboxAdapter<T extends Message> extends EventMailboxState
     public String getName() {
         return MAILBOX_NAME;
     }
+
+    @Override
+    public void send(Message message) {
+        System.out.println("Sending message from " + getName() + ": " + message.toString());
+        super.send(message);
+    }
+
+    @Override
+    public void publish(T message) {
+        System.out.println("Publishing message from " + getName() + ": " + message.toString());
+        super.publish(message);
+    }
+
+    @Override
+    public Message receive() {
+        System.out.println("Receive message from " + getName());
+        return super.receive();
+    }
 }

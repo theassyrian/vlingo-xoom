@@ -1,6 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
-
-import io.vlingo.common.Completes;
+package io.vlingo.xoom.actors.processor;
 
 /**
  * A {@link TransitionHandler} subscribes to a {@link StateTransition} and is used to perform a transaction in response
@@ -13,7 +11,7 @@ import io.vlingo.common.Completes;
 public class TransitionHandler<T extends State, R extends State> {
 
     private String path;
-    private Completes<StateTransition<T, R>> stateTransition;
+    private StateTransition<T, R> stateTransition;
 
     public TransitionHandler() {
     }
@@ -25,7 +23,7 @@ public class TransitionHandler<T extends State, R extends State> {
 
 
     public TransitionHandler<T, R> withTransition(StateHandler<T, R> handler) {
-        this.stateTransition = handler.execute();
+        this.stateTransition = handler.execute().outcome();
         return this;
     }
 
@@ -34,11 +32,11 @@ public class TransitionHandler<T extends State, R extends State> {
         return path;
     }
 
-    public Completes<StateTransition<T, R>> getStateTransition() {
+    public StateTransition<T, R> getStateTransition() {
         return stateTransition;
     }
 
-    public void setStateTransition(Completes<StateTransition<T, R>> stateTransition) {
+    public void setStateTransition(StateTransition<T, R> stateTransition) {
         this.stateTransition = stateTransition;
     }
 

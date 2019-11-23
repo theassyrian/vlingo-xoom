@@ -1,6 +1,6 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors;
 
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.state.*;
+import io.vlingo.xoom.actors.account.state.*;
 import org.junit.Assert;
 import org.junit.Test;
 

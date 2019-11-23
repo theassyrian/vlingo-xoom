@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 import io.vlingo.common.Completes;
 

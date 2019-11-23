@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.state;
+package io.vlingo.xoom.actors.account.state;
 
 public enum AccountStatus {
     ACCOUNT_CREATED,

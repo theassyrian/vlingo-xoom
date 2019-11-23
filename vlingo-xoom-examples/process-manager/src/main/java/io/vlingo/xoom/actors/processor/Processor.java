@@ -1,9 +1,10 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event;
+package io.vlingo.xoom.actors.processor;
 
-import io.vlingo.actors.*;
+import io.vlingo.actors.Actor;
+import io.vlingo.actors.Definition;
+import io.vlingo.actors.Stage;
+import io.vlingo.actors.Stoppable;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.actors.plugin.mailbox.event.adapter.EventMailboxStateAdapter;
-import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
 
 /**
  * <p>A {@link Processor} is a distributed task executor that dereferences actors to a lower-level library. Processors
@@ -72,26 +73,29 @@ import io.vlingo.xoom.actors.plugin.mailbox.event.statemachine.Kernel;
  */
 public interface Processor extends Stoppable {
 
-    /**
-     * Answer a new {@code Processor} with the given configuration and characteristics.
-     */
-    public static <A extends Actor, T extends Message>
-    Processor startWith(final Stage stage, Class<A> clazz, String actorName,
-                        EventMailboxStateAdapter<T> mailboxAdapter) {
-
-        final Processor processor = stage.actorFor(Processor.class,
-                Definition.has(clazz, Definition.NoParameters, mailboxAdapter.getName(), actorName),
-                stage.world().addressFactory().withHighId(),
-                stage.world().defaultLogger());
-
-        processor.startUp();
-
-        return processor;
-    }
-
     Completes<Boolean> shutDown();
 
     Completes<Boolean> startUp();
 
     Completes<Kernel> getKernel();
+
+    Completes<String> getName();
+
+    Completes<StateTransition> applyEvent(Event event);
+
+    /**
+     * Answer a new {@code Processor} with the given configuration and characteristics.
+     */
+    @SuppressWarnings("unchecked")
+    public static <A extends Actor> Processor startWith(Stage stage, Class<A> clazz, String actorName) {
+
+        final Processor processor = stage.actorFor(Processor.class, Definition.has(
+                clazz,
+                Definition.NoParameters,
+                "queueMailbox", actorName),
+                stage.world().addressFactory().withHighId(),
+                stage.world().defaultLogger());
+        processor.startUp();
+        return processor;
+    }
 }

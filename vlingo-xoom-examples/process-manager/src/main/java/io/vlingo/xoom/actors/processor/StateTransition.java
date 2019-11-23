@@ -1,4 +1,4 @@
-package io.vlingo.xoom.actors.plugin.mailbox.event.statemachine;
+package io.vlingo.xoom.actors.processor;
 
 import io.vlingo.common.Completes;
 
@@ -32,13 +32,22 @@ public class StateTransition<T extends State, R extends State> implements Transi
         return Completes.withSuccess(function.apply(from));
     }
 
+    public Completes<StateTransition<T, R>> build() {
+        if (successResult == null || errorResult == null) {
+            throw new IllegalStateException("A state transition must define a success and error result");
+        }
+
+        return Completes.withSuccess(this);
+    }
+
     public Completes<StateTransition<T, R>> apply() {
         if (successResult == null || errorResult == null) {
             throw new IllegalStateException("A state transition must define a success and error result");
         }
 
         return successResult.apply(this)
-                .recoverFrom((e -> errorResult.apply(this).outcome()));
+                .otherwise((e -> errorResult.apply(this).outcome()))
+                .with(this);
     }
 
     public StateTransition<T, R> onSuccess(CompletesState<T, R> action) {
@@ -71,5 +80,15 @@ public class StateTransition<T extends State, R extends State> implements Transi
 
     public static <T1 extends State, R1 extends State> StateTransition<T1, R1> transition(T1 source, R1 target) {
         return new StateTransition<>(source, target);
+    }
+
+    @Override
+    public String toString() {
+        return "StateTransition{" +
+                "from=" + from +
+                ", to=" + to +
+                ", successResult=" + successResult +
+                ", errorResult=" + errorResult +
+                '}';
     }
 }
