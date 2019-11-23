@@ -30,7 +30,9 @@ public class ProcessorContext implements ApplicationEventListener<ApplicationSta
                         .getVlingoScene().getWorld().stage(),
                 AccountProcessor.class, "AccountProcessor", Stream.of(Arrays.asList(states))
                         .collect(Collectors.toList()));
-        event.getSource().getApplicationContext().publishEvent(new ProcessorStartupEvent(processor));
+        event.getSource()
+                .getApplicationContext()
+                .publishEvent(new ProcessorStartupEvent(processor));
     }
 
     public Processor getProcessor() {

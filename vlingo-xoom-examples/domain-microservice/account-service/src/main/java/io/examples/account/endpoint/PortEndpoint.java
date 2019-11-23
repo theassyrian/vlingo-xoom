@@ -14,7 +14,7 @@ import static io.vlingo.http.resource.ResourceBuilder.get;
 public class PortEndpoint implements Endpoint {
 
     private static String ENDPOINT_VERSION = "1.1";
-    private static String ENDPOINT_NAME = "Port Endpoint";
+    private static String ENDPOINT_NAME = "Port";
     private final ServerConfiguration serverConfiguration;
 
     public PortEndpoint(ServerConfiguration serverConfiguration) {

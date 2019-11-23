@@ -22,7 +22,7 @@ import static io.vlingo.http.resource.ResourceBuilder.get;
 @Resource
 public class ManagementEndpoints implements Endpoint {
 
-    private final String ENDPOINT_NAME = "Management Endpoint";
+    private final String ENDPOINT_NAME = "Management";
     private final String ENDPOINT_VERSION = "1.0.0";
     private final ApplicationContext applicationContext;
 

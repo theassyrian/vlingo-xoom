@@ -59,6 +59,11 @@ public abstract class ProcessorActor extends Actor implements Processor, Schedul
     }
 
     @Override
+    public Completes<String> getName() {
+        return completes().with("DefaultProcessor");
+    }
+
+    @Override
     public void intervalSignal(Scheduled scheduled, Message data) {
     }
 }

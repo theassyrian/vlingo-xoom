@@ -21,13 +21,12 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStar
     @Read
     public Map<String, TransitionHandler> getMap() {
         Kernel kernel = processor.getKernel().await();
-        Map<String, TransitionHandler> handlerMap = kernel.getTransitionMap().await();
-        return handlerMap;
+        return kernel.getTransitionMap().await();
     }
 
     @Override
     public void onApplicationEvent(ProcessorStartupEvent event) {
-        log.info("Registered processor [" + event.getSource().getName() + "] with management endpoint");
+        log.info("Registered processor [" + event.getSource().getName().await() + "] with management endpoint");
         this.processor = event.getSource();
     }
 }

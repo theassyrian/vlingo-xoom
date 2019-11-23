@@ -98,13 +98,14 @@ public interface Processor extends Stoppable {
     @SuppressWarnings("unchecked")
     public static <A extends Actor> Processor startWith(Stage stage, Class<A> clazz, String actorName,
                                                         List<Object> params) {
-        final Processor processor = stage.actorFor(Processor.class, Definition.has(
+        Processor processor = stage.actorFor(Processor.class, Definition.has(
                 clazz,
                 params,
                 "queueMailbox", actorName),
                 stage.world().addressFactory().withHighId(),
                 stage.world().defaultLogger());
-        processor.startUp();
-        return processor;
+
+        return Completes.withSuccess(processor.startUp().await())
+                .andThen(p -> processor).await();
     }
 }

@@ -3,6 +3,8 @@ package io.vlingo.xoom.processor;
 import io.micronaut.context.event.ApplicationEvent;
 
 public class ProcessorStartupEvent extends ApplicationEvent {
+    private final Processor source;
+
     /**
      * Constructs a prototypical Event.
      *
@@ -11,10 +13,11 @@ public class ProcessorStartupEvent extends ApplicationEvent {
      */
     public ProcessorStartupEvent(Processor source) {
         super(source);
+        this.source = source;
     }
 
     @Override
     public Processor getSource() {
-        return (Processor)super.getSource();
+        return source;
     }
 }
