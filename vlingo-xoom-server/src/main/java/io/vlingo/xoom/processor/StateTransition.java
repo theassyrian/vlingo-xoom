@@ -78,7 +78,7 @@ public class StateTransition<T extends State, R extends State> implements Transi
         return getTo().getName();
     }
 
-    public static <T1 extends State, R1 extends State> StateTransition<T1, R1> transition(T1 source, R1 target) {
+    public static <T1 extends State, R1 extends State> StateTransition<T1, R1> with(T1 source, R1 target) {
         return new StateTransition<>(source, target);
     }
 

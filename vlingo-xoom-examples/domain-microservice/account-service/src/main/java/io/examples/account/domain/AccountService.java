@@ -58,7 +58,7 @@ public class AccountService {
      * @param account is the {@link Account} to create.
      * @return the created {@link Account}.
      */
-    public Completes<Account> createAccount(Account account) {
+    public Completes<Account> create(Account account) {
         account = accountRepository.save(account);
         execute(account.getId(), result -> result.create(accountProcessor.getProcessor()));
         return getAccount(account.getId());
@@ -68,12 +68,13 @@ public class AccountService {
      * Updates the {@link Account} with the corresponding unique identifier.
      *
      * @param id      is the unique identifier for the {@link Account}.
-     * @param account is the {@link Account} entity containing the fields to update.
+     * @param model is the {@link Account} entity containing the fields to update.
      * @return the updated {@link Account}.
      */
-    public Completes<Account> updateAccount(@NotNull Long id, @NotNull Account account) {
-        accountRepository.update(id, account.getAccountNumber());
-        return getAccount(id);
+    public Completes<Account> update(@NotNull Long id, @NotNull Account model) {
+        return execute(id, account -> account.update(accountProcessor.getProcessor(), model))
+                .andThenConsume(account ->
+                        accountRepository.update(id, account.getAccountNumber()));
     }
 
     /**
@@ -81,32 +82,30 @@ public class AccountService {
      *
      * @param id is the unique identifier of the {@link Account} that is to be deleted.
      */
-    public void deleteAccount(Long id) {
+    public void delete(Long id) {
         accountRepository.deleteById(id);
     }
 
-    public Completes<Account> confirmAccount(@NotNull Long id) {
+    public Completes<Account> confirm(@NotNull Long id) {
         return execute(id, account -> account.confirm(accountProcessor.getProcessor()));
     }
 
-    public Completes<Account> activateAccount(@NotNull Long id) {
+    public Completes<Account> activate(@NotNull Long id) {
         return execute(id, account -> account.activate(accountProcessor.getProcessor()));
     }
 
-    public Completes<Account> suspendAccount(@NotNull Long id) {
+    public Completes<Account> suspend(@NotNull Long id) {
         return execute(id, account -> account.suspend(accountProcessor.getProcessor()));
     }
 
-    public Completes<Account> archiveAccount(@NotNull Long id) {
+    public Completes<Account> archive(@NotNull Long id) {
         return execute(id, account -> account.archive(accountProcessor.getProcessor()));
     }
 
     private Completes<Account> execute(@NotNull Long id, Consumer<Account> commandHandler) {
         return getAccount(id)
                 .andThenConsume(commandHandler)
-                .andThenConsume(account ->
-                        accountRepository.update(id, account.getAccountStatus(), account.getVersion()))
-                .andThenConsume(Completes::withSuccess)
-                .otherwiseConsume(Completes::withFailure);
+                .andThenConsume(account -> accountRepository
+                        .update(id, account.getAccountStatus(), account.getVersion()));
     }
 }

@@ -104,36 +104,36 @@ public class AccountResource implements AccountEndpoint {
 
     @Override
     public Completes<Response> createAccount(Account account) {
-        return response(Created, accountService.createAccount(account));
+        return response(Created, accountService.create(account));
     }
 
     @Override
     public Completes<Response> updateAccount(Long id, Account account) {
-        return response(Ok, accountService.updateAccount(id, account));
+        return response(Ok, accountService.update(id, account));
     }
 
     @Override
     public Completes<Response> deleteAccount(Long id) {
-        return emptyResponse(NoContent, withSuccess(() -> accountService.deleteAccount(id)));
+        return emptyResponse(NoContent, withSuccess(() -> accountService.delete(id)));
     }
 
     @Override
     public Completes<Response> confirmAccount(Long id) {
-        return response(Ok, accountService.confirmAccount(id));
+        return response(Ok, accountService.confirm(id));
     }
 
     @Override
     public Completes<Response> activateAccount(Long id) {
-        return response(Ok, accountService.activateAccount(id));
+        return response(Ok, accountService.activate(id));
     }
 
     @Override
     public Completes<Response> archiveAccount(Long id) {
-        return response(Ok, accountService.archiveAccount(id));
+        return response(Ok, accountService.archive(id));
     }
 
     @Override
     public Completes<Response> suspendAccount(Long id) {
-        return response(Ok, accountService.suspendAccount(id));
+        return response(Ok, accountService.suspend(id));
     }
 }

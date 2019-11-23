@@ -73,15 +73,6 @@ public class AccountServiceTests {
 
         assertEquals("12345", account.getAccountNumber());
 
-        request = HttpRequest.PUT("/accounts/" + id, new Account("54321", account.getAddresses()));
-        response = client.toBlocking().exchange(request, Account.class);
-
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        request = HttpRequest.GET("/accounts/" + id);
-        accountResponse = client.toBlocking().retrieve(request, Account.class);
-        assertEquals("54321", accountResponse.getAccountNumber());
-
         request = HttpRequest.GET("/accounts/" + id + "/confirm");
         accountResponse = client.toBlocking().retrieve(request, Account.class);
         assertEquals(AccountStatus.ACCOUNT_CONFIRMED, accountResponse.getAccountStatus());
@@ -97,6 +88,15 @@ public class AccountServiceTests {
         request = HttpRequest.GET("/accounts/" + id + "/activate");
         accountResponse = client.toBlocking().retrieve(request, Account.class);
         assertEquals(AccountStatus.ACCOUNT_ACTIVATED, accountResponse.getAccountStatus());
+
+        request = HttpRequest.PUT("/accounts/" + id, new Account("54321", account.getAddresses()));
+        response = client.toBlocking().exchange(request, Account.class);
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+
+        request = HttpRequest.GET("/accounts/" + id);
+        accountResponse = client.toBlocking().retrieve(request, Account.class);
+        assertEquals("54321", accountResponse.getAccountNumber());
 
         request = HttpRequest.GET("/accounts/" + id + "/archive");
         accountResponse = client.toBlocking().retrieve(request, Account.class);

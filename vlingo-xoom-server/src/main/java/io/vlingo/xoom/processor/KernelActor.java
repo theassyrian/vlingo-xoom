@@ -27,7 +27,7 @@ public class KernelActor extends Actor implements Kernel {
 
     @Override
     public Completes<String> getName() {
-        return Completes.withSuccess(kernelName);
+        return completes().with(this.kernelName);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class KernelActor extends Actor implements Kernel {
                     if (result != null) {
                         throw new IllegalStateException("The state transition for " + a + " is already registered");
                     } else {
-                        logger().info("State transition [" + a + "] was registered with " + getName().outcome());
+                        logger().info("State transition [" + a + "] was registered with " + this.kernelName);
                         result = transitionHandler;
                     }
                     return result;
@@ -79,7 +79,7 @@ public class KernelActor extends Actor implements Kernel {
                         " valid transition handler in the processor kernel.");
             return completes().with(handler.getStateTransition());
         } catch (Exception ex) {
-            logger().error(ex.getMessage(), ex);
+            logger().debug(ex.getMessage(), ex);
             return completes().with(null);
         }
     }
