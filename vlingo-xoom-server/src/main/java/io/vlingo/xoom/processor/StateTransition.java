@@ -2,7 +2,7 @@ package io.vlingo.xoom.processor;
 
 import io.vlingo.common.Completes;
 
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 /**
  * A {@link StateTransition} is a resource specification that defines an input state and output state, while providing
@@ -16,48 +16,24 @@ public class StateTransition<T extends State, R extends State> implements Transi
 
     private T from;
     private R to;
-    private CompletesState<T, R> successResult;
-    private CompletesState<T, R> errorResult;
+    private BiConsumer<T, R> action;
 
     public StateTransition(T from, R to) {
         this.from = from;
         this.to = to;
     }
 
-    public Completes<R> apply(Function<T, R> function) {
-        if (successResult == null || errorResult == null) {
+    public Completes<StateTransition<T, R>> apply(R state) {
+        if (action == null) {
             throw new IllegalStateException("A state transition must define a success and error result");
         }
 
-        return Completes.withSuccess(function.apply(from));
+        return Completes.withSuccess(this)
+                .andThenConsume(t -> action.accept(from, to));
     }
 
-    public Completes<StateTransition<T, R>> build() {
-        if (successResult == null || errorResult == null) {
-            throw new IllegalStateException("A state transition must define a success and error result");
-        }
-
-        return Completes.withSuccess(this);
-    }
-
-    public Completes<StateTransition<T, R>> apply(State state) {
-        if (successResult == null || errorResult == null) {
-            throw new IllegalStateException("A state transition must define a success and error result");
-        }
-
-        return successResult.apply(this, state)
-                .otherwise((e -> errorResult.apply(this, state).outcome()))
-                .with(this);
-    }
-
-    public StateTransition<T, R> onSuccess(CompletesState<T, R> action) {
-        this.successResult = action;
-        return this;
-    }
-
-    public StateTransition<T, R> onError(CompletesState<T, R> action) {
-        this.errorResult = action;
-        return this;
+    public void setActionHandler(BiConsumer<T, R> action) {
+        this.action = action;
     }
 
     public T getFrom() {
@@ -78,17 +54,12 @@ public class StateTransition<T extends State, R extends State> implements Transi
         return getTo().getName();
     }
 
-    public static <T1 extends State, R1 extends State> StateTransition<T1, R1> with(T1 source, R1 target) {
-        return new StateTransition<>(source, target);
-    }
-
     @Override
     public String toString() {
         return "StateTransition{" +
                 "from=" + from +
                 ", to=" + to +
-                ", successResult=" + successResult +
-                ", errorResult=" + errorResult +
+                ", action=" + action +
                 '}';
     }
 }

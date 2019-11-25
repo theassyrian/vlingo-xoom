@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static io.examples.account.domain.state.AccountStatus.ACCOUNT_NUMBER_UPDATED;
+
 /**
  * The {@link Account} is the entity representation of an aggregate for a customer's account. This class is used
  * for both persistence and business logic that is exposed and controlled from the {@link AccountService}.
@@ -174,8 +176,7 @@ public class Account extends Identity {
 
         // Generate the sub-state transition's address in a new event
         AccountEvent event = new AccountEvent(accountStatus.name(),
-                targetState.getType() + "::"
-                        + AccountStatus.ACCOUNT_NUMBER_UPDATED.name());
+                targetState.getType() + "::" + ACCOUNT_NUMBER_UPDATED.name());
 
         // Send the event to the processor and update the account using the provided model
         return sendEvent(processor, event, stateTransition -> {

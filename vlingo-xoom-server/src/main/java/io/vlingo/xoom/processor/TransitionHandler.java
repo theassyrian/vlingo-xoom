@@ -10,39 +10,33 @@ package io.vlingo.xoom.processor;
  */
 public class TransitionHandler<T extends State, R extends State> {
 
-    private String path;
+    private String address;
     private StateTransition<T, R> stateTransition;
 
-    public TransitionHandler() {
+    private TransitionHandler(StateTransition<T, R> stateTransition) {
+        this.stateTransition = stateTransition;
+        this.address = stateTransition.getSourceName() + "::" + stateTransition.getTargetName();
     }
 
-    public TransitionHandler<T, R> withPath(String name) {
-        this.path = name;
+    public TransitionHandler<T, R> withAddress(String address) {
+        this.address = this.address + "::" + address;
         return this;
     }
 
-
-    public TransitionHandler<T, R> withTransition(StateHandler<T, R> handler) {
-        this.stateTransition = handler.execute().outcome();
-        return this;
-    }
-
-
-    public String getPath() {
-        return path;
+    public String getAddress() {
+        return address;
     }
 
     public StateTransition<T, R> getStateTransition() {
         return stateTransition;
     }
 
-    public void setStateTransition(StateTransition<T, R> stateTransition) {
-        this.stateTransition = stateTransition;
+    public static <T1 extends State, R1 extends State>
+    TransitionHandler<T1, R1> handle(StateTransition<T1, R1> stateTransition) {
+        return new TransitionHandler<>(stateTransition);
     }
 
-    public static <T1 extends State, R1 extends State> TransitionHandler<T1, R1> handleFor(
-            Class<T1> t1,
-            Class<R1> r1) {
-        return new TransitionHandler<>();
+    public static TransitionHandler[] transitions(TransitionHandler... handlers) {
+        return handlers;
     }
 }

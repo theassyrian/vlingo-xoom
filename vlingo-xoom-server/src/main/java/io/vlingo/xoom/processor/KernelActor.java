@@ -43,7 +43,7 @@ public class KernelActor extends Actor implements Kernel {
                         "already been registered");
             }
             Stream.of(s.getTransitionHandlers()).forEach(transitionHandler -> {
-                transitionHandlerMap.compute(s.getName() + "::" + transitionHandler.getPath(), (a, b) -> {
+                transitionHandlerMap.compute(transitionHandler.getAddress(), (a, b) -> {
                     TransitionHandler result = b;
                     if (result != null) {
                         throw new IllegalStateException("The state transition for " + a + " is already registered");

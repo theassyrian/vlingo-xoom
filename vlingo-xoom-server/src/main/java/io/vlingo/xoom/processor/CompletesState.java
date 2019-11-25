@@ -11,5 +11,5 @@ import io.vlingo.common.Completes;
  */
 @FunctionalInterface
 public interface CompletesState<T extends State, R extends State> {
-    Completes<StateTransition<T, R>> apply(StateTransition<T, R> transition, State state);
+    void apply(StateTransition<T, ?> transition, R state);
 }

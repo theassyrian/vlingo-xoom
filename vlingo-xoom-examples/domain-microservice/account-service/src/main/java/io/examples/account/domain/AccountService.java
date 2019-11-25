@@ -24,11 +24,11 @@ import java.util.function.Consumer;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final ProcessorContext accountProcessor;
+    private final ProcessorContext context;
 
     public AccountService(AccountRepository accountRepository, ProcessorContext processorContext) {
         this.accountRepository = accountRepository;
-        this.accountProcessor = processorContext;
+        this.context = processorContext;
     }
 
     /**
@@ -60,7 +60,7 @@ public class AccountService {
      */
     public Completes<Account> create(Account account) {
         account = accountRepository.save(account);
-        execute(account.getId(), result -> result.create(accountProcessor.getProcessor()));
+        execute(account.getId(), result -> result.create(context.getProcessor()));
         return getAccount(account.getId());
     }
 
@@ -72,7 +72,7 @@ public class AccountService {
      * @return the updated {@link Account}.
      */
     public Completes<Account> update(@NotNull Long id, @NotNull Account model) {
-        return execute(id, account -> account.update(accountProcessor.getProcessor(), model))
+        return execute(id, account -> account.update(context.getProcessor(), model))
                 .andThenConsume(account ->
                         accountRepository.update(id, account.getAccountNumber()));
     }
@@ -87,19 +87,19 @@ public class AccountService {
     }
 
     public Completes<Account> confirm(@NotNull Long id) {
-        return execute(id, account -> account.confirm(accountProcessor.getProcessor()));
+        return execute(id, account -> account.confirm(context.getProcessor()));
     }
 
     public Completes<Account> activate(@NotNull Long id) {
-        return execute(id, account -> account.activate(accountProcessor.getProcessor()));
+        return execute(id, account -> account.activate(context.getProcessor()));
     }
 
     public Completes<Account> suspend(@NotNull Long id) {
-        return execute(id, account -> account.suspend(accountProcessor.getProcessor()));
+        return execute(id, account -> account.suspend(context.getProcessor()));
     }
 
     public Completes<Account> archive(@NotNull Long id) {
-        return execute(id, account -> account.archive(accountProcessor.getProcessor()));
+        return execute(id, account -> account.archive(context.getProcessor()));
     }
 
     private Completes<Account> execute(@NotNull Long id, Consumer<Account> commandHandler) {
