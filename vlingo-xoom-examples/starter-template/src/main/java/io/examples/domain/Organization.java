@@ -1,7 +1,8 @@
 package io.examples.domain;
 
 import io.examples.data.Identity;
-import io.examples.domain.state.OrganizationPending;
+import io.examples.domain.state.Defined;
+import io.examples.domain.state.Disabled;
 import io.vlingo.xoom.processor.Processor;
 import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.StateTransition;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 @Entity
 public class Organization extends Identity {
 
-    private OrganizationStatus status = OrganizationStatus.CREATED;
+    private OrganizationStatus status = OrganizationStatus.DEFINED;
 
     public Organization() {
     }
@@ -22,24 +23,27 @@ public class Organization extends Identity {
         return status;
     }
 
-    public Organization create(Processor processor) {
-        return sendEvent(processor, new OrganizationPending());
+    public Organization define(Processor processor) {
+        return sendEvent(processor, new Defined());
     }
 
-    public Organization confirm(Processor processor) {
-        OrganizationEvent confirmEvent = new OrganizationEvent(status.name(), OrganizationStatus.CONFIRMED.name());
+    public Organization enable(Processor processor) {
+        OrganizationEvent confirmEvent = new OrganizationEvent(status.name(), OrganizationStatus.ENABLED.name());
         return sendEvent(processor, confirmEvent, stateTransition -> {
             // TODO: Implement payment confirmation
 
             // Then accept the state transition
-            acceptState(stateTransition.getTo())
-                    .accept(stateTransition);
+            apply(stateTransition.getTo()).accept(stateTransition);
         });
+    }
+
+    public Organization disable(Processor processor) {
+        return sendEvent(processor, new Disabled());
     }
 
     private Organization sendEvent(Processor processor, State targetState) {
         OrganizationEvent event = new OrganizationEvent(status.name(), targetState.getName());
-        return sendEvent(processor, event, acceptState(targetState));
+        return sendEvent(processor, event, apply(targetState));
     }
 
     private Organization sendEvent(Processor processor, OrganizationEvent event, Consumer<StateTransition> handler) {
@@ -51,11 +55,11 @@ public class Organization extends Identity {
     }
 
     @SuppressWarnings("unchecked")
-    private Consumer<StateTransition> acceptState(State targetState) {
+    private Consumer<StateTransition> apply(State newState) {
         return stateTransition -> {
-            stateTransition.apply(targetState).await();
+            stateTransition.apply(newState).await();
             this.status = OrganizationStatus.valueOf(stateTransition.getTargetName());
-            this.version = targetState.getVersion().toString();
+            this.version = newState.getVersion().toString();
         };
     }
 
@@ -66,4 +70,6 @@ public class Organization extends Identity {
                 ", version='" + version + '\'' +
                 "} " + super.toString();
     }
+
+
 }

@@ -7,20 +7,20 @@ import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
 import static io.vlingo.xoom.processor.TransitionBuilder.from;
+import static io.vlingo.xoom.processor.TransitionHandler.handle;
 
 @Resource
-public class OrganizationCreated extends State<OrganizationCreated> {
+public class Disabled extends State<Disabled> {
 
     @Override
     public String getName() {
-        return OrganizationStatus.CREATED.name();
+        return OrganizationStatus.DISABLED.name();
     }
 
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                TransitionHandler.handle(from(this).to(new OrganizationPending())
-                        .then(Transition::logResult))
+                handle(from(this).to(new Enabled()).then(Transition::logResult))
         };
     }
 }

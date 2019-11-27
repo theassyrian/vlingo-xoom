@@ -10,18 +10,18 @@ import static io.vlingo.xoom.processor.TransitionBuilder.from;
 import static io.vlingo.xoom.processor.TransitionHandler.handle;
 
 @Resource
-public class OrganizationPending extends State<OrganizationPending> {
+public class Defined extends State<Defined> {
 
     @Override
     public String getName() {
-        return OrganizationStatus.PENDING.name();
+        return OrganizationStatus.DEFINED.name();
     }
 
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                handle(from(this).to(new OrganizationConfirmed())
-                        .then(Transition::logResult))
+                handle(from(this).to(new Enabled()).then(Transition::logResult)),
+                handle(from(this).to(new Defined()).then(Transition::logResult))
         };
     }
 }

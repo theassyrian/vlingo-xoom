@@ -94,4 +94,13 @@ public class Identity implements Auditable {
         this.version = version;
     }
 
+    @Override
+    public String toString() {
+        return "Identity{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", lastUpdated=" + lastUpdated +
+                ", version='" + version + '\'' +
+                '}';
+    }
 }
