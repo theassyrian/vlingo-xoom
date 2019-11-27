@@ -26,19 +26,19 @@ public class OrganizationResource implements Endpoint {
     @Override
     public RequestHandler[] getHandlers() {
         return new RequestHandler[]{
-                get("/v1/organizations/{id}")
+                get("/organizations/{id}")
                         .param(Long.class)
                         .handle(this::queryOrganization)
                         .onError(this::getErrorResponse),
-                post("/v1/organizations")
+                post("/organizations")
                         .body(Organization.class)
                         .handle(this::defineOrganization)
                         .onError(this::getErrorResponse),
-                patch("/v1/organizations/{id}/enable")
+                patch("/organizations/{id}/enable")
                         .param(Long.class)
                         .handle(this::enableOrganization)
                         .onError(this::getErrorResponse),
-                patch("/v1/organizations/{id}/disable")
+                patch("/organizations/{id}/disable")
                         .param(Long.class)
                         .handle(this::disableOrganization)
                         .onError(this::getErrorResponse)
