@@ -93,4 +93,5 @@ public class Identity implements Auditable {
     public void setVersion(String version) {
         this.version = version;
     }
+
 }

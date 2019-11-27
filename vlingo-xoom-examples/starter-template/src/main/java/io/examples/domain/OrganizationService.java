@@ -3,6 +3,7 @@ package io.examples.domain;
 import io.examples.domain.processor.ProcessorService;
 import io.examples.repository.OrganizationRepository;
 import io.reactivex.Observable;
+import io.vlingo.actors.Logger;
 import io.vlingo.common.Completes;
 
 import javax.inject.Singleton;
@@ -35,20 +36,35 @@ public class OrganizationService {
         organizationRepository.deleteById(id);
     }
 
-    public Completes<Organization> createOrganization(Organization organization) {
-        organization = organizationRepository.save(organization);
-        execute(organization.getId(), result -> result.create(processorService.getProcessor()));
-        return getOrganization(organization.getId());
+    public Completes<Organization> createOrganization(Organization model) {
+        // Execute the create command on a new organization entity
+        return executeCommand(organizationRepository.save(model).getId(),
+                organization ->
+                        organization.create(processorService.getProcessor()))
+                .andThenConsume(organization ->
+                        getOrganization(organization.getId()))
+                .otherwise(organization -> {
+                    throw new RuntimeException("Could not create the organization: " + model.toString());
+                });
     }
 
-    public Completes<Organization> confirmOrganization(Long id) {
-        execute(id, result -> result.confirm(processorService.getProcessor()));
-        return getOrganization(id);
+    public Completes<Organization> confirmOrganization(Long organizationId) {
+        // Execute the confirm command on the organization
+        return executeCommand(organizationId,
+                organization -> organization.confirm(processorService.getProcessor()))
+                .otherwise(organization -> {
+                    throw new RuntimeException("Could not confirm the organization: " + organization.toString());
+                });
     }
 
-    private Completes<Organization> execute(@NotNull Long id, Consumer<Organization> commandHandler) {
-        return getOrganization(id).andThenConsume(commandHandler)
-                .andThenConsume(organization -> organizationRepository
-                        .update(id, organization.getStatus(), organization.getVersion()));
+    private Completes<Organization> executeCommand(@NotNull Long id, Consumer<Organization> commandHandler) {
+        return getOrganization(id)
+                .andThenConsume(commandHandler)
+                .andThen(organization -> {
+                    // The command succeeded, now persist the updated state to the repository
+                    Logger.basicLogger().info("Updated organization: " + organization.toString());
+                    organizationRepository.update(id, organization.getStatus(), organization.getVersion());
+                    return organization;
+                });
     }
 }

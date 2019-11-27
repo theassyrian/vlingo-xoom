@@ -1,7 +1,6 @@
 package io.examples.domain;
 
 import io.examples.data.Identity;
-import io.examples.domain.state.OrganizationConfirmed;
 import io.examples.domain.state.OrganizationPending;
 import io.vlingo.xoom.processor.Processor;
 import io.vlingo.xoom.processor.State;
@@ -28,12 +27,19 @@ public class Organization extends Identity {
     }
 
     public Organization confirm(Processor processor) {
-        return sendEvent(processor, new OrganizationConfirmed());
+        OrganizationEvent confirmEvent = new OrganizationEvent(status.name(), OrganizationStatus.CONFIRMED.name());
+        return sendEvent(processor, confirmEvent, stateTransition -> {
+            // TODO: Implement payment confirmation
+
+            // Then accept the state transition
+            acceptState(stateTransition.getTo())
+                    .accept(stateTransition);
+        });
     }
 
     private Organization sendEvent(Processor processor, State targetState) {
         OrganizationEvent event = new OrganizationEvent(status.name(), targetState.getName());
-        return sendEvent(processor, event, defaultStateConsumer(targetState));
+        return sendEvent(processor, event, acceptState(targetState));
     }
 
     private Organization sendEvent(Processor processor, OrganizationEvent event, Consumer<StateTransition> handler) {
@@ -45,11 +51,19 @@ public class Organization extends Identity {
     }
 
     @SuppressWarnings("unchecked")
-    private Consumer<StateTransition> defaultStateConsumer(State targetState) {
+    private Consumer<StateTransition> acceptState(State targetState) {
         return stateTransition -> {
             stateTransition.apply(targetState).await();
             this.status = OrganizationStatus.valueOf(stateTransition.getTargetName());
             this.version = targetState.getVersion().toString();
         };
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "status=" + status +
+                ", version='" + version + '\'' +
+                "} " + super.toString();
     }
 }
