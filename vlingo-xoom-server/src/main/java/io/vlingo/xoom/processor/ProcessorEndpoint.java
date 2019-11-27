@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-@Endpoint(id = "processors",
-        prefix = "custom",
-        defaultEnabled = true,
-        defaultSensitive = false)
+@Endpoint(id = "processors", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
 @Requires(classes = State.class)
 public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStartupEvent> {
     private static Logger log = LoggerFactory.getLogger(ProcessorEndpoint.class);

@@ -26,7 +26,8 @@ public class AccountPending extends AccountState<AccountPending> {
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                handle(from(this).to(new AccountConfirmed()).then(Transition::logResult))
+                handle(from(this).to(new AccountConfirmed())
+                        .then(Transition::logResult))
         };
     }
 

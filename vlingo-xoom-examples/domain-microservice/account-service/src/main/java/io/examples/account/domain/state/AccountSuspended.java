@@ -26,7 +26,8 @@ public class AccountSuspended extends AccountState<AccountSuspended> {
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                handle(from(this).to(new AccountActivated()).then(Transition::logResult))
+                handle(from(this).to(new AccountActivated())
+                        .then(Transition::logResult))
         };
     }
 
