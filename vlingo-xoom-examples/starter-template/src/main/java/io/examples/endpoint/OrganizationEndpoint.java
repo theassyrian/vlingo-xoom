@@ -12,7 +12,6 @@ import static io.vlingo.common.Completes.withSuccess;
 import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 
-
 @Resource
 public class OrganizationEndpoint implements Endpoint {
 
@@ -46,7 +45,6 @@ public class OrganizationEndpoint implements Endpoint {
                         .param(Long.class)
                         .handle(this::confirmOrganization)
                         .onError(this::getErrorResponse)
-
         };
     }
 
@@ -69,7 +67,6 @@ public class OrganizationEndpoint implements Endpoint {
     public Completes<Response> confirmOrganization(Long id) {
         return response(Created, organizationService.confirmOrganization(id));
     }
-
 
     @Override
     public String getName() {
