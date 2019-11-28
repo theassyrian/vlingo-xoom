@@ -33,7 +33,7 @@ public class OrganizationService {
                 .andThenConsume(organization ->
                         queryOrganization(organization.getId()))
                 .otherwise(organization -> {
-                    throw new RuntimeException("Could not create the organization: " + model.toString());
+                    throw new RuntimeException("Could not define the organization: " + model.toString());
                 });
     }
 

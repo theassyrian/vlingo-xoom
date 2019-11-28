@@ -14,6 +14,7 @@ import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.xoom.resource.Endpoint;
+import io.vlingo.xoom.resource.StaticFileResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -41,7 +44,7 @@ public class VlingoServer implements EmbeddedServer {
     private static final Logger log = LoggerFactory.getLogger(VlingoServer.class);
     private Server server;
     private VlingoScene vlingoScene;
-    private Resource[] resources;
+    private Set<Resource> resources;
     private ApplicationContext applicationContext;
     private ApplicationConfiguration applicationConfiguration;
     private boolean isRunning = false;
@@ -61,7 +64,8 @@ public class VlingoServer implements EmbeddedServer {
         this.applicationContext = applicationContext;
         this.applicationConfiguration = applicationConfiguration;
         this.vlingoScene = vlingoScene;
-        this.resources = endpoints.map(Endpoint::getResource).toArray(Resource[]::new);
+        this.resources = endpoints.map(Endpoint::getResource).collect(Collectors.toSet());
+        this.resources.add(new StaticFileResources().routes());
     }
 
     public Server getServer() {
@@ -72,7 +76,7 @@ public class VlingoServer implements EmbeddedServer {
         return vlingoScene;
     }
 
-    public Resource[] getResources() {
+    public Set<Resource> getResources() {
         return resources;
     }
 
@@ -133,7 +137,8 @@ public class VlingoServer implements EmbeddedServer {
             }
 
             // Start the server with auto-configured settings
-            this.server = Server.startWith(vlingoScene.getWorld().stage(), Resources.are(resources),
+            this.server = Server.startWith(vlingoScene.getWorld().stage(),
+                    Resources.are(resources.toArray(new Resource[0])),
                     vlingoScene.getServerConfiguration().getPort(),
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
