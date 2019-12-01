@@ -19,25 +19,12 @@ app.config(function ($routeProvider) {
             locationService = $location;
             scopeService = scope;
 
-            $('#accordion').collapse({
-                toggle: false
-            });
-            $("#accordion").click(function (e) {
-                e.preventDefault();
-            });
-            $('.collapse').on('shown.bs.collapse', function () {
-                $(this).parent().find('.panel-title').removeClass("expandable").addClass("expanded");
-            }).on('hidden.bs.collapse', function () {
-                $(this).parent().find('.panel-title').removeClass("expanded").addClass("expandable");
-            });
-
-            var selector = ".item-title";
             var loadGraph = function () {
                 processorClient.get(function (data) {
                     if (data.statusCode != null) {
                     } else {
                         renderProcessorGraph(function () {
-                            console.log("Loaded graph");
+                            console.log("Loaded graph diagram...");
                         }, data)
                     }
                 });

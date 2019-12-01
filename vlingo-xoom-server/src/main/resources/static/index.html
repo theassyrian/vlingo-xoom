@@ -2,17 +2,16 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Management endpoint for Vlingo Xoom processors">
+    <meta name="author" content="Vlingo">
 
     <title>Vlingo Xoom Processor Flow</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    <link rel="stylesheet" href="static/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="static/css/main.css">
 
@@ -23,9 +22,10 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Oswald:300&display=swap" rel="stylesheet">
+    <!-- Angular -->
+    <script src="static/js/util/angular-1.4.8.min.js"></script>
+    <script src="static/js/util/angular-route-1.4.8.min.js"></script>
+
     <!-- jQuery -->
     <script src="static/js/util/jquery-2.2.4.min.js"></script>
 
@@ -33,11 +33,13 @@
     <script src="static/js/util/bootstrap.min.js"></script>
 </head>
 <body ng-app="myApp">
+
 <!-- Page Content -->
 <div class="container">
     <div class="ng-view"></div>
 </div>
 
+<!-- Modal Dialog -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="errorLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content ">
@@ -52,12 +54,14 @@
 
 <!-- JS clients --->
 <script src="static/js/client/dispatcher/dispatcher.js"></script>
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="static/js/util/dagre-d3.min.js"></script>
-<script src="static/js/util/json.tables.1.0.0.js"></script>
 <script src="static/js/client/api/processor-client.js"></script>
+
+<!-- D3 -->
+<script src="static/js/util/d3.v3.min.js" charset="utf-8"></script>
+<script src="static/js/util/dagre-d3.min.js"></script>
+
+<!-- Angular Root -->
 <script src="static/js/root.js"></script>
 
 </body>
-
 </html>

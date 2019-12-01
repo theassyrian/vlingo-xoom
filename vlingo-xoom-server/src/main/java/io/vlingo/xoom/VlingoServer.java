@@ -14,7 +14,7 @@ import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
 import io.vlingo.xoom.resource.Endpoint;
-import io.vlingo.xoom.resource.StaticFileResources;
+import io.vlingo.xoom.resource.CachedStaticFilesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +65,7 @@ public class VlingoServer implements EmbeddedServer {
         this.applicationConfiguration = applicationConfiguration;
         this.vlingoScene = vlingoScene;
         this.resources = endpoints.map(Endpoint::getResource).collect(Collectors.toSet());
-        this.resources.add(new StaticFileResources().routes());
+        this.resources.add(new CachedStaticFilesResource().routes());
     }
 
     public Server getServer() {

@@ -7,8 +7,7 @@ var appDispatcher = {
             dataType: "json",
             contentType: req.contentType,
             processData: false
-        })
-            .success(callback)
+        }).success(callback)
             .error(function (err) {
                 $(".modal").modal();
                 if (err.statusCode().status == 404) {

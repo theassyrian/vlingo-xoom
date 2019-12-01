@@ -29,8 +29,17 @@ import static io.vlingo.http.ResponseHeader.ContentLength;
 import static io.vlingo.http.resource.ResourceBuilder.get;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-public class StaticFileResources extends ResourceHandler {
+/**
+ * The {@link StaticFilesResource} serves static content from the /src/main/resources/static directory of the Xoom
+ * application.
+ *
+ * @author Kenny Bastani
+ * @author Wolfgang Werner
+ * @author Vaughn Vernon
+ */
+public class CachedStaticFilesResource extends ResourceHandler {
 
+    // TODO: Make the cache expiration and max size limit configurable
     private final LoadingCache<String, byte[]> staticFileCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -43,9 +52,6 @@ public class StaticFileResources extends ResourceHandler {
                 }
             });
 
-    public StaticFileResources() {
-    }
-
     @Override
     public Resource<?> routes() {
         final RequestHandler0.Handler0 serve0 = this::serve;
@@ -54,6 +60,7 @@ public class StaticFileResources extends ResourceHandler {
         final RequestHandler3.Handler3<String, String, String> serve3 = this::serve;
         final RequestHandler4.Handler4<String, String, String, String> serve4 = this::serve;
 
+        // TODO: Make the handler pool size for this resource configurable
         return resource("Static File Resource", 10,
                 get("")
                         .handle(() -> redirectToApp("/")),
@@ -118,16 +125,15 @@ public class StaticFileResources extends ResourceHandler {
         }
     }
 
-    private String guessContentType(final String path) throws IOException {
-        // This implementation uses javax.activation.MimetypesFileTypeMap; the mime types are defined
-        // in META-INF/mime.types as JDK8's java.nio.file.Files#probeContentType is highly platform dependent
-        // and reportedly not reliable, see e.g. https://bugs.openjdk.java.net/browse/JDK-8186071
+    private String guessContentType(final String path) {
         MimetypesFileTypeMap m = new MimetypesFileTypeMap();
         String contentType = m.getContentType(Paths.get(path).toFile());
         return (contentType != null) ? contentType : "application/octet-stream";
     }
 
     private String pathFrom(final String[] pathSegments) {
+        // TODO: Make the static resource path configurable
+        // TODO: Make the static file serving location configurable
         return Stream.of(pathSegments)
                 .map(p -> p.startsWith("/") ? p.substring(1) : p)
                 .map(p -> p.endsWith("/") ? p.substring(0, p.length() - 1) : p)
@@ -145,6 +151,7 @@ public class StaticFileResources extends ResourceHandler {
 
     private static byte[] read(final InputStream is) throws IOException {
         byte[] readBytes;
+        
         byte[] buffer = new byte[4096];
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

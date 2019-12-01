@@ -19,7 +19,7 @@ var renderProcessorGraph = function (callback, data) {
     g.graph().marginx = 80;
     g.graph().marginy = 20;
 
-    data.nodes.forEach(function(node) {
+    data.nodes.forEach(function (node) {
         g.setNode(node, {
             label: node,
             class: node.toLowerCase()
@@ -33,7 +33,7 @@ var renderProcessorGraph = function (callback, data) {
         node.rx = node.ry = 5;
     });
 
-    data.edges.forEach(function(edge) {
+    data.edges.forEach(function (edge) {
         g.setEdge(edge.source, edge.target, {
             label: edge.label,
             style: "stroke-width: 1.25em;",
@@ -44,6 +44,9 @@ var renderProcessorGraph = function (callback, data) {
     });
 
     var render = new dagreD3.render();
+
+    callback();
+
     var svg = d3.select("svg"),
         svgGroup = svg.append("g"),
         inner = svg.select("g"),
@@ -53,12 +56,10 @@ var renderProcessorGraph = function (callback, data) {
 
     render(d3.select("svg g"), g);
     inner.call(render, g);
+
     var draw = function (isUpdate) {
         var graphWidth = g.graph().width;
         var graphHeight = g.graph().height;
-        g.nodes().forEach(function(node) {
-            console.log(g.node(node));
-        });
         var width = parseInt(svg.style("width").replace(/px/, ""));
         var height = parseInt(svg.style("height").replace(/px/, ""));
         var zoomScale = Math.min(width / graphWidth, height / graphHeight);
@@ -67,8 +68,11 @@ var renderProcessorGraph = function (callback, data) {
         zoom.scale(zoomScale);
         zoom.event(isUpdate ? svg.transition().duration(300) : d3.select("svg"));
     };
+
+    // Detect window changes and redraw the diagram to fit within its bounded container
     setInterval(function () {
         draw(true);
     }, 100);
+
     draw();
 };

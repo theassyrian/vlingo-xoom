@@ -18,47 +18,63 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStar
 
     @Read
     public Map<String, Object> getMap() {
-        Kernel kernel = processor.getKernel().await();
-
         Set<String> nodes = new HashSet<>();
+        Map<String, Integer> portCount = new HashMap<>();
+        Set<Map<String, Object>> links = new HashSet<>();
+        Map<String, Object> results = new HashMap<>();
 
+        Kernel kernel = processor.getKernel().await();
         List<State> states = kernel.getStates().await();
+
         states.forEach(state -> {
             nodes.add(state.getName().split("::")[0]);
         });
 
-        Map<String, Integer> portCount = new HashMap<>();
-        Set<Map<String, Object>> links = new HashSet<>();
+        states.stream().map(state -> Stream.of(state.getTransitionHandlers()))
+                .flatMap(handler -> handler)
+                .forEach(handler -> defineGraph(portCount, links, handler));
 
-        states.stream().map(state -> Stream.of(state.getTransitionHandlers())).flatMap(handler -> handler)
-                .forEach(handler -> {
-                    Map<String, Object> link = new HashMap<>();
-                    link.put("source", handler.getStateTransition().getSourceName());
-                    link.put("target", handler.getStateTransition().getTargetName());
-                    String[] address = handler.getAddress().split("::");
-                    link.put("label", address.length == 3 ? address[2] : "TO");
-                    Integer port = address.length != 3 ?
-                            portCount.compute(handler.getStateTransition().getSourceName(),
-                                    (s, integer) -> Optional.ofNullable(integer)
-                                            .map(i -> i + 1)
-                                            .orElse(0)) : 1;
-
-                    Integer targetPort = address.length != 3 ?
-                            portCount.compute("TO" + "::" + handler.getStateTransition().getTargetName(),
-                                    (s, integer) -> Optional.ofNullable(integer)
-                                            .map(i -> i + 1)
-                                            .orElse(1)) : 0;
-
-                    link.put("port", port + targetPort);
-                    links.add(link);
-                });
-
-        Map<String, Object> results = new HashMap<>();
         results.put("nodes", nodes);
         results.put("edges", links);
         results.put("processor", processor.getName().await());
 
         return results;
+    }
+
+    private void defineGraph(Map<String, Integer> portCount, Set<Map<String, Object>> links, TransitionHandler handler) {
+        Map<String, Object> link = new HashMap<>();
+
+        // Split the handler address into parts
+        String[] address = handler.getAddress().split("::");
+
+        link.put("source", handler.getStateTransition().getSourceName());
+        link.put("target", handler.getStateTransition().getTargetName());
+
+        // If the state transition is logical then return TO otherwise return the sub-state transition's name
+        link.put("label", address.length == 3 ? address[2] : "TO");
+
+        // (i=0)-[i++]->(port=[j+i])<-[j++]-(j=0)
+
+        // Algorithmically determines whether or not to place a label left or right of an arrow
+
+        // Calculates a port based on the number of incoming connections spanning from the source node
+        Integer sourcePort = address.length != 3 ?
+                portCount.compute(handler.getStateTransition().getSourceName(),
+                        (s, integer) -> Optional.ofNullable(integer)
+                                .map(i -> i + 1)
+                                .orElse(0)) : 1;
+
+        // Calculates a port based on the number of outgoing connections spanning into the target node
+        Integer targetPort = address.length != 3 ?
+                portCount.compute("TO" + "::" + handler.getStateTransition().getTargetName(),
+                        (s, integer) -> Optional.ofNullable(integer)
+                                .map(i -> i + 1)
+                                .orElse(1)) : 0;
+
+        // Calculate and set the port on the response by summing the results of the sourcePort and targetPort
+        link.put("port", sourcePort + targetPort);
+
+        links.add(link);
     }
 
     @Override
