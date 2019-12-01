@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 public class KernelActor extends Actor implements Kernel {
     private final Map<String, TransitionHandler> transitionHandlerMap;
-    private final Map<String, State> stateMap;
+    private final Map<String, State<? extends State>> stateMap;
     private String kernelName = "DefaultProcessorKernel";
 
     public KernelActor() {
@@ -36,7 +36,7 @@ public class KernelActor extends Actor implements Kernel {
     }
 
     @Override
-    public void registerStates(State... states) {
+    public void registerStates(State<? extends State>... states) {
         Stream.of(states).forEach(s -> {
             if (stateMap.containsKey(s.getName())) {
                 throw new IllegalStateException("The state with the name " + s.getName() + " has " +
@@ -59,7 +59,7 @@ public class KernelActor extends Actor implements Kernel {
     }
 
     @Override
-    public Completes<List<State>> getStates() {
+    public Completes<List<State<? extends State>>> getStates() {
         return completes().with(Collections.unmodifiableList(new ArrayList<>(stateMap.values())));
     }
 

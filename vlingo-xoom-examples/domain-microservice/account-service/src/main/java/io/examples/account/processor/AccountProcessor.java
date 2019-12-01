@@ -25,6 +25,6 @@ public class AccountProcessor extends ProcessorActor {
 
     @Override
     public Completes<String> getName() {
-        return completes().with("AccountProcessor");
+        return completes().with("Account Processor");
     }
 }

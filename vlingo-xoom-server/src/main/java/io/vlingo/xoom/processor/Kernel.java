@@ -38,9 +38,9 @@ public interface Kernel {
 
     void setName(String name);
 
-    void registerStates(State... states);
+    void registerStates(State<? extends State>... states);
 
-    Completes<List<State>> getStates();
+    Completes<List<State<? extends State>>> getStates();
 
     Completes<List<StateTransition>> getStateTransitions();
 

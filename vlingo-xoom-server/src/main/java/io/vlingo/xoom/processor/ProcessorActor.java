@@ -60,7 +60,7 @@ public abstract class ProcessorActor extends Actor implements Processor, Schedul
 
     @Override
     public Completes<String> getName() {
-        return completes().with("DefaultProcessor");
+        return completes().with("Default Processor");
     }
 
     @Override

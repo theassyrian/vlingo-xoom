@@ -1,5 +1,9 @@
 package io.vlingo.xoom.resource;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalNotification;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Body;
 import io.vlingo.http.Header;
@@ -8,11 +12,14 @@ import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.*;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +30,18 @@ import static io.vlingo.http.resource.ResourceBuilder.get;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
 public class StaticFileResources extends ResourceHandler {
+
+    private final LoadingCache<String, byte[]> staticFileCache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .removalListener(this::onRemoval)
+            .build(new CacheLoader<String, byte[]>() {
+                @Override
+                @ParametersAreNonnullByDefault
+                public byte[] load(String path) throws IOException {
+                    return readFileFromClasspath(path);
+                }
+            });
 
     public StaticFileResources() {
     }
@@ -73,23 +92,28 @@ public class StaticFileResources extends ResourceHandler {
     }
 
     private Completes<Response> serve(final String... pathSegments) {
-        if (pathSegments.length == 0)
-            return serve("index.html");
+        if (pathSegments.length == 0 || pathSegments[pathSegments.length - 1].split("\\.").length == 1)
+            return serve(Stream.concat(Stream.of(pathSegments), Stream.of("index.html")).toArray(String[]::new));
 
         String path = pathFrom(pathSegments);
         try {
-            byte[] content = readFileFromClasspath(path);
+            byte[] content;
+            try {
+                content = staticFileCache.get(path);
+            } catch (ExecutionException ex) {
+                throw ex.getCause();
+            }
             return Completes.withSuccess(
                     Response.of(Ok,
                             Header.Headers.of(
                                     ResponseHeader.of(ContentType, guessContentType(path)),
-                                    ResponseHeader.of(ContentLength, content.length)
-                            ),
-                            Body.from(content, Body.Encoding.UTF8).content()
-                    ));
+                                    ResponseHeader.of(ContentLength, content.length)),
+                            Body.bytesToUTF8(content)
+                    )
+            );
         } catch (FileNotFoundException e) {
             return Completes.withSuccess(Response.of(NotFound, path + " not found."));
-        } catch (IOException e) {
+        } catch (Throwable e) {
             return Completes.withSuccess(Response.of(InternalServerError));
         }
     }
@@ -133,5 +157,9 @@ public class StaticFileResources extends ResourceHandler {
             is.close();
         }
         return readBytes;
+    }
+
+    private void onRemoval(RemovalNotification<Object, Object> notification) {
+        staticFileCache.invalidate(notification.getKey());
     }
 }
