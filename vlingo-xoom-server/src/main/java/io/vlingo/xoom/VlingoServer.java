@@ -6,6 +6,7 @@ import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.event.ServiceShutdownEvent;
 import io.micronaut.discovery.event.ServiceStartedEvent;
+import io.micronaut.health.HealthStatus;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
@@ -145,11 +146,13 @@ public class VlingoServer implements EmbeddedServer {
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
                     Configuration.Timing.define());
+
+            serviceInstance = applicationContext.createBean(VlingoServerInstance.class, this);
             applicationContext.publishEvent(new ServerStartupEvent(this));
+            if(serviceInstance.getHealthStatus() == HealthStatus.DOWN)
+                applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
             applicationContext.publishEvent(new SceneStartupEvent(vlingoScene));
             isRunning = true;
-            serviceInstance = applicationContext.createBean(VlingoServerInstance.class, this);
-            applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
         } else {
             throw new RuntimeException("A Vlingo Xoom server is already running in the current Micronaut context");
         }
