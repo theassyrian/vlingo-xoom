@@ -3,6 +3,7 @@ package io.vlingo.xoom;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.io.socket.SocketUtils;
+import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.event.ServiceShutdownEvent;
 import io.micronaut.discovery.event.ServiceStartedEvent;
 import io.micronaut.runtime.ApplicationConfiguration;
@@ -13,6 +14,7 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
+import io.vlingo.xoom.processor.SceneStartupEvent;
 import io.vlingo.xoom.resource.CachedStaticFilesResource;
 import io.vlingo.xoom.resource.Endpoint;
 import org.slf4j.Logger;
@@ -42,13 +44,14 @@ import java.util.stream.Stream;
 @Singleton
 public class VlingoServer implements EmbeddedServer {
     private static final Logger log = LoggerFactory.getLogger(VlingoServer.class);
+    private final String host;
     private Server server;
-    private VlingoScene vlingoScene;
-    private Set<Resource> resources;
-    private ApplicationContext applicationContext;
-    private ApplicationConfiguration applicationConfiguration;
+    private final VlingoScene vlingoScene;
+    private final Set<Resource> resources;
+    private final ApplicationContext applicationContext;
+    private final ApplicationConfiguration applicationConfiguration;
     private boolean isRunning = false;
-    private VlingoEmbeddedServerInstance serviceInstance;
+    private ServiceInstance serviceInstance;
 
     /**
      * Bootstrap the application context and configuration for starting the vlingo/http server.
@@ -61,11 +64,14 @@ public class VlingoServer implements EmbeddedServer {
     public VlingoServer(ApplicationContext applicationContext, ApplicationConfiguration applicationConfiguration,
                         VlingoScene vlingoScene, Stream<Endpoint> endpoints) {
         // Load the world context with auto-configured settings
+        this.resources = endpoints.map(Endpoint::getResource).collect(Collectors.toSet());
+        this.resources.add(new CachedStaticFilesResource().routes());
         this.applicationContext = applicationContext;
         this.applicationConfiguration = applicationConfiguration;
         this.vlingoScene = vlingoScene;
-        this.resources = endpoints.map(Endpoint::getResource).collect(Collectors.toSet());
-        this.resources.add(new CachedStaticFilesResource().routes());
+        this.host = Optional.ofNullable(this.vlingoScene.getServerConfiguration().getHost())
+                .orElseGet(() -> Optional.ofNullable(System.getenv(Environment.HOSTNAME))
+                        .orElse(SocketUtils.LOCALHOST));
     }
 
     public Server getServer() {
@@ -87,9 +93,7 @@ public class VlingoServer implements EmbeddedServer {
 
     @Override
     public String getHost() {
-        return Optional.ofNullable(vlingoScene.getServerConfiguration().getHost())
-                .orElseGet(() -> Optional.ofNullable(System.getenv(Environment.HOSTNAME))
-                        .orElse(SocketUtils.LOCALHOST));
+        return host;
     }
 
     @Override
@@ -102,10 +106,8 @@ public class VlingoServer implements EmbeddedServer {
         try {
             return getURI().toURL();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Invalid URL argument: " + getURI());
         }
-
-        return null;
     }
 
     @Override
@@ -143,24 +145,21 @@ public class VlingoServer implements EmbeddedServer {
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
                     Configuration.Timing.define());
-
             applicationContext.publishEvent(new ServerStartupEvent(this));
-
-            vlingoScene.getApplicationConfiguration().getName().ifPresent(id -> {
-                this.serviceInstance = applicationContext
-                        .createBean(VlingoEmbeddedServerInstance.class, id, this);
-
-                applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
-            });
-
+            applicationContext.publishEvent(new SceneStartupEvent(vlingoScene));
             isRunning = true;
-
-            log.info(ServerConfiguration.getBanner());
-            log.info("Started embedded Vlingo Xoom server at " + getURI().toASCIIString());
+            serviceInstance = applicationContext.createBean(VlingoServerInstance.class, this);
+            applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
         } else {
             throw new RuntimeException("A Vlingo Xoom server is already running in the current Micronaut context");
         }
+
+        log.info(ServerConfiguration.getBanner());
         return this;
+    }
+
+    public ServiceInstance getServiceInstance() {
+        return serviceInstance;
     }
 
     @Override

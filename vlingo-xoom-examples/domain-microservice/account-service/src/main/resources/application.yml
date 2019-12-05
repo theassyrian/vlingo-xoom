@@ -20,12 +20,16 @@ jpa:
           provider: none
         hbm2ddl:
           auto: update
+ribbon:
+  VipAddress: account-service
+  ServerListRefreshInterval: 500
 eureka:
   client:
     registration:
       enabled: true
       fail-fast: false
+      retry-count: 10
+      retry-delay: 1s
       leaseInfo:
         durationInSecs: 10
     defaultZone: "${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}"
-

@@ -13,8 +13,12 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.21"
 }
 
+apply plugin: 'java'
 apply plugin: 'org.hibernate.orm'
 apply plugin: 'application'
+
+sourceCompatibility = 1.9
+targetCompatibility = 11
 
 group = 'io.examples'
 version = '1.0.0-SNAPSHOT'

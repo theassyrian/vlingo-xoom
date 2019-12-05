@@ -3,6 +3,7 @@ package io.vlingo.xoom;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.management.endpoint.beans.BeansEndpoint;
 import io.micronaut.management.endpoint.env.EnvironmentEndpoint;
+import io.micronaut.management.endpoint.health.DetailsVisibility;
 import io.micronaut.management.endpoint.health.HealthEndpoint;
 import io.micronaut.management.endpoint.loggers.LoggersEndpoint;
 import io.micronaut.management.endpoint.routes.RoutesEndpoint;
@@ -68,7 +69,10 @@ public class ManagementEndpoints implements Endpoint {
     public RequestHandler[] getHandlers() {
         List<RequestHandler> handlers = Stream.of(
                 get("/health").handle(() -> response(Ok, getHealthEndpoint()
-                        .andThen(healthEndpoint -> healthEndpoint.getHealth(null).blockingGet())))
+                        .andThen(healthEndpoint -> {
+                            healthEndpoint.setDetailsVisible(DetailsVisibility.ANONYMOUS);
+                            return healthEndpoint.getHealth(null).blockingGet();
+                        })))
                         .onError(this::getErrorResponse),
                 get("/beans").handle(() -> response(Ok, getBeansEndpoint()
                         .andThen(beansEndpoint -> beansEndpoint.getBeans().blockingGet())))

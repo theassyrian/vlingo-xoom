@@ -1,5 +1,6 @@
 package io.vlingo.xoom;
 
+import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.runtime.ApplicationConfiguration;
@@ -21,12 +22,15 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
     private World world;
     private final ApplicationConfiguration applicationConfiguration;
     private final ServerConfiguration serverConfiguration;
+    private final ApplicationContext applicationContext;
     private boolean isRunning;
 
     public VlingoScene(ServerConfiguration serverConfiguration,
-                       ApplicationConfiguration applicationConfiguration) {
+                       ApplicationConfiguration applicationConfiguration,
+                       ApplicationContext applicationContext) {
         this.applicationConfiguration = applicationConfiguration;
         this.serverConfiguration = serverConfiguration;
+        this.applicationContext = applicationContext;
     }
 
     public World getWorld() {
@@ -39,6 +43,10 @@ public class VlingoScene implements LifeCycle<VlingoScene> {
 
     public ServerConfiguration getServerConfiguration() {
         return serverConfiguration;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     @Override

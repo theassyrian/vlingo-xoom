@@ -13,8 +13,12 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.21"
 }
 
+apply plugin: 'java'
 apply plugin: 'org.hibernate.orm'
 apply plugin: 'application'
+
+sourceCompatibility = 1.9
+targetCompatibility = 11
 
 group = 'io.examples'
 version = '1.0.0-SNAPSHOT'
@@ -43,7 +47,6 @@ dependencies {
     implementation "io.micronaut:micronaut-discovery-client"
     implementation "io.vlingo:vlingo-xoom-server:$xoomVersion"
 
-    implementation "io.micronaut.configuration:micronaut-netflix-ribbon"
     compile 'io.micronaut.data:micronaut-data-hibernate-jpa:1.0.0.M4'
 
     runtime "io.micronaut.configuration:micronaut-jdbc-hikari"
@@ -84,8 +87,7 @@ tasks.withType(JavaCompile) {
 apply plugin: 'com.palantir.docker'
 
 docker {
-    dependsOn shadowJar
     copySpec.from(tasks.shadowJar.outputs).into("dependency")
     dockerfile project.file('Dockerfile')
-    name "vlingo/${property("projectName")}"
+    name "vlingo/${property("projectName")}:domain-microservice"
 }

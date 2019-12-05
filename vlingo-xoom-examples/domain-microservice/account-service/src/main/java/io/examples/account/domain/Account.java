@@ -170,6 +170,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
+    @SuppressWarnings("unchecked")
     public Account update(Processor processor, Account model) {
         // Handle the sub-state transition for updating an active account's accountNumber
         AccountState targetState = new AccountActivated();
@@ -244,6 +245,7 @@ public class Account extends Identity {
      * @param targetState is the requested {@link AccountState} to attempt to transition to
      * @return the default {@link Consumer}
      */
+    @SuppressWarnings("unchecked")
     private Consumer<StateTransition> defaultStateConsumer(AccountState targetState) {
         return stateTransition -> {
             stateTransition.apply(this);

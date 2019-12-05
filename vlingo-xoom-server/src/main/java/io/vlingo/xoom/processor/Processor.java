@@ -105,7 +105,7 @@ public interface Processor extends Stoppable {
                 stage.world().addressFactory().withHighId(),
                 stage.world().defaultLogger());
 
-        return Completes.withSuccess(processor.startUp().await())
-                .andThen(p -> processor).await();
+        processor.startUp();
+        return processor;
     }
 }

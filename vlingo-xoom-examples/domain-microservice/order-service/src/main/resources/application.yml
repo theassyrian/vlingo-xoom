@@ -1,6 +1,9 @@
 micronaut:
   application:
     name: "order-service"
+  http:
+    client:
+      read-timeout: 5s
 ---
 server:
   port: 8080
@@ -20,11 +23,16 @@ jpa:
           provider: none
         hbm2ddl:
           auto: update
+ribbon:
+  VipAddress: test
+  ServerListRefreshInterval: 2000
 eureka:
   client:
     registration:
       enabled: true
       fail-fast: false
+      retry-count: 10
+      retry-delay: 5s
       leaseInfo:
-        durationInSecs: 10
+        durationInSecs: 5
     defaultZone: "${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}"

@@ -36,7 +36,7 @@ public abstract class ProcessorActor extends Actor implements Processor, Schedul
     @SuppressWarnings("unchecked")
     public Completes<Boolean> startUp() {
         logger().info("Starting " + this.definition().actorName() + "...");
-        stage().scheduler().schedule(selfAs(Scheduled.class), null, 1000L, 100);
+        //stage().scheduler().schedule(selfAs(Scheduled.class), null, 0L, 10);
         this.kernel = stage().actorFor(Kernel.class, KernelActor.class);
         this.kernel.setName(this.definition().actorName() + "/Kernel");
         this.kernel.registerStates(states.toArray(new State[]{}));

@@ -4,8 +4,8 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.9
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -24,6 +24,7 @@ dependencies {
     implementation "com.google.guava:guava:28.1-jre"
     compile "jakarta.activation:jakarta.activation-api:1.2.1"
     compile "io.micronaut:micronaut-http-client:$micronautVersion"
+    implementation "io.micronaut.configuration:micronaut-netflix-ribbon:1.0.4"
     compile "io.micronaut:micronaut-runtime:$micronautVersion"
     compile "io.vlingo:vlingo-http:$vlingoVersion"
     compile "io.vlingo:vlingo-actors:$vlingoVersion"

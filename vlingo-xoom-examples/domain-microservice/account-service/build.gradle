@@ -17,8 +17,8 @@ apply plugin: 'java'
 apply plugin: 'org.hibernate.orm'
 apply plugin: 'application'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.9
+targetCompatibility = 11
 
 group = 'io.examples'
 version = '1.0.0-SNAPSHOT'
@@ -76,9 +76,8 @@ shadowJar {
     mergeServiceFiles()
 }
 
-
 run.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+run.jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.add('-parameters')

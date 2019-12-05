@@ -4,13 +4,14 @@ import io.examples.account.application.AccountContext;
 import io.examples.account.domain.model.AccountQuery;
 import io.examples.order.domain.Address;
 import io.examples.order.domain.Order;
-import io.reactivex.Single;
 import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static io.vlingo.xoom.processor.TransitionBuilder.from;
 import static io.vlingo.xoom.processor.TransitionHandler.handle;
@@ -45,12 +46,17 @@ public class OrderCreated extends State<OrderCreated> {
     private Order connectAccount(Order order) {
 
         // Retrieve the function to query the account context
-        Single<AccountQuery> single = accountContext.getAccount()
+        CompletableFuture<AccountQuery> accountFuture = accountContext.getAccount()
                 .query(order.getAccountId())
                 .await();
 
-        // Issue a blocking get to call the account service and retrieve the account
-        AccountQuery accountQuery = single.blockingGet();
+        AccountQuery accountQuery;
+
+        try {
+            accountQuery = accountFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error getting account query: " + e.getCause().getMessage(), e);
+        }
 
         // Set the shipping address on the order sourced from the account query or throw an error
         order.setShippingAddress(Address.translateFrom(accountQuery.getAddresses()

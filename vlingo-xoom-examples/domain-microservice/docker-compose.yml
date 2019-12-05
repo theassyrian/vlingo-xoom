@@ -4,9 +4,16 @@ services:
   account-service:
     image: "vlingo/account-service:domain-microservice"
     environment:
-      - SERVER_PORT=8080
       - EUREKA_HOST=discovery-service
-      - EUREKA_CLIENT_REGISTRATION_PREFER_IP_ADDRESS=true
+    links:
+      - discovery-service
+    networks:
+      - microservice
+
+  order-service:
+    image: "vlingo/order-service:domain-microservice"
+    environment:
+      - EUREKA_HOST=discovery-service
     links:
       - discovery-service
     networks:
