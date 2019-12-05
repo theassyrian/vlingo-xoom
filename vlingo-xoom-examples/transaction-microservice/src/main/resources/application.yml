@@ -1,5 +1,7 @@
-application:
-  name: "demo-application"
+micronaut:
+  application:
+    name: "order-service"
+---
 server:
   port: 8080
 datasources:
@@ -18,3 +20,11 @@ jpa:
           provider: none
         hbm2ddl:
           auto: update
+eureka:
+  client:
+    registration:
+      enabled: true
+      fail-fast: false
+      leaseInfo:
+        durationInSecs: 10
+    defaultZone: "${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}"

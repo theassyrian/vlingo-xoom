@@ -10,5 +10,5 @@ import io.vlingo.common.Completes;
  * @author Kenny Bastani
  */
 public interface StateHandler<T extends State, R extends State> {
-    Completes<StateTransition<T, R>> execute();
+    Completes<StateTransition<T, R, ?>> execute();
 }

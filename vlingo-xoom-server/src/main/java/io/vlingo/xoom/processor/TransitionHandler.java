@@ -11,9 +11,10 @@ package io.vlingo.xoom.processor;
 public class TransitionHandler<T extends State, R extends State> {
 
     private String address;
-    private StateTransition<T, R> stateTransition;
+    private Class<?> aggregateType = Object.class;
+    private StateTransition<T, R, ?> stateTransition;
 
-    private TransitionHandler(StateTransition<T, R> stateTransition) {
+    private TransitionHandler(StateTransition<T, R, ?> stateTransition) {
         this.stateTransition = stateTransition;
         this.address = stateTransition.getSourceName() + "::" + stateTransition.getTargetName();
     }
@@ -23,16 +24,25 @@ public class TransitionHandler<T extends State, R extends State> {
         return this;
     }
 
+    public <A> TransitionHandler<T, R> withAggregate(Class<A> type) {
+        this.aggregateType = type;
+        return this;
+    }
+
     public String getAddress() {
         return address;
     }
 
-    public StateTransition<T, R> getStateTransition() {
+    public Class<?> getAggregateType() {
+        return aggregateType;
+    }
+
+    public StateTransition<T, R, ?> getStateTransition() {
         return stateTransition;
     }
 
     public static <T1 extends State, R1 extends State>
-    TransitionHandler<T1, R1> handle(StateTransition<T1, R1> stateTransition) {
+    TransitionHandler<T1, R1> handle(StateTransition<T1, R1, ?> stateTransition) {
         return new TransitionHandler<>(stateTransition);
     }
 

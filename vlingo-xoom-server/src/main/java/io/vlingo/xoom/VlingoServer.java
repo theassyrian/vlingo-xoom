@@ -13,8 +13,8 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
-import io.vlingo.xoom.resource.Endpoint;
 import io.vlingo.xoom.resource.CachedStaticFilesResource;
+import io.vlingo.xoom.resource.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,13 +143,18 @@ public class VlingoServer implements EmbeddedServer {
                     Configuration.Sizing.defineWith(10, 16, 100,
                             65535 * 2),
                     Configuration.Timing.define());
+
             applicationContext.publishEvent(new ServerStartupEvent(this));
+
             vlingoScene.getApplicationConfiguration().getName().ifPresent(id -> {
                 this.serviceInstance = applicationContext
                         .createBean(VlingoEmbeddedServerInstance.class, id, this);
+
                 applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
             });
+
             isRunning = true;
+
             log.info(ServerConfiguration.getBanner());
             log.info("Started embedded Vlingo Xoom server at " + getURI().toASCIIString());
         } else {

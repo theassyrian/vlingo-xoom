@@ -1,7 +1,16 @@
-application:
-  name: "demo-application"
+micronaut:
+  application:
+    name: "order-service"
+---
 server:
-  port: -1
+  port: 56445
+micronaut:
+  http:
+    services:
+      order:
+        urls:
+          - http://localhost:56445/v1
+          - http://localhost:56445/v1
 datasources:
   default:
     url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
@@ -18,3 +27,7 @@ jpa:
           provider: none
         hbm2ddl:
           auto: update
+eureka:
+  client:
+    registration:
+      enabled: false

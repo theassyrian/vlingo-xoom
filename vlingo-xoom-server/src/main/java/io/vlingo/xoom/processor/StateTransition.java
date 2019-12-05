@@ -1,8 +1,7 @@
 package io.vlingo.xoom.processor;
 
-import io.vlingo.common.Completes;
-
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * A {@link StateTransition} is a resource specification that defines an input state and output state, while providing
@@ -12,28 +11,34 @@ import java.util.function.BiConsumer;
  * @param <R> is the target state
  * @author Kenny Bastani
  */
-public class StateTransition<T extends State, R extends State> implements Transition {
+public class StateTransition<T extends State, R extends State, A> implements Transition {
 
     private T from;
     private R to;
-    private BiConsumer<T, R> action;
+    private BiConsumer<T, R> action = (a, b) -> {
+    };
+    private Function<A, A> aggregateConsumer = (a) -> a;
 
     public StateTransition(T from, R to) {
         this.from = from;
         this.to = to;
     }
 
-    public Completes<StateTransition<T, R>> apply(R state) {
+    public A apply(A aggregate) {
         if (action == null) {
             throw new IllegalStateException("A state transition must define a success and error result");
         }
-
-        return Completes.withSuccess(this)
-                .andThenConsume(t -> action.accept(from, to));
+        A a = this.aggregateConsumer.apply(aggregate);
+        this.action.accept(this.getFrom(), this.getTo());
+        return a;
     }
 
     public void setActionHandler(BiConsumer<T, R> action) {
         this.action = action;
+    }
+
+    public void setAggregateConsumer(Function<A, A> consumer) {
+        this.aggregateConsumer = consumer;
     }
 
     public T getFrom() {

@@ -180,7 +180,7 @@ public class Account extends Identity {
 
         // Send the event to the processor and update the account using the provided model
         return sendEvent(processor, event, stateTransition -> {
-            stateTransition.apply(targetState).await();
+            stateTransition.apply(this);
             this.accountStatus = AccountStatus.valueOf(stateTransition.getTargetName());
             this.version = targetState.getVersion().toString();
             this.accountNumber = model.getAccountNumber();
@@ -246,7 +246,7 @@ public class Account extends Identity {
      */
     private Consumer<StateTransition> defaultStateConsumer(AccountState targetState) {
         return stateTransition -> {
-            stateTransition.apply(targetState).await();
+            stateTransition.apply(this);
             this.accountStatus = AccountStatus.valueOf(stateTransition.getTargetName());
             this.version = targetState.getVersion().toString();
         };

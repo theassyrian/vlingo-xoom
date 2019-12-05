@@ -30,23 +30,23 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
     private final Environment environment;
     private final ComputeInstanceMetadataResolver computeInstanceMetadataResolver;
     private final List<ServiceInstanceMetadataContributor> metadataContributors;
-    private static String instanceId = UUID.randomUUID().toString();
+    private final String instanceId = UUID.randomUUID().toString();
 
     private ConvertibleValues<String> instanceMetadata;
 
     /**
      * @param id                              The id
-     * @param vlingoServer                 The {@link VlingoServer}
+     * @param vlingoServer                    The {@link VlingoServer}
      * @param environment                     The Environment
      * @param computeInstanceMetadataResolver The {@link ComputeInstanceMetadataResolver}
      * @param metadataContributors            The {@link ServiceInstanceMetadataContributor}
      */
     VlingoEmbeddedServerInstance(
-        @Parameter String id,
-        @Parameter VlingoServer vlingoServer,
-        Environment environment,
-        @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
-        List<ServiceInstanceMetadataContributor> metadataContributors) {
+            @Parameter String id,
+            @Parameter VlingoServer vlingoServer,
+            Environment environment,
+            @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
+            List<ServiceInstanceMetadataContributor> metadataContributors) {
 
         this.id = id;
         this.vlingoServer = vlingoServer;
@@ -75,7 +75,8 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
         if (instanceMetadata == null) {
             Map<String, String> cloudMetadata = new HashMap<>();
             if (computeInstanceMetadataResolver != null) {
-                Optional<? extends ComputeInstanceMetadata> resolved = computeInstanceMetadataResolver.resolve(environment);
+                Optional<? extends ComputeInstanceMetadata> resolved =
+                        computeInstanceMetadataResolver.resolve(environment);
                 if (resolved.isPresent()) {
                     cloudMetadata = resolved.get().getMetadata();
                 }
@@ -86,9 +87,10 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
                 }
             }
             Map<String, String> metadata = vlingoServer.getVlingoScene()
-                .getApplicationConfiguration()
-                .getInstance()
-                .getMetadata();
+                    .getApplicationConfiguration()
+                    .getInstance()
+                    .getMetadata();
+
             if (cloudMetadata != null) {
                 cloudMetadata.putAll(metadata);
             }
@@ -96,6 +98,7 @@ class VlingoEmbeddedServerInstance implements EmbeddedServerInstance {
         }
         return instanceMetadata;
     }
+
 
     @Override
     public HealthStatus getHealthStatus() {

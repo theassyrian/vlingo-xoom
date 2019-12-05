@@ -1,6 +1,6 @@
 package io.examples;
 
-import io.examples.domain.Organization;
+import io.examples.order.domain.Organization;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
