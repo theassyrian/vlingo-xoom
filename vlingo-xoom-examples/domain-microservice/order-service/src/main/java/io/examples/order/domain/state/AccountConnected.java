@@ -9,6 +9,12 @@ import javax.inject.Singleton;
 import static io.vlingo.xoom.processor.TransitionBuilder.from;
 import static io.vlingo.xoom.processor.TransitionHandler.handle;
 
+/**
+ * The {@link AccountConnected} state transitions from the {@link OrderCreated} state. This state automatically
+ * transitions from {@link AccountConnected} to {@link ReservationPending}.
+ *
+ * @author Kenny Bastani
+ */
 @Singleton
 public class AccountConnected extends State<AccountConnected> {
 
@@ -21,7 +27,8 @@ public class AccountConnected extends State<AccountConnected> {
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
-                handle(from(this).to(reservationPending).then(Transition::logResult))
+                handle(from(this).to(reservationPending)
+                        .then(Transition::logResult))
         };
     }
 

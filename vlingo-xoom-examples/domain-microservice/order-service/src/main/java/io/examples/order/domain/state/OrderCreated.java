@@ -16,6 +16,21 @@ import java.util.concurrent.ExecutionException;
 import static io.vlingo.xoom.processor.TransitionBuilder.from;
 import static io.vlingo.xoom.processor.TransitionHandler.handle;
 
+/**
+ * When an {@link Order} is created, it must be connected to an {@link AccountQuery}. The {@link AccountQuery}
+ * is a query model retrieved from the {@link AccountContext}. An accountId is provided to the {@link Order}
+ * when the definition is first created by a consumer.
+ * <p>
+ * This class is responsible for transitioning the state of the {@link Order} from {@link OrderCreated} to
+ * {@link AccountConnected}. The connectOrder method is a command handler that is provided with the account
+ * context to check if the {@link AccountQuery} can be fetched. Once the {@link AccountQuery} is fetched
+ * from the account microservice, the active shipping address on the account will be copied into the {@link Order}.
+ * <p>
+ * The shipping address is cloned to the order at the time the order is created, which means that the address
+ * can only be changed in relation to the order itself.
+ *
+ * @author Kenny Bastani
+ */
 @Singleton
 public class OrderCreated extends State<OrderCreated> {
 
@@ -30,6 +45,7 @@ public class OrderCreated extends State<OrderCreated> {
     @Override
     public TransitionHandler[] getTransitionHandlers() {
         return new TransitionHandler[]{
+                // Here we define the transition handler from OrderCreated to AccountConnected
                 handle(from(this).to(accountConnected).on(Order.class)
                         .then(this::connectAccount)
                         .then(Transition::logResult))
@@ -44,8 +60,7 @@ public class OrderCreated extends State<OrderCreated> {
      * @return the updated {@link Order} definition to be persisted
      */
     private Order connectAccount(Order order) {
-
-        // Retrieve the function to query the account context
+        // Retrieve the reactive client request to query the account service via its context
         CompletableFuture<AccountQuery> accountFuture = accountContext.getAccount()
                 .query(order.getAccountId())
                 .await();
@@ -53,12 +68,13 @@ public class OrderCreated extends State<OrderCreated> {
         AccountQuery accountQuery;
 
         try {
+            // This will execute the reactive HTTP request to query the account
             accountQuery = accountFuture.get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Error getting account query: " + e.getCause().getMessage(), e);
         }
 
-        // Set the shipping address on the order sourced from the account query or throw an error
+        // The shipping address is then copied from the account query to the order
         order.setShippingAddress(Address.translateFrom(accountQuery.getAddresses()
                 .stream()
                 .filter(address -> address.getType().name().equals(Address.AddressType.SHIPPING.name()))

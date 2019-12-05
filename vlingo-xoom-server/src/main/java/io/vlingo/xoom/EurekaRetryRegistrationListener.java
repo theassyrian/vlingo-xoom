@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * This event handler is responsible for healing a load-balanced discovery client that uses Eureka for its service
  * registry.
+ *
+ * @author Kenny Bastani
  */
 @Singleton
 @Requires(property = "eureka.client.registration.enabled", value = "true")

@@ -22,10 +22,12 @@ public class OrderService {
     public Completes<Order> defineOrder(Order orderDefinition) {
         // Remove the identity from the shipping address and save the order
         return Completes.withSuccess(orderDefinition)
-                .andThen(order -> order.sendEvent(processorService.getProcessor(), OrderStatus.ACCOUNT_CONNECTED))
+                .andThen(order -> order.sendEvent(processorService.getProcessor(),
+                        OrderStatus.ACCOUNT_CONNECTED))
+                .andThen(order -> order.sendEvent(processorService.getProcessor(),
+                        OrderStatus.RESERVATION_PENDING))
                 .andThenConsume(orderRepository::save)
-                .andThenConsume(order ->
-                        queryOrder(order.getId()))
+                .andThenConsume(order -> queryOrder(order.getId()))
                 .otherwise(order -> {
                     throw new RuntimeException("Could not define the order: " + order.toString());
                 });
