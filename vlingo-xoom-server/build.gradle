@@ -23,6 +23,7 @@ dependencies {
     implementation "io.micronaut:micronaut-management:$micronautVersion"
     implementation "com.google.guava:guava:28.1-jre"
     compile "jakarta.activation:jakarta.activation-api:1.2.1"
+    compile "com.sun.activation:javax.activation:1.2.0"
     compile "io.micronaut:micronaut-http-client:$micronautVersion"
     implementation "io.micronaut.configuration:micronaut-netflix-ribbon:1.0.4"
     compile "io.micronaut:micronaut-runtime:$micronautVersion"

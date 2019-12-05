@@ -20,13 +20,10 @@ public class OrderService {
     }
 
     public Completes<Order> defineOrder(Order orderDefinition) {
+        // Remove the identity from the shipping address and save the order
         return Completes.withSuccess(orderDefinition)
                 .andThen(order -> order.sendEvent(processorService.getProcessor(), OrderStatus.ACCOUNT_CONNECTED))
-                .andThenConsume(order -> {
-                    // Remove the identity from the shipping address and save the order
-                    order.getShippingAddress().setId(null);
-                    orderRepository.save(order);
-                })
+                .andThenConsume(orderRepository::save)
                 .andThenConsume(order ->
                         queryOrder(order.getId()))
                 .otherwise(order -> {
