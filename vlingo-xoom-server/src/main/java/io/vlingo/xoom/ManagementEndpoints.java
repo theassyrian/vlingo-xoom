@@ -9,6 +9,7 @@ import io.micronaut.management.endpoint.loggers.LoggersEndpoint;
 import io.micronaut.management.endpoint.routes.RoutesEndpoint;
 import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
+import io.vlingo.http.resource.RequestHandler1;
 import io.vlingo.xoom.annotations.Resource;
 import io.vlingo.xoom.processor.ProcessorEndpoint;
 import io.vlingo.xoom.resource.Endpoint;
@@ -88,11 +89,16 @@ public class ManagementEndpoints implements Endpoint {
                         .onError(this::getErrorResponse)).collect(Collectors.toList());
 
         if (getProcessorEndpoint().await() != null) {
-            handlers.add(get("/processors").handle(() -> response(Ok, getProcessorEndpoint()
-                    .andThen(ProcessorEndpoint::getMap)))
+            handlers.add(get("/processors/{name}")
+                    .param(String.class)
+                    .handle(processorEndpointHandler())
                     .onError(this::getErrorResponse));
         }
 
-        return handlers.toArray(new RequestHandler[0]);
+        return handlers.toArray(new RequestHandler[]{});
+    }
+
+    public RequestHandler1.Handler1<String> processorEndpointHandler() {
+        return (name) -> response(Ok, getProcessorEndpoint().andThen((endpoint) -> endpoint.getMap(name)));
     }
 }

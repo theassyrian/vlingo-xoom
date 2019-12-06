@@ -1,12 +1,12 @@
 package io.examples.account.domain.model;
 
 /**
- * This is a simple {@link Address} value object and entity.
+ * This is a simple {@link AccountAddress} value object and entity.
  *
  * @author Kenny Bastani
  * @see AccountQuery
  */
-public class Address {
+public class AccountAddress {
 
     private String street1;
     private String street2;
@@ -16,14 +16,14 @@ public class Address {
     private Integer zipCode;
     private AddressType type;
 
-    public Address() {
+    public AccountAddress() {
     }
 
     /**
-     * Instantiates a new {@link Address} entity with overloaded arguments.
+     * Instantiates a new {@link AccountAddress} entity with overloaded arguments.
      */
-    public Address(String street1, String street2, String state, String city, String country, AddressType type,
-                   Integer zipCode) {
+    public AccountAddress(String street1, String street2, String state, String city, String country, AddressType type,
+                          Integer zipCode) {
         this.street1 = street1;
         this.street2 = street2;
         this.state = state;
@@ -107,7 +107,7 @@ public class Address {
      *
      * @author Kenny Bastani
      * @see AccountQuery
-     * @see Address
+     * @see AccountAddress
      */
     public enum AddressType {
         SHIPPING,

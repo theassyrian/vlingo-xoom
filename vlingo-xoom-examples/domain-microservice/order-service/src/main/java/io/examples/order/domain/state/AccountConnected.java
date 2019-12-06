@@ -1,6 +1,5 @@
 package io.examples.order.domain.state;
 
-import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
@@ -16,7 +15,7 @@ import static io.vlingo.xoom.processor.TransitionHandler.handle;
  * @author Kenny Bastani
  */
 @Singleton
-public class AccountConnected extends State<AccountConnected> {
+public class AccountConnected extends OrderState<AccountConnected> {
 
     private final ReservationPending reservationPending;
 

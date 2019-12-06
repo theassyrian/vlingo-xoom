@@ -1,7 +1,7 @@
 package io.examples.order.domain;
 
 import io.examples.order.domain.state.OrderStatus;
-import io.examples.order.infra.repository.Identity;
+import io.examples.infra.Identity;
 import io.vlingo.xoom.processor.Processor;
 import io.vlingo.xoom.processor.StateTransition;
 
@@ -19,12 +19,12 @@ public class Order extends Identity {
     private OrderStatus status = OrderStatus.ORDER_CREATED;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Address shippingAddress;
+    private OrderShippingAddress shippingAddress;
 
     public Order() {
     }
 
-    public Order(Address shippingAddress) {
+    public Order(OrderShippingAddress shippingAddress) {
         super();
         this.shippingAddress = shippingAddress;
     }
@@ -37,11 +37,11 @@ public class Order extends Identity {
         this.status = status;
     }
 
-    public Address getShippingAddress() {
+    public OrderShippingAddress getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(Address shippingAddress) {
+    public void setShippingAddress(OrderShippingAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
@@ -70,14 +70,4 @@ public class Order extends Identity {
         this.version = UUID.randomUUID().toString();
         return this;
     }
-
-    @Override
-    public String toString() {
-        return "Organization{" +
-                "status=" + status +
-                ", version='" + version + '\'' +
-                "} " + super.toString();
-    }
-
-
 }

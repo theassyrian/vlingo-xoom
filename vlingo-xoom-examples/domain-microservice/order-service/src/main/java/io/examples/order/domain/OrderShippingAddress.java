@@ -1,19 +1,20 @@
 package io.examples.order.domain;
 
 import com.google.gson.Gson;
+import io.examples.account.domain.model.AccountAddress;
 import io.examples.account.domain.model.AccountQuery;
-import io.examples.order.infra.repository.Identity;
+import io.examples.infra.Identity;
 
 import javax.persistence.Entity;
 
 /**
- * This is a simple {@link Address} value object and entity.
+ * This is a simple {@link OrderShippingAddress} value object and entity.
  *
  * @author Kenny Bastani
  * @see AccountQuery
  */
 @Entity
-public class Address extends Identity {
+public class OrderShippingAddress extends Identity {
 
     private String street1;
     private String street2;
@@ -23,24 +24,24 @@ public class Address extends Identity {
     private Integer zipCode;
     private AddressType type;
 
-    public Address() {
+    public OrderShippingAddress() {
     }
 
-    public Address(String street1, String street2, String state, String city, String country, int zipCode) {
+    public OrderShippingAddress(String street1, String street2, String state, String city, String country, int zipCode) {
         this(street1, street2, state, city, country, AddressType.SHIPPING, zipCode);
     }
 
-    public static Address translateFrom(io.examples.account.domain.model.Address accountAddress) {
+    public static OrderShippingAddress translateFrom(AccountAddress accountAddress) {
         // Context map from an account address to an order address using reverse JSON serialization
         Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(accountAddress), Address.class);
+        return gson.fromJson(gson.toJson(accountAddress), OrderShippingAddress.class);
     }
 
     /**
-     * Instantiates a new {@link Address} entity with overloaded arguments.
+     * Instantiates a new {@link OrderShippingAddress} entity with overloaded arguments.
      */
-    public Address(String street1, String street2, String state, String city, String country, AddressType type,
-                   Integer zipCode) {
+    public OrderShippingAddress(String street1, String street2, String state, String city, String country, AddressType type,
+                                Integer zipCode) {
         this.street1 = street1;
         this.street2 = street2;
         this.state = state;
@@ -124,7 +125,7 @@ public class Address extends Identity {
      *
      * @author Kenny Bastani
      * @see AccountQuery
-     * @see Address
+     * @see OrderShippingAddress
      */
     public enum AddressType {
         SHIPPING,

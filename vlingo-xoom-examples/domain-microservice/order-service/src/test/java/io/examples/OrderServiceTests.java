@@ -2,7 +2,7 @@ package io.examples;
 
 import io.examples.account.application.AccountClient;
 import io.examples.account.domain.model.AccountQuery;
-import io.examples.account.domain.model.Address;
+import io.examples.account.domain.model.AccountAddress;
 import io.examples.order.domain.Order;
 import io.examples.order.domain.state.OrderStatus;
 import io.micronaut.http.HttpRequest;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@MicronautTest(application = DemoApplication.class, environments = "test")
+@MicronautTest(application = OrderApplication.class, environments = "test")
 public class OrderServiceTests {
 
     @Inject
@@ -42,8 +42,8 @@ public class OrderServiceTests {
         AccountQuery accountQuery = new AccountQuery("12345");
 
         accountQuery.getAddresses()
-                .add(new Address("101 4th Ave", "", "CA",
-                        "Palo Alto", "US", Address.AddressType.SHIPPING, 94403));
+                .add(new AccountAddress("101 4th Ave", "", "CA",
+                        "Palo Alto", "US", AccountAddress.AddressType.SHIPPING, 94403));
 
         when(accountClient.queryAccount(1L)).then(invocation -> Single.create(onSubscribe ->
                 onSubscribe.onSuccess(accountQuery)));

@@ -1,6 +1,6 @@
 package io.examples.order.infra.repository;
 
-import io.examples.order.domain.Address;
+import io.examples.order.domain.OrderShippingAddress;
 import io.examples.order.domain.Order;
 import io.examples.order.domain.state.OrderStatus;
 import io.micronaut.data.annotation.Id;
@@ -12,5 +12,5 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
     void update(@Id Long id, OrderStatus status, String version);
 
-    void updateShippingAddress(@Id Long id, Address shippingAddress);
+    void updateShippingAddress(@Id Long id, OrderShippingAddress shippingAddress);
 }

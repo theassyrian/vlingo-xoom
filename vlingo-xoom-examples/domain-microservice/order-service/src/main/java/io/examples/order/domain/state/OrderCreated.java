@@ -2,9 +2,8 @@ package io.examples.order.domain.state;
 
 import io.examples.account.application.AccountContext;
 import io.examples.account.domain.model.AccountQuery;
-import io.examples.order.domain.Address;
+import io.examples.order.domain.OrderShippingAddress;
 import io.examples.order.domain.Order;
-import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
@@ -32,7 +31,7 @@ import static io.vlingo.xoom.processor.TransitionHandler.handle;
  * @author Kenny Bastani
  */
 @Singleton
-public class OrderCreated extends State<OrderCreated> {
+public class OrderCreated extends OrderState<OrderCreated> {
 
     private final AccountContext accountContext;
     private final AccountConnected accountConnected;
@@ -75,9 +74,9 @@ public class OrderCreated extends State<OrderCreated> {
         }
 
         // The shipping address is then copied from the account query to the order
-        order.setShippingAddress(Address.translateFrom(accountQuery.getAddresses()
+        order.setShippingAddress(OrderShippingAddress.translateFrom(accountQuery.getAddresses()
                 .stream()
-                .filter(address -> address.getType().name().equals(Address.AddressType.SHIPPING.name()))
+                .filter(address -> address.getType().name().equals(OrderShippingAddress.AddressType.SHIPPING.name()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("The account does not have a shipping address"))));
 

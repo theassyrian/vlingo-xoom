@@ -1,12 +1,12 @@
 var processorClient = {
-    get: function (callback) {
-        appDispatcher.handle(generate("GET", null, "/processors"), callback);
+    get: function (name, callback) {
+        appDispatcher.handle(generate("GET", null, "/processors/" + name), callback);
     }
 };
 
 var renderProcessorGraph = function (callback, data) {
 
-    $('.page-title').text("Xoom: " + data.processor);
+    $('.page-title').text("Vlingo Xoom: " + data.processor);
 
     var g = new dagreD3.graphlib.Graph().setGraph({
         nodesep: 80,
@@ -46,6 +46,8 @@ var renderProcessorGraph = function (callback, data) {
     var render = new dagreD3.render();
 
     callback();
+
+    $("#svg-canvas").toggleClass("active");
 
     var svg = d3.select("svg"),
         svgGroup = svg.append("g"),

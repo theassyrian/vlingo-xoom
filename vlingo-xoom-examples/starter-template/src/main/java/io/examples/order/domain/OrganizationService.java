@@ -1,6 +1,6 @@
 package io.examples.order.domain;
 
-import io.examples.order.domain.state.processor.ProcessorService;
+import io.examples.order.infra.processor.ProcessorService;
 import io.examples.order.infra.repository.OrganizationRepository;
 import io.vlingo.actors.Logger;
 import io.vlingo.common.Completes;

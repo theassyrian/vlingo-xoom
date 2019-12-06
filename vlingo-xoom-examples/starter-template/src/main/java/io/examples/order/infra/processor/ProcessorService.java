@@ -1,10 +1,10 @@
-package io.examples.order.domain.state.processor;
+package io.examples.order.infra.processor;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;
 import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.ProcessorStartupEvent;
+import io.vlingo.xoom.processor.ProcessorCreatedEvent;
 import io.vlingo.xoom.processor.State;
 
 import javax.inject.Singleton;
@@ -32,7 +32,7 @@ public class ProcessorService implements ApplicationEventListener<ApplicationSta
                 "OrganizationProcessor", Stream.of(Arrays.asList(states)).collect(Collectors.toList()));
 
         event.getSource().getApplicationContext()
-                .publishEvent(new ProcessorStartupEvent(processor));
+                .publishEvent(new ProcessorCreatedEvent(processor, "organization"));
     }
 
     public Processor getProcessor() {

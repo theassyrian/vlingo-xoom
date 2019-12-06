@@ -14,7 +14,7 @@ public class AccountQuery {
     private String version;
     private AccountStatus accountStatus;
     private Set<CreditCard> creditCards = new HashSet<>();
-    private Set<Address> addresses = new HashSet<>();
+    private Set<AccountAddress> addresses = new HashSet<>();
 
     public AccountQuery() {
         accountStatus = AccountStatus.ACCOUNT_CREATED;
@@ -84,20 +84,20 @@ public class AccountQuery {
     }
 
     /**
-     * Get a collection of {@link Address}es for this customer's account.
+     * Get a collection of {@link AccountAddress}es for this customer's account.
      *
      * @return a set of addresses for this customer's account.
      */
-    public Set<Address> getAddresses() {
+    public Set<AccountAddress> getAddresses() {
         return addresses;
     }
 
     /**
-     * Set a collection of {@link Address}es for this customer's account.
+     * Set a collection of {@link AccountAddress}es for this customer's account.
      *
      * @param addresses is a set of addresses for this customer's account.
      */
-    public void setAddresses(Set<Address> addresses) {
+    public void setAddresses(Set<AccountAddress> addresses) {
         this.addresses = addresses;
     }
 

@@ -8,17 +8,17 @@ import java.util.*;
 import java.util.stream.Stream;
 
 @Endpoint(id = "processors", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
-public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStartupEvent> {
-    private Processor processor;
+public class ProcessorEndpoint implements ApplicationEventListener<ProcessorCreatedEvent> {
+    private Map<String, Processor> processors = new HashMap<>();
 
     @Read
-    public Map<String, Object> getMap() {
+    public Map<String, Object> getMap(String processorName) {
         Set<String> nodes = new HashSet<>();
         Map<String, Integer> portCount = new HashMap<>();
         Set<Map<String, Object>> links = new HashSet<>();
         Map<String, Object> results = new HashMap<>();
 
-        Kernel kernel = processor.getKernel().await();
+        Kernel kernel = processors.get(processorName).getKernel().await();
         List<State> states = kernel.getStates().await();
 
         states.forEach(state -> {
@@ -31,7 +31,7 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStar
 
         results.put("nodes", nodes);
         results.put("edges", links);
-        results.put("processor", processor.getName().await());
+        results.put("processor", processors.get(processorName).getName().await());
 
         return results;
     }
@@ -73,7 +73,7 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorStar
     }
 
     @Override
-    public void onApplicationEvent(ProcessorStartupEvent event) {
-        this.processor = event.getSource();
+    public void onApplicationEvent(ProcessorCreatedEvent event) {
+        processors.put(event.getProcessorName(), event.getSource());
     }
 }

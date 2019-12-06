@@ -4,7 +4,7 @@ var windowService;
 var locationService;
 var scopeService;
 app.config(function ($routeProvider) {
-    $routeProvider.when("/", {
+    $routeProvider.when("/:id", {
         templateUrl: "/static/partials/main.html",
         cache: false
     });
@@ -15,12 +15,13 @@ app.config(function ($routeProvider) {
             scope.domain = attr.domain;
 
             pageId = $routeParams.id;
+            console.log(pageId);
             windowService = $window;
             locationService = $location;
             scopeService = scope;
 
             var loadGraph = function () {
-                processorClient.get(function (data) {
+                processorClient.get(pageId, function (data) {
                     if (data.statusCode != null) {
                     } else {
                         renderProcessorGraph(function () {

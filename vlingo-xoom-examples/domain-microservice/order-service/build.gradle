@@ -65,7 +65,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "io.examples.DemoApplication"
+mainClassName = "io.examples.OrderApplication"
 applicationName = "$projectName"
 // use JUnit 5 platform
 test {

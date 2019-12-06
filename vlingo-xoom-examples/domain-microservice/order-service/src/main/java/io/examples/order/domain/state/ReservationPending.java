@@ -1,7 +1,6 @@
 package io.examples.order.domain.state;
 
 import io.examples.order.domain.Order;
-import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
@@ -29,7 +28,7 @@ import static io.vlingo.xoom.processor.TransitionHandler.handle;
  * @author Kenny Bastani
  */
 @Singleton
-public class ReservationPending extends State<ReservationPending> {
+public class ReservationPending extends OrderState<ReservationPending> {
 
     private final ReservationFailed reservationFailed;
     private final ReservationSucceeded reservationSucceeded;

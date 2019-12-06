@@ -2,7 +2,7 @@ package io.examples.account.processor;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.ProcessorStartupEvent;
+import io.vlingo.xoom.processor.ProcessorCreatedEvent;
 import io.vlingo.xoom.processor.SceneStartupEvent;
 import io.vlingo.xoom.processor.State;
 
@@ -26,7 +26,7 @@ public class ProcessorContext implements ApplicationEventListener<SceneStartupEv
 
         event.getSource()
                 .getApplicationContext()
-                .publishEvent(new ProcessorStartupEvent(processor));
+                .publishEvent(new ProcessorCreatedEvent(processor, "account"));
     }
 
     public Processor getProcessor() {

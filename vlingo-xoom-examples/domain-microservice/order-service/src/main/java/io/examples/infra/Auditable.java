@@ -1,4 +1,4 @@
-package io.examples.order.infra.repository;
+package io.examples.infra;
 
 import java.sql.Timestamp;
 

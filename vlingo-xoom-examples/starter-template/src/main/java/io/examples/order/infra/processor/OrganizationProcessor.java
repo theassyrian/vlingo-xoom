@@ -1,4 +1,4 @@
-package io.examples.order.domain.state.processor;
+package io.examples.order.infra.processor;
 
 import io.vlingo.xoom.processor.ProcessorActor;
 import io.vlingo.xoom.processor.State;

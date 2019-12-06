@@ -92,11 +92,24 @@ public interface Processor extends Stoppable {
         return startWith(stage, clazz, actorName, Definition.NoParameters);
     }
 
+    static <A extends Actor, P extends Processor> P startWith(Stage stage, Class<A> clazz, Class<P> protocol,
+                                                    String actorName, List<Object> params) {
+        P processor = stage.actorFor(protocol, Definition.has(
+                clazz,
+                params,
+                "queueMailbox", actorName),
+                stage.world().addressFactory().withHighId(),
+                stage.world().defaultLogger());
+
+        processor.startUp();
+        return processor;
+    }
+
     /**
      * Answer a new {@code Processor} with the given configuration and characteristics.
      */
     @SuppressWarnings("unchecked")
-    public static <A extends Actor> Processor startWith(Stage stage, Class<A> clazz, String actorName,
+    public static <A extends Actor, P> Processor startWith(Stage stage, Class<A> clazz, String actorName,
                                                         List<Object> params) {
         Processor processor = stage.actorFor(Processor.class, Definition.has(
                 clazz,

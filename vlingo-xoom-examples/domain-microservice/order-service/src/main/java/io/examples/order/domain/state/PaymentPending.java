@@ -1,6 +1,5 @@
 package io.examples.order.domain.state;
 
-import io.vlingo.xoom.processor.State;
 import io.vlingo.xoom.processor.Transition;
 import io.vlingo.xoom.processor.TransitionHandler;
 
@@ -10,7 +9,7 @@ import static io.vlingo.xoom.processor.TransitionBuilder.from;
 import static io.vlingo.xoom.processor.TransitionHandler.handle;
 
 @Singleton
-public class PaymentPending extends State<PaymentPending> {
+public class PaymentPending extends OrderState<PaymentPending> {
 
     private final PaymentSucceeded paymentSucceeded;
     private final PaymentFailed paymentFailed;

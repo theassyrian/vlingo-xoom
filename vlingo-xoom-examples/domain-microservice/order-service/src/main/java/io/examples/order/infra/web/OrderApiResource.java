@@ -1,7 +1,7 @@
-package io.examples.order.infra;
+package io.examples.order.infra.web;
 
 import io.examples.order.domain.Order;
-import io.examples.order.domain.OrderService;
+import io.examples.order.application.OrderService;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
