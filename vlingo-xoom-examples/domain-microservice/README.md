@@ -4,7 +4,7 @@ In this example application, you'll be introduced to operational patterns for im
 
 ## Architecture
 
-![](https://imgur.com/gkAqkpm.png)
+![](https://imgur.com/RtkcJfE.png)
 
 This example has three applications, as shown in the diagram.
 
