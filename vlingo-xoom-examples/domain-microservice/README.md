@@ -6,7 +6,7 @@ In this example application, you'll be introduced to operational patterns for im
 
 ![](https://imgur.com/RtkcJfE.png)
 
-This example has three applications, as shown in the diagram.
+This example has four applications, as shown in the diagram.
 
 - Discovery Service (Spring Cloud Netflix Eureka)
   - Service registry
@@ -14,8 +14,12 @@ This example has three applications, as shown in the diagram.
   - Reverse proxy
 - Account Service (Vlingo Xoom & Micronaut)
   - Microservice reference example
+- Order Service (Vlingo Xoom & Micronaut)
+  - Microservice reference example
   
-The `discovery-service` and `api-gateway` applications are platform services used to scale and expose functionality of your core domain applications. The domain application in this example would be `account-service`. It's important to note that the `account-service` does not use Spring (microframework) or Netty (embedded servlet container). The `account-service` implements all of the functionality of a microservice using Vlingo (embedded server) and Micronaut (compile-time microframework).
+The `discovery-service` and `api-gateway` applications are platform services used to scale and expose functionality of your core domain applications. 
+
+The domain for this reference is contained inside `account-service` and `order-service`. It's also good to point out that `account-service` and `order-service` do not use Spring Boot (microframework) or Netty (embedded servlet container). The `account-service` and `order-service` implement their business logic and distributed process managers using Vlingo (embedded server) and Micronaut (compile-time microframework).
 
 ## Process Managers
 
@@ -30,11 +34,11 @@ You can view the management endpoints for process managers at the following loca
 
 A good example of a reactive state transition is the `OrderCreated` state.
 
-  When an `Order` is created, it must be connected to an `AccountQuery`. The `AccountQuery` is a query model retrieved from the `AccountContext`. An accountId is provided to the `Order` when the definition is first created by a consumer. 
+When an `Order` is created, it must be connected to an `AccountQuery`. The `AccountQuery` is a query model retrieved from the `AccountContext`. An accountId is provided to the `Order` when the definition is first created by a consumer. 
 
-  The `OrderCreated` class is responsible for transitioning the state of an `Order` from `OrderCreated` to `AccountConnected`. The `connectOrder()` method is a command handler that is provided with the account context to check if the `AccountQuery` can be fetched.
+The `OrderCreated` class is responsible for transitioning the state of an `Order` from `OrderCreated` to `AccountConnected`. The `connectOrder()` method is a command handler that is provided with the account context to check if the `AccountQuery` can be fetched.
 
-  Once the `AccountQuery` is fetched from the account microservice, the active shipping address on the account will be copied into the `Order`.  The shipping address is cloned to the order at the time the order is created, which means that the address can only be changed in relation to the order itself.
+Once the `AccountQuery` is fetched from the account microservice, the active shipping address on the account will be copied into the `Order`.  The shipping address is cloned to the order at the time the order is created, which means that the address can only be changed in relation to the order itself.
 
 ```java
 @Singleton
