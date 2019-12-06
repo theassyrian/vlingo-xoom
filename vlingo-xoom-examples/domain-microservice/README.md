@@ -1,4 +1,4 @@
-# Xoom Advanced Microservice Example
+# Domain Microservices Example (Vlingo Xoom)
 
 In this example application, you'll be introduced to operational patterns for implementing a microservice with `vlingo-xoom-server` and `micronaut`.
 
@@ -16,6 +16,80 @@ This example has three applications, as shown in the diagram.
   - Microservice reference example
   
 The `discovery-service` and `api-gateway` applications are platform services used to scale and expose functionality of your core domain applications. The domain application in this example would be `account-service`. It's important to note that the `account-service` does not use Spring (microframework) or Netty (embedded servlet container). The `account-service` implements all of the functionality of a microservice using Vlingo (embedded server) and Micronaut (compile-time microframework).
+
+## Process Managers
+
+You can view the management endpoints for process managers at the following locations:
+
+- `http://localhost:9000/account-service/#/account`
+- `http://localhost:9000/order-service/#/order`
+- `http://localhost:9000/order-service/#/invoice`
+- `http://localhost:9000/order-service/#/warehouse`
+
+![](https://imgur.com/uWNA4VY.gif)
+
+A good example of a reactive state transition is the `OrderCreated` state.
+
+  When an `Order` is created, it must be connected to an `AccountQuery`. The `AccountQuery` is a query model retrieved from the `AccountContext`. An accountId is provided to the `Order` when the definition is first created by a consumer. 
+
+  The `OrderCreated` class is responsible for transitioning the state of an `Order` from `OrderCreated` to `AccountConnected`. The `connectOrder()` method is a command handler that is provided with the account context to check if the `AccountQuery` can be fetched.
+
+  Once the `AccountQuery` is fetched from the account microservice, the active shipping address on the account will be copied into the `Order`.  The shipping address is cloned to the order at the time the order is created, which means that the address can only be changed in relation to the order itself.
+
+```java
+@Singleton
+public class OrderCreated extends OrderState<OrderCreated> {
+
+    private final AccountContext accountContext;
+    private final AccountConnected accountConnected;
+
+    public OrderCreated(Provider<AccountContext> accountContext, AccountConnected accountConnected) {
+        this.accountContext = accountContext.get();
+        this.accountConnected = accountConnected;
+    }
+
+    @Override
+    public TransitionHandler[] getTransitionHandlers() {
+        return new TransitionHandler[]{
+                // Here we define the transition handler from OrderCreated to AccountConnected
+                handle(from(this).to(accountConnected).on(Order.class)
+                        .then(this::connectAccount)
+                        .then(Transition::logResult))
+        };
+    }
+
+    /**
+     * This is the function command for handling the {@link OrderCreated} event. This function will call the
+     * account service to retrieve a shipping address and add it to the order.
+     *
+     * @param order is the definition of the {@link Order} containing the context for this event handler
+     * @return the updated {@link Order} definition to be persisted
+     */
+    private Order connectAccount(Order order) {
+        // Retrieve the reactive client request to query the account service via its context
+        CompletableFuture<AccountQuery> accountFuture = accountContext.getAccount()
+                .query(order.getAccountId())
+                .await();
+
+        AccountQuery accountQuery;
+
+        try {
+            // This will execute the reactive HTTP request to query the account
+            accountQuery = accountFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error getting account query: " + e.getCause().getMessage(), e);
+        }
+
+        // The shipping address is then copied from the account query to the order
+        order.setShippingAddress(OrderShippingAddress.translateFrom(accountQuery.getAddresses()
+                .stream()
+                .filter(address -> address.getType().name().equals(OrderShippingAddress.AddressType.SHIPPING.name()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("The account does not have a shipping address"))));
+
+        return order;
+    }
+```
 
 ## Running the Example
 
@@ -76,11 +150,9 @@ This microservice example demonstrates the following capabilities that are enabl
 - Embedded In-Memory Database with H2
 - Unit Testing with Micronaut's HTTP Client
 
-## Account Domain
+## Domain and Process Diagrams
 
 Within this application you'll find the recommended implementation patterns for creating a basic microservice for managing a bounded context for a user's account. This is the first tier of multiple examples that will add additional capabilities from vlingo/platform, in addition to DDD patterns and framework abstractions.
-
-This microservice is also an example of an anemic domain model, that is, it only covers basic CRUD operations on `Account` entities. This was done intentionally to magnify the capabilities listed in the previous section with minimal code. The examples that follow this one will iterate from this anemic domain model and provide a rich command-driven interface.
 
 ## Client Usage Examples
  
@@ -132,3 +204,7 @@ Execute the following command to get an `Account` by its ID.
 Execute the following command to get all `Account` entities.
 
     curl -X GET -H "Content-Type: application/json" http://localhost:9000/account-service/accounts -i 
+
+### Define a new Order
+
+    curl -X POST http://localhost:9000/order-service/v1/orders -H "Content-Type: application/json" -d '{"accountId": 1}' -i
