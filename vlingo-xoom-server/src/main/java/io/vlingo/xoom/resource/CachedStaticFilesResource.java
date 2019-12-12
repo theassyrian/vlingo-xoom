@@ -154,7 +154,7 @@ public class CachedStaticFilesResource extends ResourceHandler {
         
         byte[] buffer = new byte[4096];
 
-        try (is; ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             int read;
             while ((read = is.read(buffer)) != -1) {
                 baos.write(buffer, 0, read);

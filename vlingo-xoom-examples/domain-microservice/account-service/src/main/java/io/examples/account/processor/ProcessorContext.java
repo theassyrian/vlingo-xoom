@@ -7,6 +7,8 @@ import io.vlingo.xoom.processor.SceneStartupEvent;
 import io.vlingo.xoom.processor.State;
 
 import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Singleton
 public class ProcessorContext implements ApplicationEventListener<SceneStartupEvent> {
@@ -22,7 +24,7 @@ public class ProcessorContext implements ApplicationEventListener<SceneStartupEv
     public void onApplicationEvent(SceneStartupEvent event) {
         processor = Processor.startWith(event.getSource().getWorld().stage(),
                 AccountProcessor.class, "AccountProcessor",
-                java.util.List.of(java.util.List.of(states)));
+                Collections.singletonList(Arrays.asList(states)));
 
         event.getSource()
                 .getApplicationContext()
