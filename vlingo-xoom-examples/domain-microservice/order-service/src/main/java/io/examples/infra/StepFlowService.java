@@ -1,14 +1,14 @@
 package io.examples.infra;
 
 import io.examples.inventory.domain.state.InventoryState;
-import io.examples.inventory.infra.processor.InventoryContext;
-import io.examples.inventory.infra.processor.InventoryFlowActor;
+import io.examples.inventory.infra.stepflow.InventoryContext;
+import io.examples.inventory.infra.stepflow.InventoryFlowActor;
 import io.examples.order.domain.state.OrderState;
 import io.examples.order.infra.stepflow.OrderContext;
 import io.examples.order.infra.stepflow.OrderFlowActor;
 import io.examples.warehouse.domain.state.WarehouseState;
-import io.examples.warehouse.infra.processor.WarehouseContext;
-import io.examples.warehouse.infra.processor.WarehouseFlowActor;
+import io.examples.warehouse.infra.stepflow.WarehouseContext;
+import io.examples.warehouse.infra.stepflow.WarehouseFlowActor;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;

@@ -3,13 +3,13 @@ package io.examples.order.infra.stepflow;
 import io.vlingo.xoom.stepflow.StepFlow;
 
 public class OrderContext {
-    private final StepFlow processor;
+    private final StepFlow flow;
 
-    public OrderContext(StepFlow processor) {
-        this.processor = processor;
+    public OrderContext(StepFlow flow) {
+        this.flow = flow;
     }
 
-    public StepFlow getProcessor() {
-        return processor;
+    public StepFlow getFlow() {
+        return flow;
     }
 }

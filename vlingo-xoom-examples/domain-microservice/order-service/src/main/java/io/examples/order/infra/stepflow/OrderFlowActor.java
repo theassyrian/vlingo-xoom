@@ -14,6 +14,6 @@ public class OrderFlowActor extends FlowActor {
 
     @Override
     public Completes<String> getName() {
-        return completes().with("Order Processor");
+        return completes().with("Order Flow");
     }
 }

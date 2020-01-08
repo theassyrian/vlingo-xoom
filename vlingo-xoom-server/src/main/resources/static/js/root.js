@@ -15,7 +15,6 @@ app.config(function ($routeProvider) {
             scope.domain = attr.domain;
 
             pageId = $routeParams.id;
-            console.log(pageId);
             windowService = $window;
             locationService = $location;
             scopeService = scope;

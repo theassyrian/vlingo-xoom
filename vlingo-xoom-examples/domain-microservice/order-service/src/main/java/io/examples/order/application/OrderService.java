@@ -29,7 +29,7 @@ public class OrderService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Order> defineOrder(Order orderDefinition) {
-        final StepFlow processor = stepFlowService.getOrderContext().getProcessor();
+        final StepFlow processor = stepFlowService.getOrderContext().getFlow();
         return Completes.withSuccess(orderDefinition)
                 .andThen(order -> order.sendEvent(processor, OrderStatus.ACCOUNT_CONNECTED))
                 .andThen(order -> order.sendEvent(processor, OrderStatus.RESERVATION_PENDING))
