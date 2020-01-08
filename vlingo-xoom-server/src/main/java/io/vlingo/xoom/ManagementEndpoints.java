@@ -11,7 +11,7 @@ import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.http.resource.RequestHandler1;
 import io.vlingo.xoom.annotations.Resource;
-import io.vlingo.xoom.stepflow.ProcessorEndpoint;
+import io.vlingo.xoom.stepflow.FlowEndpoint;
 import io.vlingo.xoom.resource.Endpoint;
 
 import java.util.List;
@@ -52,8 +52,8 @@ public class ManagementEndpoints implements Endpoint {
         return Completes.withSuccess(applicationContext.getBean(LoggersEndpoint.class));
     }
 
-    public Completes<ProcessorEndpoint> getProcessorEndpoint() {
-        return Completes.withSuccess(applicationContext.getBean(ProcessorEndpoint.class));
+    public Completes<FlowEndpoint> getProcessorEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(FlowEndpoint.class));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ManagementEndpoints implements Endpoint {
                         .onError(this::getErrorResponse)).collect(Collectors.toList());
 
         if (getProcessorEndpoint().await() != null) {
-            handlers.add(get("/processors/{name}")
+            handlers.add(get("/flows/{name}")
                     .param(String.class)
                     .handle(processorEndpointHandler())
                     .onError(this::getErrorResponse));

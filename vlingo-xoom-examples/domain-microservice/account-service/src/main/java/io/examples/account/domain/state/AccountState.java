@@ -2,7 +2,7 @@ package io.examples.account.domain.state;
 
 
 import io.examples.account.domain.Account;
-import io.examples.account.processor.AccountProcessor;
+import io.examples.account.flow.AccountFlow;
 import io.vlingo.xoom.stepflow.StepFlow;
 import io.vlingo.xoom.stepflow.State;
 
@@ -12,7 +12,7 @@ import io.vlingo.xoom.stepflow.State;
  * will be automatically registered with a {@link StepFlow} in the Micronaut application context.
  *
  * @author Kenny Bastani
- * @see AccountProcessor
+ * @see AccountFlow
  */
 public abstract class AccountState<T extends State> extends State<T> {
 

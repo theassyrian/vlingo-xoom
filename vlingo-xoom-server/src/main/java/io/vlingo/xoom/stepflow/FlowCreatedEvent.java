@@ -2,7 +2,7 @@ package io.vlingo.xoom.stepflow;
 
 import io.micronaut.context.event.ApplicationEvent;
 
-public class ProcessorCreatedEvent extends ApplicationEvent {
+public class FlowCreatedEvent extends ApplicationEvent {
     private final StepFlow source;
     private final String processorName;
 
@@ -12,7 +12,7 @@ public class ProcessorCreatedEvent extends ApplicationEvent {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public ProcessorCreatedEvent(StepFlow source, String processorName) {
+    public FlowCreatedEvent(StepFlow source, String processorName) {
         super(source);
         this.source = source;
         this.processorName = processorName;

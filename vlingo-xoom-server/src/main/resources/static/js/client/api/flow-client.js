@@ -1,12 +1,12 @@
-var processorClient = {
+var flowClient = {
     get: function (name, callback) {
-        appDispatcher.handle(generate("GET", null, "/processors/" + name), callback);
+        appDispatcher.handle(generate("GET", null, "/flows/" + name), callback);
     }
 };
 
 var renderProcessorGraph = function (callback, data) {
 
-    $('.page-title').text("Vlingo Xoom: " + data.processor);
+    $('.page-title').text("Vlingo Step Flow: " + data.flow);
 
     var g = new dagreD3.graphlib.Graph().setGraph({
         nodesep: 80,

@@ -21,7 +21,7 @@ app.config(function ($routeProvider) {
             scopeService = scope;
 
             var loadGraph = function () {
-                processorClient.get(pageId, function (data) {
+                flowClient.get(pageId, function (data) {
                     if (data.statusCode != null) {
                     } else {
                         renderProcessorGraph(function () {

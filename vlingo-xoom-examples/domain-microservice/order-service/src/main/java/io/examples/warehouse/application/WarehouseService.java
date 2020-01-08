@@ -1,6 +1,6 @@
 package io.examples.warehouse.application;
 
-import io.examples.infra.ProcessorService;
+import io.examples.infra.StepFlowService;
 import io.examples.warehouse.domain.model.Warehouse;
 import io.examples.warehouse.domain.model.WarehouseStatus;
 import io.examples.warehouse.infra.WarehouseRepository;
@@ -13,11 +13,11 @@ import javax.inject.Singleton;
 @Singleton
 public class WarehouseService {
     private final WarehouseRepository warehouseRepository;
-    private final ProcessorService processorService;
+    private final StepFlowService stepFlowService;
 
-    public WarehouseService(WarehouseRepository warehouseRepository, Provider<ProcessorService> processorService) {
+    public WarehouseService(WarehouseRepository warehouseRepository, Provider<StepFlowService> processorService) {
         this.warehouseRepository = warehouseRepository;
-        this.processorService = processorService.get();
+        this.stepFlowService = processorService.get();
     }
 
     /**
@@ -28,7 +28,7 @@ public class WarehouseService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Warehouse> defineWarehouse(Warehouse warehouseDefinition) {
-        final StepFlow processor = processorService.getWarehouseContext().getProcessor();
+        final StepFlow processor = stepFlowService.getWarehouseContext().getProcessor();
         return Completes.withSuccess(warehouseDefinition)
                 .andThen(warehouse -> warehouse.sendEvent(processor, WarehouseStatus.WAREHOUSE_CREATED))
                 .andThenConsume(warehouseRepository::save)

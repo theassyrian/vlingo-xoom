@@ -1,14 +1,14 @@
 package io.examples.inventory.infra.processor;
 
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.stepflow.ProcessorActor;
+import io.vlingo.xoom.stepflow.FlowActor;
 import io.vlingo.xoom.stepflow.State;
 
 import java.util.List;
 
-public class InventoryProcessorActor extends ProcessorActor {
+public class InventoryFlowActor extends FlowActor {
 
-    public InventoryProcessorActor(List<State> states) {
+    public InventoryFlowActor(List<State> states) {
         super(states);
     }
 

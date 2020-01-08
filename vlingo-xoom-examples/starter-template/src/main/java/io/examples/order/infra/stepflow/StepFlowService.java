@@ -1,10 +1,10 @@
-package io.examples.order.infra.processor;
+package io.examples.order.infra.stepflow;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;
 import io.vlingo.xoom.stepflow.StepFlow;
-import io.vlingo.xoom.stepflow.ProcessorCreatedEvent;
+import io.vlingo.xoom.stepflow.FlowCreatedEvent;
 import io.vlingo.xoom.stepflow.State;
 
 import javax.inject.Singleton;
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Singleton
-public class ProcessorService implements ApplicationEventListener<ApplicationStartupEvent> {
+public class StepFlowService implements ApplicationEventListener<ApplicationStartupEvent> {
 
     private final State[] states;
     private StepFlow processor;
 
-    public ProcessorService(State[] states) {
+    public StepFlowService(State[] states) {
         this.states = states;
     }
 
@@ -28,14 +28,14 @@ public class ProcessorService implements ApplicationEventListener<ApplicationSta
         processor = StepFlow.startWith(event.getSource()
                         .getApplicationContext()
                         .getBean(VlingoServer.class)
-                        .getVlingoScene().getWorld().stage(), OrganizationProcessor.class,
-                "OrganizationProcessor", Stream.of(Arrays.asList(states)).collect(Collectors.toList()));
+                        .getVlingoScene().getWorld().stage(), OrganizationFlow.class,
+                "OrganizationFlow", Stream.of(Arrays.asList(states)).collect(Collectors.toList()));
 
         event.getSource().getApplicationContext()
-                .publishEvent(new ProcessorCreatedEvent(processor, "organization"));
+                .publishEvent(new FlowCreatedEvent(processor, "organization"));
     }
 
-    public StepFlow getProcessor() {
+    public StepFlow getFlow() {
         return processor;
     }
 }

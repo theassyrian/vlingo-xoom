@@ -7,18 +7,18 @@ import io.micronaut.management.endpoint.annotation.Read;
 import java.util.*;
 import java.util.stream.Stream;
 
-@Endpoint(id = "processors", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
-public class ProcessorEndpoint implements ApplicationEventListener<ProcessorCreatedEvent> {
-    private Map<String, StepFlow> processors = new HashMap<>();
+@Endpoint(id = "flows", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
+public class FlowEndpoint implements ApplicationEventListener<FlowCreatedEvent> {
+    private Map<String, StepFlow> stepFlow = new HashMap<>();
 
     @Read
-    public Map<String, Object> getMap(String processorName) {
+    public Map<String, Object> getMap(String flowName) {
         Set<String> nodes = new HashSet<>();
         Map<String, Integer> portCount = new HashMap<>();
         Set<Map<String, Object>> links = new HashSet<>();
         Map<String, Object> results = new HashMap<>();
 
-        Kernel kernel = processors.get(processorName).getKernel().await();
+        Kernel kernel = stepFlow.get(flowName).getKernel().await();
         List<State> states = kernel.getStates().await();
 
         states.forEach(state -> {
@@ -31,7 +31,7 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorCrea
 
         results.put("nodes", nodes);
         results.put("edges", links);
-        results.put("processor", processors.get(processorName).getName().await());
+        results.put("flow", stepFlow.get(flowName).getName().await());
 
         return results;
     }
@@ -73,7 +73,7 @@ public class ProcessorEndpoint implements ApplicationEventListener<ProcessorCrea
     }
 
     @Override
-    public void onApplicationEvent(ProcessorCreatedEvent event) {
-        processors.put(event.getProcessorName(), event.getSource());
+    public void onApplicationEvent(FlowCreatedEvent event) {
+        stepFlow.put(event.getProcessorName(), event.getSource());
     }
 }

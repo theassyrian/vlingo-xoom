@@ -2,7 +2,7 @@ package io.examples.account.domain;
 
 import io.examples.account.endpoint.AccountEndpoint;
 import io.examples.account.endpoint.v1.AccountResource;
-import io.examples.account.processor.ProcessorContext;
+import io.examples.account.flow.FlowContext;
 import io.examples.account.repository.AccountRepository;
 import io.reactivex.Observable;
 import io.vlingo.common.Completes;
@@ -24,11 +24,11 @@ import java.util.function.Consumer;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final ProcessorContext context;
+    private final FlowContext context;
 
-    public AccountService(AccountRepository accountRepository, ProcessorContext processorContext) {
+    public AccountService(AccountRepository accountRepository, FlowContext flowContext) {
         this.accountRepository = accountRepository;
-        this.context = processorContext;
+        this.context = flowContext;
     }
 
     /**

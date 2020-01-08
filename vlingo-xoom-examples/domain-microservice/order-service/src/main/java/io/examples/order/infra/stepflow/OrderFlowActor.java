@@ -1,14 +1,14 @@
-package io.examples.order.infra.processor;
+package io.examples.order.infra.stepflow;
 
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.stepflow.ProcessorActor;
+import io.vlingo.xoom.stepflow.FlowActor;
 import io.vlingo.xoom.stepflow.State;
 
 import java.util.List;
 
-public class OrderProcessorActor extends ProcessorActor {
+public class OrderFlowActor extends FlowActor {
 
-    public OrderProcessorActor(List<State> states) {
+    public OrderFlowActor(List<State> states) {
         super(states);
     }
 

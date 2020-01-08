@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@link ProcessorActor} is the default {@link Actor} implementation for a {@link StepFlow}.
+ * The {@link FlowActor} is the default {@link Actor} implementation for a {@link StepFlow}.
  *
  * @author Kenny Bastani
  */
-public abstract class ProcessorActor extends Actor implements StepFlow, Scheduled<Message> {
+public abstract class FlowActor extends Actor implements StepFlow, Scheduled<Message> {
 
     private final List<State> states;
     private Kernel kernel;
 
-    public ProcessorActor() {
+    public FlowActor() {
         states = new ArrayList<>();
     }
 
-    protected ProcessorActor(List<State> states) {
+    protected FlowActor(List<State> states) {
         this.states = states;
     }
 

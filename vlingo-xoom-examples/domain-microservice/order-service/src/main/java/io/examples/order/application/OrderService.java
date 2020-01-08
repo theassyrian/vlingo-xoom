@@ -2,7 +2,7 @@ package io.examples.order.application;
 
 import io.examples.order.domain.Order;
 import io.examples.order.domain.state.OrderStatus;
-import io.examples.infra.ProcessorService;
+import io.examples.infra.StepFlowService;
 import io.examples.order.infra.repository.OrderRepository;
 import io.vlingo.common.Completes;
 import io.vlingo.xoom.stepflow.StepFlow;
@@ -14,11 +14,11 @@ import javax.inject.Singleton;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProcessorService processorService;
+    private final StepFlowService stepFlowService;
 
-    public OrderService(OrderRepository orderRepository, Provider<ProcessorService> processorService) {
+    public OrderService(OrderRepository orderRepository, Provider<StepFlowService> processorService) {
         this.orderRepository = orderRepository;
-        this.processorService = processorService.get();
+        this.stepFlowService = processorService.get();
     }
 
     /**
@@ -29,7 +29,7 @@ public class OrderService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Order> defineOrder(Order orderDefinition) {
-        final StepFlow processor = processorService.getOrderContext().getProcessor();
+        final StepFlow processor = stepFlowService.getOrderContext().getProcessor();
         return Completes.withSuccess(orderDefinition)
                 .andThen(order -> order.sendEvent(processor, OrderStatus.ACCOUNT_CONNECTED))
                 .andThen(order -> order.sendEvent(processor, OrderStatus.RESERVATION_PENDING))

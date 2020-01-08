@@ -1,4 +1,4 @@
-package io.examples.order.infra.processor;
+package io.examples.order.infra.stepflow;
 
 import io.vlingo.xoom.stepflow.StepFlow;
 

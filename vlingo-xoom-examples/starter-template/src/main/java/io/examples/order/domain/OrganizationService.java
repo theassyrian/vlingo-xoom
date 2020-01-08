@@ -1,6 +1,6 @@
 package io.examples.order.domain;
 
-import io.examples.order.infra.processor.ProcessorService;
+import io.examples.order.infra.stepflow.StepFlowService;
 import io.examples.order.infra.repository.OrganizationRepository;
 import io.vlingo.actors.Logger;
 import io.vlingo.common.Completes;
@@ -13,11 +13,11 @@ import java.util.function.Consumer;
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
-    private final ProcessorService processorService;
+    private final StepFlowService stepFlowService;
 
-    public OrganizationService(OrganizationRepository organizationRepository, ProcessorService processorService) {
+    public OrganizationService(OrganizationRepository organizationRepository, StepFlowService stepFlowService) {
         this.organizationRepository = organizationRepository;
-        this.processorService = processorService;
+        this.stepFlowService = stepFlowService;
     }
 
     public Completes<Organization> queryOrganization(Long id) {
@@ -29,7 +29,7 @@ public class OrganizationService {
         // Execute the create command on a new organization entity
         return executeCommand(organizationRepository.save(model).getId(),
                 organization ->
-                        organization.define(processorService.getProcessor()))
+                        organization.define(stepFlowService.getFlow()))
                 .andThenConsume(organization ->
                         queryOrganization(organization.getId()))
                 .otherwise(organization -> {
@@ -40,7 +40,7 @@ public class OrganizationService {
     public Completes<Organization> enableOrganization(Long organizationId) {
         // Execute the confirm command on the organization
         return executeCommand(organizationId,
-                organization -> organization.enable(processorService.getProcessor()))
+                organization -> organization.enable(stepFlowService.getFlow()))
                 .otherwise(organization -> {
                     throw new RuntimeException("Could not enable the organization: " + organization.toString());
                 });
@@ -49,7 +49,7 @@ public class OrganizationService {
     public Completes<Organization> disableOrganization(Long organizationId) {
         // Execute the confirm command on the organization
         return executeCommand(organizationId,
-                organization -> organization.disable(processorService.getProcessor()))
+                organization -> organization.disable(stepFlowService.getFlow()))
                 .otherwise(organization -> {
                     throw new RuntimeException("Could not disable the organization: " + organization.toString());
                 });

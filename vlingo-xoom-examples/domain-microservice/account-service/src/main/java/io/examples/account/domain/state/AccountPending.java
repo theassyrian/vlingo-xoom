@@ -1,7 +1,7 @@
 package io.examples.account.domain.state;
 
 import io.examples.account.domain.Account;
-import io.examples.account.processor.AccountProcessor;
+import io.examples.account.flow.AccountFlow;
 import io.vlingo.xoom.annotations.Resource;
 import io.vlingo.xoom.stepflow.StepFlow;
 import io.vlingo.xoom.stepflow.State;
@@ -17,7 +17,7 @@ import static io.vlingo.xoom.stepflow.TransitionHandler.handle;
  * will be automatically registered with a {@link StepFlow} in the Micronaut application context.
  *
  * @author Kenny Bastani
- * @see AccountProcessor
+ * @see AccountFlow
  */
 @Resource
 public class AccountPending extends AccountState<AccountPending> {
