@@ -1,16 +1,16 @@
 package io.examples.warehouse.infra.processor;
 
-import io.vlingo.xoom.processor.Processor;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 public class WarehouseContext {
 
-    private final Processor processor;
+    private final StepFlow processor;
 
-    public WarehouseContext(Processor processor) {
+    public WarehouseContext(StepFlow processor) {
         this.processor = processor;
     }
 
-    public Processor getProcessor() {
+    public StepFlow getProcessor() {
         return processor;
     }
 }

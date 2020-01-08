@@ -12,10 +12,10 @@ import io.examples.warehouse.infra.processor.WarehouseProcessorActor;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.ProcessorActor;
-import io.vlingo.xoom.processor.ProcessorCreatedEvent;
-import io.vlingo.xoom.processor.State;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.ProcessorActor;
+import io.vlingo.xoom.stepflow.ProcessorCreatedEvent;
+import io.vlingo.xoom.stepflow.State;
 
 import javax.inject.Singleton;
 import java.util.Collections;
@@ -61,16 +61,16 @@ public class ProcessorService implements ApplicationEventListener<ApplicationSta
                 "inventory"));
     }
 
-    private <P extends Processor, A extends ProcessorActor> Processor defineProcessor(ApplicationStartupEvent event,
-                                                                                      Class<A> actorClass,
-                                                                                      List<State> states,
-                                                                                      String processorName) {
-        Processor processor = Processor.startWith(event.getSource()
+    private <P extends StepFlow, A extends ProcessorActor> StepFlow defineProcessor(ApplicationStartupEvent event,
+                                                                                    Class<A> actorClass,
+                                                                                    List<State> states,
+                                                                                    String processorName) {
+        StepFlow processor = StepFlow.startWith(event.getSource()
                 .getApplicationContext()
                 .getBean(VlingoServer.class)
                 .getVlingoScene()
                 .getWorld()
-                .stage(), actorClass, Processor.class, processorName, Collections.singletonList(states));
+                .stage(), actorClass, StepFlow.class, processorName, Collections.singletonList(states));
 
         event.getSource()
                 .getApplicationContext()

@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.actors.Definition;
@@ -9,7 +9,7 @@ import io.vlingo.common.Completes;
 import java.util.List;
 
 /**
- * <p>A {@link Processor} is a distributed task executor that dereferences actors to a lower-level library. Processors
+ * <p>A {@link StepFlow} is a distributed task executor that dereferences actors to a lower-level library. Processors
  * are provided with a set of handlers that are exposed by a defined collection of protocols. Handlers are
  * address-referencable functions that are invoked through a protocol definition. Processors manage a registry of
  * handlers that pipe together other processor implementations. Processor dispatchers are discoverable through a
@@ -73,7 +73,7 @@ import java.util.List;
  *
  * @author Kenny Bastani
  */
-public interface Processor extends Stoppable {
+public interface StepFlow extends Stoppable {
 
     Completes<Boolean> shutDown();
 
@@ -88,12 +88,12 @@ public interface Processor extends Stoppable {
     /**
      * Answer a new {@code Processor} with the given configuration and characteristics.
      */
-    static <A extends Actor> Processor startWith(Stage stage, Class<A> clazz, String actorName) {
+    static <A extends Actor> StepFlow startWith(Stage stage, Class<A> clazz, String actorName) {
         return startWith(stage, clazz, actorName, Definition.NoParameters);
     }
 
-    static <A extends Actor, P extends Processor> P startWith(Stage stage, Class<A> clazz, Class<P> protocol,
-                                                    String actorName, List<Object> params) {
+    static <A extends Actor, P extends StepFlow> P startWith(Stage stage, Class<A> clazz, Class<P> protocol,
+                                                             String actorName, List<Object> params) {
         P processor = stage.actorFor(protocol, Definition.has(
                 clazz,
                 params,
@@ -109,9 +109,9 @@ public interface Processor extends Stoppable {
      * Answer a new {@code Processor} with the given configuration and characteristics.
      */
     @SuppressWarnings("unchecked")
-    public static <A extends Actor, P> Processor startWith(Stage stage, Class<A> clazz, String actorName,
-                                                        List<Object> params) {
-        Processor processor = stage.actorFor(Processor.class, Definition.has(
+    public static <A extends Actor, P> StepFlow startWith(Stage stage, Class<A> clazz, String actorName,
+                                                          List<Object> params) {
+        StepFlow processor = stage.actorFor(StepFlow.class, Definition.has(
                 clazz,
                 params,
                 "queueMailbox", actorName),

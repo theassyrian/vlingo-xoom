@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 /**
  * A {@link TransitionHandler} subscribes to a {@link StateTransition} and is used to perform a transaction in response

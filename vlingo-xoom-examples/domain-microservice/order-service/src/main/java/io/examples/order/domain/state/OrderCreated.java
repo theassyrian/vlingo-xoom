@@ -4,16 +4,16 @@ import io.examples.account.application.AccountContext;
 import io.examples.account.domain.model.AccountQuery;
 import io.examples.order.domain.OrderShippingAddress;
 import io.examples.order.domain.Order;
-import io.vlingo.xoom.processor.Transition;
-import io.vlingo.xoom.processor.TransitionHandler;
+import io.vlingo.xoom.stepflow.Transition;
+import io.vlingo.xoom.stepflow.TransitionHandler;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static io.vlingo.xoom.processor.TransitionBuilder.from;
-import static io.vlingo.xoom.processor.TransitionHandler.handle;
+import static io.vlingo.xoom.stepflow.TransitionBuilder.from;
+import static io.vlingo.xoom.stepflow.TransitionHandler.handle;
 
 /**
  * When an {@link Order} is created, it must be connected to an {@link AccountQuery}. The {@link AccountQuery}

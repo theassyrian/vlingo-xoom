@@ -3,8 +3,8 @@ package io.examples.account.domain;
 import io.examples.account.data.Identity;
 import io.examples.account.domain.event.AccountEvent;
 import io.examples.account.domain.state.*;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.StateTransition;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.StateTransition;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -140,7 +140,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
-    public Account create(Processor processor) {
+    public Account create(StepFlow processor) {
         return sendEvent(processor, new AccountPending());
     }
 
@@ -150,7 +150,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
-    public Account confirm(Processor processor) {
+    public Account confirm(StepFlow processor) {
         return sendEvent(processor, new AccountConfirmed());
     }
 
@@ -160,7 +160,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
-    public Account activate(Processor processor) {
+    public Account activate(StepFlow processor) {
         return sendEvent(processor, new AccountActivated());
     }
 
@@ -171,7 +171,7 @@ public class Account extends Identity {
      * @return the state of the {@link Account}
      */
     @SuppressWarnings("unchecked")
-    public Account update(Processor processor, Account model) {
+    public Account update(StepFlow processor, Account model) {
         // Handle the sub-state transition for updating an active account's accountNumber
         AccountState targetState = new AccountActivated();
 
@@ -194,7 +194,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
-    public Account suspend(Processor processor) {
+    public Account suspend(StepFlow processor) {
         return sendEvent(processor, new AccountSuspended());
     }
 
@@ -204,7 +204,7 @@ public class Account extends Identity {
      * @param processor is the process manager for this {@link Account}
      * @return the state of the {@link Account}
      */
-    public Account archive(Processor processor) {
+    public Account archive(StepFlow processor) {
         return sendEvent(processor, new AccountArchived());
     }
 
@@ -215,7 +215,7 @@ public class Account extends Identity {
      * @param targetState is the requested {@link AccountState} to attempt to transition to
      * @return the state of the {@link Account}
      */
-    private Account sendEvent(Processor processor, AccountState targetState) {
+    private Account sendEvent(StepFlow processor, AccountState targetState) {
         AccountEvent event = new AccountEvent(accountStatus, targetState.getType());
         return sendEvent(processor, event, defaultStateConsumer(targetState));
     }
@@ -228,7 +228,7 @@ public class Account extends Identity {
      * @param handler   is the {@link Consumer} for mutating state if the new target state is accepted
      * @return the state of the {@link Account}
      */
-    private Account sendEvent(Processor processor, AccountEvent event, Consumer<StateTransition> handler) {
+    private Account sendEvent(StepFlow processor, AccountEvent event, Consumer<StateTransition> handler) {
         return Optional.ofNullable(processor.applyEvent(event)
                 .andThenConsume(handler)
                 .otherwise(transition -> null)

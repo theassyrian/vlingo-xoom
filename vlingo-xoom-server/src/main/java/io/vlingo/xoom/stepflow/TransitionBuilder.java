@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import java.util.ArrayList;
 import java.util.List;

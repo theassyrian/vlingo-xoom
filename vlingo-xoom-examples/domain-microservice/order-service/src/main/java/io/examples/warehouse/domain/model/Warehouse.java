@@ -2,8 +2,8 @@ package io.examples.warehouse.domain.model;
 
 import io.examples.infra.Identity;
 import io.examples.inventory.domain.model.Inventory;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.StateTransition;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.StateTransition;
 
 import javax.persistence.*;
 import java.util.List;
@@ -49,7 +49,7 @@ public class Warehouse extends Identity {
     }
 
     @SuppressWarnings("unchecked")
-    public Warehouse sendEvent(Processor processor, WarehouseStatus targetState) {
+    public Warehouse sendEvent(StepFlow processor, WarehouseStatus targetState) {
         WarehouseEvent event = new WarehouseEvent(status.name(), targetState.name());
         StateTransition stateTransition = processor.applyEvent(event).await();
         stateTransition.apply(this);

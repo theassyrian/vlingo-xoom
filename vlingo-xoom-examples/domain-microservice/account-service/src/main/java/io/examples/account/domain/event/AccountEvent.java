@@ -1,7 +1,7 @@
 package io.examples.account.domain.event;
 
 import io.examples.account.domain.state.AccountStatus;
-import io.vlingo.xoom.processor.Event;
+import io.vlingo.xoom.stepflow.Event;
 
 public class AccountEvent extends Event {
 

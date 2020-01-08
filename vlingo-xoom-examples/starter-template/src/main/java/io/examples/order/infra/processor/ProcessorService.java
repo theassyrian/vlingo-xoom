@@ -3,9 +3,9 @@ package io.examples.order.infra.processor;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.ProcessorCreatedEvent;
-import io.vlingo.xoom.processor.State;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.ProcessorCreatedEvent;
+import io.vlingo.xoom.stepflow.State;
 
 import javax.inject.Singleton;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class ProcessorService implements ApplicationEventListener<ApplicationStartupEvent> {
 
     private final State[] states;
-    private Processor processor;
+    private StepFlow processor;
 
     public ProcessorService(State[] states) {
         this.states = states;
@@ -25,7 +25,7 @@ public class ProcessorService implements ApplicationEventListener<ApplicationSta
     @Override
     @SuppressWarnings("unchecked")
     public void onApplicationEvent(ApplicationStartupEvent event) {
-        processor = Processor.startWith(event.getSource()
+        processor = StepFlow.startWith(event.getSource()
                         .getApplicationContext()
                         .getBean(VlingoServer.class)
                         .getVlingoScene().getWorld().stage(), OrganizationProcessor.class,
@@ -35,7 +35,7 @@ public class ProcessorService implements ApplicationEventListener<ApplicationSta
                 .publishEvent(new ProcessorCreatedEvent(processor, "organization"));
     }
 
-    public Processor getProcessor() {
+    public StepFlow getProcessor() {
         return processor;
     }
 }

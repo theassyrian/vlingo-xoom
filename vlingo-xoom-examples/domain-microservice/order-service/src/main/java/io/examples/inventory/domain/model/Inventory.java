@@ -1,8 +1,8 @@
 package io.examples.inventory.domain.model;
 
 import io.examples.infra.Identity;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.StateTransition;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.StateTransition;
 
 import javax.persistence.Entity;
 import java.util.UUID;
@@ -40,7 +40,7 @@ public class Inventory extends Identity {
     }
 
     @SuppressWarnings("unchecked")
-    public Inventory sendEvent(Processor processor, InventoryStatus targetState) {
+    public Inventory sendEvent(StepFlow processor, InventoryStatus targetState) {
         InventoryEvent event = new InventoryEvent(status.name(), targetState.name());
         StateTransition stateTransition = processor.applyEvent(event).await();
         stateTransition.apply(this);

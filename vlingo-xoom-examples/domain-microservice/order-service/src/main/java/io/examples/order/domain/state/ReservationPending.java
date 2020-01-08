@@ -1,13 +1,13 @@
 package io.examples.order.domain.state;
 
 import io.examples.order.domain.Order;
-import io.vlingo.xoom.processor.Transition;
-import io.vlingo.xoom.processor.TransitionHandler;
+import io.vlingo.xoom.stepflow.Transition;
+import io.vlingo.xoom.stepflow.TransitionHandler;
 
 import javax.inject.Singleton;
 
-import static io.vlingo.xoom.processor.TransitionBuilder.from;
-import static io.vlingo.xoom.processor.TransitionHandler.handle;
+import static io.vlingo.xoom.stepflow.TransitionBuilder.from;
+import static io.vlingo.xoom.stepflow.TransitionHandler.handle;
 
 /**
  * The {@link ReservationPending} state transitions from the {@link AccountConnected} state. This state

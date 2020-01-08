@@ -2,8 +2,8 @@ package io.examples.order.domain;
 
 import io.examples.order.domain.state.OrderStatus;
 import io.examples.infra.Identity;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.StateTransition;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.StateTransition;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -62,7 +62,7 @@ public class Order extends Identity {
     }
 
     @SuppressWarnings("unchecked")
-    public Order sendEvent(Processor processor, OrderStatus targetState) {
+    public Order sendEvent(StepFlow processor, OrderStatus targetState) {
         OrderEvent event = new OrderEvent(status.name(), targetState.name());
         StateTransition stateTransition = processor.applyEvent(event).await();
         stateTransition.apply(this);

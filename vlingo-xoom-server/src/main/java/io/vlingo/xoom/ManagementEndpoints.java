@@ -11,7 +11,7 @@ import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.http.resource.RequestHandler1;
 import io.vlingo.xoom.annotations.Resource;
-import io.vlingo.xoom.processor.ProcessorEndpoint;
+import io.vlingo.xoom.stepflow.ProcessorEndpoint;
 import io.vlingo.xoom.resource.Endpoint;
 
 import java.util.List;

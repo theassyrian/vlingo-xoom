@@ -1,6 +1,6 @@
 package io.examples.order.domain.state;
 
-import io.vlingo.xoom.processor.TransitionHandler;
+import io.vlingo.xoom.stepflow.TransitionHandler;
 
 import javax.inject.Singleton;
 

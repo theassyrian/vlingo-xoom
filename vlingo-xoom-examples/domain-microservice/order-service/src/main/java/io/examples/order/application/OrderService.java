@@ -5,7 +5,7 @@ import io.examples.order.domain.state.OrderStatus;
 import io.examples.infra.ProcessorService;
 import io.examples.order.infra.repository.OrderRepository;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.processor.Processor;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -29,7 +29,7 @@ public class OrderService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Order> defineOrder(Order orderDefinition) {
-        final Processor processor = processorService.getOrderContext().getProcessor();
+        final StepFlow processor = processorService.getOrderContext().getProcessor();
         return Completes.withSuccess(orderDefinition)
                 .andThen(order -> order.sendEvent(processor, OrderStatus.ACCOUNT_CONNECTED))
                 .andThen(order -> order.sendEvent(processor, OrderStatus.RESERVATION_PENDING))

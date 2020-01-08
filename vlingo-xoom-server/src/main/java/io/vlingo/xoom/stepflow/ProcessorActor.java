@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.actors.Message;
@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@link ProcessorActor} is the default {@link Actor} implementation for a {@link Processor}.
+ * The {@link ProcessorActor} is the default {@link Actor} implementation for a {@link StepFlow}.
  *
  * @author Kenny Bastani
  */
-public abstract class ProcessorActor extends Actor implements Processor, Scheduled<Message> {
+public abstract class ProcessorActor extends Actor implements StepFlow, Scheduled<Message> {
 
     private final List<State> states;
     private Kernel kernel;

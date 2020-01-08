@@ -15,7 +15,7 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
-import io.vlingo.xoom.processor.SceneStartupEvent;
+import io.vlingo.xoom.stepflow.SceneStartupEvent;
 import io.vlingo.xoom.resource.CachedStaticFilesResource;
 import io.vlingo.xoom.resource.Endpoint;
 import org.slf4j.Logger;

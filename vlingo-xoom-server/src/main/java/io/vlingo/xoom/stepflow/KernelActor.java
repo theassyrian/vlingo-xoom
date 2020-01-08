@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.common.Completes;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author Kenny Bastani
  * @see Actor
  * @see Kernel
- * @see Processor
+ * @see StepFlow
  */
 public class KernelActor extends Actor implements Kernel {
     private final Map<String, TransitionHandler> transitionHandlerMap;

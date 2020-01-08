@@ -1,10 +1,10 @@
 package io.examples.account.processor;
 
 import io.micronaut.context.event.ApplicationEventListener;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.ProcessorCreatedEvent;
-import io.vlingo.xoom.processor.SceneStartupEvent;
-import io.vlingo.xoom.processor.State;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.ProcessorCreatedEvent;
+import io.vlingo.xoom.stepflow.SceneStartupEvent;
+import io.vlingo.xoom.stepflow.State;
 
 import javax.inject.Singleton;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.Collections;
 public class ProcessorContext implements ApplicationEventListener<SceneStartupEvent> {
 
     private final State[] states;
-    private Processor processor;
+    private StepFlow processor;
 
     public ProcessorContext(State[] states) {
         this.states = states;
@@ -22,7 +22,7 @@ public class ProcessorContext implements ApplicationEventListener<SceneStartupEv
 
     @Override
     public void onApplicationEvent(SceneStartupEvent event) {
-        processor = Processor.startWith(event.getSource().getWorld().stage(),
+        processor = StepFlow.startWith(event.getSource().getWorld().stage(),
                 AccountProcessor.class, "AccountProcessor",
                 Collections.singletonList(Arrays.asList(states)));
 
@@ -31,7 +31,7 @@ public class ProcessorContext implements ApplicationEventListener<SceneStartupEv
                 .publishEvent(new ProcessorCreatedEvent(processor, "account"));
     }
 
-    public Processor getProcessor() {
+    public StepFlow getProcessor() {
         return processor;
     }
 }

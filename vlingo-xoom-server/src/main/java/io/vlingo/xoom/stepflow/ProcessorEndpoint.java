@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.management.endpoint.annotation.Endpoint;
@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 @Endpoint(id = "processors", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
 public class ProcessorEndpoint implements ApplicationEventListener<ProcessorCreatedEvent> {
-    private Map<String, Processor> processors = new HashMap<>();
+    private Map<String, StepFlow> processors = new HashMap<>();
 
     @Read
     public Map<String, Object> getMap(String processorName) {

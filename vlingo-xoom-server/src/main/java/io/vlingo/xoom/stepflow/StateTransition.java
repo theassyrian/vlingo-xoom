@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

@@ -1,7 +1,7 @@
 package io.examples.order.infra.processor;
 
-import io.vlingo.xoom.processor.ProcessorActor;
-import io.vlingo.xoom.processor.State;
+import io.vlingo.xoom.stepflow.ProcessorActor;
+import io.vlingo.xoom.stepflow.State;
 
 import java.util.List;
 

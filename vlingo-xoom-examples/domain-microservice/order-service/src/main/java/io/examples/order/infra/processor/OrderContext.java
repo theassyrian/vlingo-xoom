@@ -1,15 +1,15 @@
 package io.examples.order.infra.processor;
 
-import io.vlingo.xoom.processor.Processor;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 public class OrderContext {
-    private final Processor processor;
+    private final StepFlow processor;
 
-    public OrderContext(Processor processor) {
+    public OrderContext(StepFlow processor) {
         this.processor = processor;
     }
 
-    public Processor getProcessor() {
+    public StepFlow getProcessor() {
         return processor;
     }
 }

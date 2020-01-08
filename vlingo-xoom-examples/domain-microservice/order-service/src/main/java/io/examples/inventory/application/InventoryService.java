@@ -5,7 +5,7 @@ import io.examples.inventory.domain.model.Inventory;
 import io.examples.inventory.domain.model.InventoryStatus;
 import io.examples.inventory.infra.repository.InventoryRepository;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.processor.Processor;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public class InventoryService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Inventory> defineInventory(Inventory inventoryDefinition) {
-        final Processor processor = processorService.getInventoryContext().getProcessor();
+        final StepFlow processor = processorService.getInventoryContext().getProcessor();
         return Completes.withSuccess(inventoryDefinition)
                 .andThen(inventory -> inventory.sendEvent(processor, InventoryStatus.INVENTORY_CREATED))
                 .andThen(inventory -> inventory.sendEvent(processor, InventoryStatus.RESERVATION_PENDING))

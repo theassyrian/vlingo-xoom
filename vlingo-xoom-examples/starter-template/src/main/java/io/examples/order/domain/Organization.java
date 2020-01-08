@@ -3,9 +3,9 @@ package io.examples.order.domain;
 import io.examples.data.Identity;
 import io.examples.order.domain.state.Defined;
 import io.examples.order.domain.state.Disabled;
-import io.vlingo.xoom.processor.Processor;
-import io.vlingo.xoom.processor.State;
-import io.vlingo.xoom.processor.StateTransition;
+import io.vlingo.xoom.stepflow.StepFlow;
+import io.vlingo.xoom.stepflow.State;
+import io.vlingo.xoom.stepflow.StateTransition;
 
 import javax.persistence.Entity;
 import java.util.Optional;
@@ -23,11 +23,11 @@ public class Organization extends Identity {
         return status;
     }
 
-    public Organization define(Processor processor) {
+    public Organization define(StepFlow processor) {
         return sendEvent(processor, new Defined());
     }
 
-    public Organization enable(Processor processor) {
+    public Organization enable(StepFlow processor) {
         OrganizationEvent confirmEvent = new OrganizationEvent(status.name(), OrganizationStatus.ENABLED.name());
         return sendEvent(processor, confirmEvent, stateTransition -> {
             // TODO: Implement payment confirmation
@@ -37,16 +37,16 @@ public class Organization extends Identity {
         });
     }
 
-    public Organization disable(Processor processor) {
+    public Organization disable(StepFlow processor) {
         return sendEvent(processor, new Disabled());
     }
 
-    private Organization sendEvent(Processor processor, State targetState) {
+    private Organization sendEvent(StepFlow processor, State targetState) {
         OrganizationEvent event = new OrganizationEvent(status.name(), targetState.getName());
         return sendEvent(processor, event, apply(targetState));
     }
 
-    private Organization sendEvent(Processor processor, OrganizationEvent event, Consumer<StateTransition> handler) {
+    private Organization sendEvent(StepFlow processor, OrganizationEvent event, Consumer<StateTransition> handler) {
         return Optional.ofNullable(processor.applyEvent(event)
                 .andThenConsume(handler).otherwise(transition -> null).await())
                 .map(transition -> this).orElseThrow(() -> new RuntimeException("The event with type ["

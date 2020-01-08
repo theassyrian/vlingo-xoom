@@ -5,7 +5,7 @@ import io.examples.warehouse.domain.model.Warehouse;
 import io.examples.warehouse.domain.model.WarehouseStatus;
 import io.examples.warehouse.infra.WarehouseRepository;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.processor.Processor;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public class WarehouseService {
      * @return a completes publisher that will execute as the response is returned to the HTTP resource consumer
      */
     public Completes<Warehouse> defineWarehouse(Warehouse warehouseDefinition) {
-        final Processor processor = processorService.getWarehouseContext().getProcessor();
+        final StepFlow processor = processorService.getWarehouseContext().getProcessor();
         return Completes.withSuccess(warehouseDefinition)
                 .andThen(warehouse -> warehouse.sendEvent(processor, WarehouseStatus.WAREHOUSE_CREATED))
                 .andThenConsume(warehouseRepository::save)

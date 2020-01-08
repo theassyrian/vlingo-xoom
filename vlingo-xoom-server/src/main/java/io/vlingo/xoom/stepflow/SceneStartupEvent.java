@@ -1,4 +1,4 @@
-package io.vlingo.xoom.processor;
+package io.vlingo.xoom.stepflow;
 
 import io.micronaut.context.event.ApplicationEvent;
 import io.vlingo.xoom.VlingoScene;

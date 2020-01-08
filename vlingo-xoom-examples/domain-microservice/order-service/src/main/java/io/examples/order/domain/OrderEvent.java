@@ -1,6 +1,6 @@
 package io.examples.order.domain;
 
-import io.vlingo.xoom.processor.Event;
+import io.vlingo.xoom.stepflow.Event;
 
 public class OrderEvent extends Event {
 

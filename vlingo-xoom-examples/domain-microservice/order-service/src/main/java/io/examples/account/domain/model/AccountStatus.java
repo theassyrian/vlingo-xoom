@@ -1,6 +1,6 @@
 package io.examples.account.domain.model;
 
-import io.vlingo.xoom.processor.State;
+import io.vlingo.xoom.stepflow.State;
 
 /**
  * The {@link AccountStatus} represents the multiple logical states of an {@link AccountQuery}. If an

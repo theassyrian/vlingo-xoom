@@ -1,6 +1,6 @@
 package io.examples.inventory.domain.model;
 
-import io.vlingo.xoom.processor.Event;
+import io.vlingo.xoom.stepflow.Event;
 
 public class InventoryEvent extends Event {
 
