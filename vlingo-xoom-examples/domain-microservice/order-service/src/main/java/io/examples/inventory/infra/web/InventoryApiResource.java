@@ -29,11 +29,11 @@ public class InventoryApiResource implements Endpoint {
     @Override
     public RequestHandler[] getHandlers() {
         return new RequestHandler[]{
-                post("/v1/inventorys")
+                post("/v1/inventory")
                         .body(Inventory.class)
                         .handle(this::defineInventory)
                         .onError(this::getErrorResponse),
-                get("/v1/inventorys/{id}")
+                get("/v1/inventory/{id}")
                         .param(Long.class)
                         .handle(this::queryInventory)
                         .onError(this::getErrorResponse)

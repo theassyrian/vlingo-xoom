@@ -1,4 +1,4 @@
-package io.vlingo.xoom;
+package io.vlingo.xoom.management;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.management.endpoint.beans.BeansEndpoint;
@@ -11,7 +11,6 @@ import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.http.resource.RequestHandler1;
 import io.vlingo.xoom.annotations.Resource;
-import io.vlingo.xoom.stepflow.FlowEndpoint;
 import io.vlingo.xoom.resource.Endpoint;
 
 import java.util.List;
@@ -52,8 +51,12 @@ public class ManagementEndpoints implements Endpoint {
         return Completes.withSuccess(applicationContext.getBean(LoggersEndpoint.class));
     }
 
-    public Completes<FlowEndpoint> getProcessorEndpoint() {
+    public Completes<FlowEndpoint> getFlowEndpoint() {
         return Completes.withSuccess(applicationContext.getBean(FlowEndpoint.class));
+    }
+
+    public Completes<OpenApiEndpoint> getOpenApiEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(OpenApiEndpoint.class));
     }
 
     @Override
@@ -86,9 +89,12 @@ public class ManagementEndpoints implements Endpoint {
                         .onError(this::getErrorResponse),
                 get("/loggers").handle(() -> response(Ok, getLoggersEndpoint()
                         .andThen(loggersEndpoint -> loggersEndpoint.loggers().blockingGet())))
+                        .onError(this::getErrorResponse),
+                get("/openapi").handle(() -> response(Ok, getOpenApiEndpoint()
+                        .andThen(OpenApiEndpoint::getSpecification)))
                         .onError(this::getErrorResponse)).collect(Collectors.toList());
 
-        if (getProcessorEndpoint().await() != null) {
+        if (getFlowEndpoint().await() != null) {
             handlers.add(get("/flows/{name}")
                     .param(String.class)
                     .handle(processorEndpointHandler())
@@ -99,6 +105,6 @@ public class ManagementEndpoints implements Endpoint {
     }
 
     public RequestHandler1.Handler1<String> processorEndpointHandler() {
-        return (name) -> response(Ok, getProcessorEndpoint().andThen((endpoint) -> endpoint.getMap(name)));
+        return (name) -> response(Ok, getFlowEndpoint().andThen((endpoint) -> endpoint.getMap(name)));
     }
 }

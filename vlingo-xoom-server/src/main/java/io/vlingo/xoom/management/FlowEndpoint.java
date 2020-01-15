@@ -1,8 +1,9 @@
-package io.vlingo.xoom.stepflow;
+package io.vlingo.xoom.management;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.management.endpoint.annotation.Endpoint;
 import io.micronaut.management.endpoint.annotation.Read;
+import io.vlingo.xoom.stepflow.*;
 
 import java.util.*;
 import java.util.stream.Stream;

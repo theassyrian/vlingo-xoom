@@ -26,6 +26,7 @@ dependencies {
     compile "com.sun.activation:javax.activation:1.2.0"
     compile "io.micronaut:micronaut-http-client:$micronautVersion"
     implementation "io.micronaut.configuration:micronaut-netflix-ribbon:1.0.4"
+    compile 'io.swagger.parser.v3:swagger-parser:2.0.17'
     compile "io.micronaut:micronaut-runtime:$micronautVersion"
     compile "io.vlingo:vlingo-http:$vlingoVersion"
     compile "io.vlingo:vlingo-actors:$vlingoVersion"

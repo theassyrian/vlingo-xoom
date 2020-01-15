@@ -49,6 +49,7 @@ public class VlingoServer implements EmbeddedServer {
     private Server server;
     private final VlingoScene vlingoScene;
     private final Set<Resource> resources;
+    private final Set<Endpoint> endpoints;
     private final ApplicationContext applicationContext;
     private final ApplicationConfiguration applicationConfiguration;
     private boolean isRunning = false;
@@ -65,7 +66,8 @@ public class VlingoServer implements EmbeddedServer {
     public VlingoServer(ApplicationContext applicationContext, ApplicationConfiguration applicationConfiguration,
                         VlingoScene vlingoScene, Stream<Endpoint> endpoints) {
         // Load the world context with auto-configured settings
-        this.resources = endpoints.map(Endpoint::getResource).collect(Collectors.toSet());
+        this.endpoints = endpoints.collect(Collectors.toSet());
+        this.resources = this.endpoints.stream().map(Endpoint::getResource).collect(Collectors.toSet());
         this.resources.add(new CachedStaticFilesResource().routes());
         this.applicationContext = applicationContext;
         this.applicationConfiguration = applicationConfiguration;
@@ -85,6 +87,10 @@ public class VlingoServer implements EmbeddedServer {
 
     public Set<Resource> getResources() {
         return resources;
+    }
+
+    public Set<Endpoint> getEndpoints() {
+        return endpoints;
     }
 
     @Override
