@@ -103,7 +103,7 @@ To compile this example, clone this repository and execute the following command
 
 This command will build the example projects and corresponding docker images. You must have docker running on your development machine. After the build is completed, run the following commands.
 
-    $ cd ./vlingo-xoom-examples/advanced-microservice
+    $ cd ./vlingo-xoom-examples/domain-microservice
     $ docker-compose up -d
     $ docker-compose scale account-service=3
 
