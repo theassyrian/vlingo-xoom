@@ -1,4 +1,4 @@
-package io.vlingo.xoom;
+package io.vlingo.xoom.server;
 
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
@@ -8,6 +8,7 @@ import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.health.HealthStatus;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
+import io.vlingo.xoom.VlingoServer;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -22,7 +23,7 @@ import java.util.Optional;
  * @since 1.0
  */
 @Prototype
-class VlingoServerInstance implements EmbeddedServerInstance {
+public class VlingoServiceInstance implements EmbeddedServerInstance {
 
     private final VlingoServer vlingoServer;
     private final ConvertibleValues<String> metadata;
@@ -32,8 +33,8 @@ class VlingoServerInstance implements EmbeddedServerInstance {
      * @param vlingoServer         The {@link VlingoServer}
      * @param metadataContributors The {@link ServiceInstanceMetadataContributor}
      */
-    VlingoServerInstance(@Parameter VlingoServer vlingoServer,
-                         List<ServiceInstanceMetadataContributor> metadataContributors) {
+    VlingoServiceInstance(@Parameter VlingoServer vlingoServer,
+                          List<ServiceInstanceMetadataContributor> metadataContributors) {
         this.vlingoServer = vlingoServer;
         Map<String, String> metaMap = new LinkedHashMap<>(5);
 

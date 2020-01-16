@@ -1,4 +1,4 @@
-package io.vlingo.xoom;
+package io.vlingo.xoom.server;
 
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.env.Environment;

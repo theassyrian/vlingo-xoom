@@ -2,7 +2,7 @@ package io.examples.account.domain.state;
 
 import io.examples.account.domain.Account;
 import io.examples.account.flow.AccountFlow;
-import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.stepflow.StepFlow;
 import io.vlingo.xoom.stepflow.State;
 import io.vlingo.xoom.stepflow.Transition;

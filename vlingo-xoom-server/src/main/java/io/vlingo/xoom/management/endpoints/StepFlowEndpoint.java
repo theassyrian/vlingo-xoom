@@ -1,15 +1,16 @@
-package io.vlingo.xoom.management;
+package io.vlingo.xoom.management.endpoints;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.management.endpoint.annotation.Endpoint;
 import io.micronaut.management.endpoint.annotation.Read;
+import io.vlingo.xoom.events.FlowCreatedEvent;
 import io.vlingo.xoom.stepflow.*;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 @Endpoint(id = "flows", prefix = "custom", defaultEnabled = true, defaultSensitive = false)
-public class FlowEndpoint implements ApplicationEventListener<FlowCreatedEvent> {
+public class StepFlowEndpoint implements ApplicationEventListener<FlowCreatedEvent> {
     private Map<String, StepFlow> stepFlow = new HashMap<>();
 
     @Read

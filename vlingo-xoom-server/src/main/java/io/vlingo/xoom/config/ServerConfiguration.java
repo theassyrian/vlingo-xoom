@@ -19,13 +19,11 @@ import org.slf4j.LoggerFactory;
 public class ServerConfiguration {
     private static final Logger log = LoggerFactory.getLogger(ServerConfiguration.class);
     public static final String PREFIX = "server";
-
     private Integer port = 8080;
     private String host;
     private String scheme = "http";
     private Integer maxBufferPoolSize = 100;
     private Integer maxMessageSize = 65535 * 2;
-
     private DispatchersConfiguration dispatchersConfiguration;
     private ProcessorsConfiguration processorsConfiguration;
     private ActorsConfiguration actorsConfiguration;

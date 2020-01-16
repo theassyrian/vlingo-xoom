@@ -1,6 +1,7 @@
-package io.vlingo.xoom.stepflow;
+package io.vlingo.xoom.events;
 
 import io.micronaut.context.event.ApplicationEvent;
+import io.vlingo.xoom.stepflow.StepFlow;
 
 public class FlowCreatedEvent extends ApplicationEvent {
     private final StepFlow source;

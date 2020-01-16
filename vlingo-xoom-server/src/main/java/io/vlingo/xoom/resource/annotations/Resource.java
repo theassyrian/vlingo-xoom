@@ -1,4 +1,4 @@
-package io.vlingo.xoom.annotations;
+package io.vlingo.xoom.resource.annotations;
 
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Context;

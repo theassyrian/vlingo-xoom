@@ -1,4 +1,4 @@
-package io.vlingo.xoom.error;
+package io.vlingo.xoom.resource.error;
 
 public class ErrorInfo {
 

@@ -4,8 +4,9 @@ import io.examples.inventory.application.InventoryService;
 import io.examples.inventory.domain.model.Inventory;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
+import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.resource.Endpoint;
 
 import javax.inject.Provider;
@@ -40,8 +41,8 @@ public class InventoryApiResource implements Endpoint {
         };
     }
 
-    private Completes<Response> defineInventory(Inventory inventory) {
-        return response(Created, inventoryProvider.get().defineInventory(inventory));
+    private Completes<ObjectResponse<Inventory>> defineInventory(Inventory inventory) {
+        return responseWithBody(Created, inventoryProvider.get().defineInventory(inventory));
     }
 
     private Completes<Response> queryInventory(Long id) {

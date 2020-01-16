@@ -1,4 +1,4 @@
-package io.vlingo.xoom;
+package io.vlingo.xoom.server;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.LifeCycle;

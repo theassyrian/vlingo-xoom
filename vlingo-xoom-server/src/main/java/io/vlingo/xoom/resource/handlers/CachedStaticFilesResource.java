@@ -1,4 +1,4 @@
-package io.vlingo.xoom.resource;
+package io.vlingo.xoom.resource.handlers;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -151,7 +151,7 @@ public class CachedStaticFilesResource extends ResourceHandler {
 
     private static byte[] read(final InputStream is) throws IOException {
         byte[] readBytes;
-        
+
         byte[] buffer = new byte[4096];
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

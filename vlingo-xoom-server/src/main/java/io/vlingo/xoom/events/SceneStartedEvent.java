@@ -1,13 +1,13 @@
-package io.vlingo.xoom.stepflow;
+package io.vlingo.xoom.events;
 
 import io.micronaut.context.event.ApplicationEvent;
-import io.vlingo.xoom.VlingoScene;
+import io.vlingo.xoom.server.VlingoScene;
 
-public class SceneStartupEvent extends ApplicationEvent {
+public class SceneStartedEvent extends ApplicationEvent {
 
     private final VlingoScene source;
 
-    public SceneStartupEvent(VlingoScene source) {
+    public SceneStartedEvent(VlingoScene source) {
         super(source);
         this.source = source;
     }

@@ -1,6 +1,6 @@
 package io.examples.account.application;
 
-import io.vlingo.xoom.VlingoScene;
+import io.vlingo.xoom.server.VlingoScene;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package io.vlingo.xoom;
+package io.vlingo.xoom.discovery;
 
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventListener;
@@ -9,6 +9,8 @@ import io.micronaut.runtime.server.event.ServerStartupEvent;
 import io.reactivex.Single;
 import io.vlingo.common.Scheduled;
 import io.vlingo.common.Scheduler;
+import io.vlingo.xoom.VlingoServer;
+import io.vlingo.xoom.server.VlingoServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +33,13 @@ public class EurekaRetryRegistrationListener implements ApplicationEventListener
     public void onApplicationEvent(ServerStartupEvent event) {
         VlingoServer vlingoServer = (VlingoServer) event.getSource();
         Scheduler scheduler = new Scheduler();
-        VlingoServerInstance serviceInstance = (VlingoServerInstance) vlingoServer.getServiceInstance();
+        VlingoServiceInstance serviceInstance = (VlingoServiceInstance) vlingoServer.getServiceInstance();
         scheduler.schedule(getEurekaRetryScheduler(event, scheduler, serviceInstance),
                 event.getSource().getApplicationContext().getBean(DiscoveryClient.class), 5000, 5000);
     }
 
     private Scheduled<DiscoveryClient> getEurekaRetryScheduler(ServerStartupEvent event, Scheduler scheduler,
-                                                               VlingoServerInstance serviceInstance) {
+                                                               VlingoServiceInstance serviceInstance) {
         return (scheduled, data) -> {
             try {
                 List<String> instances = Single.fromPublisher(data.getServiceIds())
@@ -54,8 +56,7 @@ public class EurekaRetryRegistrationListener implements ApplicationEventListener
                                 event.getSource().getApplicationContext()
                                         .publishEvent(new ServiceStartedEvent(serviceInstance));
                             }
-                        })
-                        .blockingGet();
+                        }).blockingGet();
                 // Close the scheduler if there is no error after the blocking get
                 scheduler.close();
             } catch (Exception ex) {

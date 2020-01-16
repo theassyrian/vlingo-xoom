@@ -15,9 +15,11 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 import io.vlingo.xoom.config.ServerConfiguration;
-import io.vlingo.xoom.stepflow.SceneStartupEvent;
-import io.vlingo.xoom.resource.CachedStaticFilesResource;
+import io.vlingo.xoom.events.SceneStartedEvent;
+import io.vlingo.xoom.resource.handlers.CachedStaticFilesResource;
 import io.vlingo.xoom.resource.Endpoint;
+import io.vlingo.xoom.server.VlingoScene;
+import io.vlingo.xoom.server.VlingoServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,11 +155,11 @@ public class VlingoServer implements EmbeddedServer {
                             65535 * 2),
                     Configuration.Timing.define());
 
-            serviceInstance = applicationContext.createBean(VlingoServerInstance.class, this);
+            serviceInstance = applicationContext.createBean(VlingoServiceInstance.class, this);
             applicationContext.publishEvent(new ServerStartupEvent(this));
             if(serviceInstance.getHealthStatus() == HealthStatus.DOWN)
                 applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
-            applicationContext.publishEvent(new SceneStartupEvent(vlingoScene));
+            applicationContext.publishEvent(new SceneStartedEvent(vlingoScene));
             isRunning = true;
         } else {
             throw new RuntimeException("A Vlingo Xoom server is already running in the current Micronaut context");

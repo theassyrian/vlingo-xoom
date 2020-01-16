@@ -10,7 +10,9 @@ import io.micronaut.management.endpoint.routes.RoutesEndpoint;
 import io.vlingo.common.Completes;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.http.resource.RequestHandler1;
-import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.management.endpoints.StepFlowEndpoint;
+import io.vlingo.xoom.management.endpoints.OpenApiEndpoint;
+import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.resource.Endpoint;
 
 import java.util.List;
@@ -21,13 +23,13 @@ import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.resource.ResourceBuilder.get;
 
 @Resource
-public class ManagementEndpoints implements Endpoint {
+public class ManagementResource implements Endpoint {
 
     private final String ENDPOINT_NAME = "Management";
     private final String ENDPOINT_VERSION = "1.0.0";
     private final ApplicationContext applicationContext;
 
-    public ManagementEndpoints(ApplicationContext applicationContext) {
+    public ManagementResource(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -51,8 +53,8 @@ public class ManagementEndpoints implements Endpoint {
         return Completes.withSuccess(applicationContext.getBean(LoggersEndpoint.class));
     }
 
-    public Completes<FlowEndpoint> getFlowEndpoint() {
-        return Completes.withSuccess(applicationContext.getBean(FlowEndpoint.class));
+    public Completes<StepFlowEndpoint> getFlowEndpoint() {
+        return Completes.withSuccess(applicationContext.getBean(StepFlowEndpoint.class));
     }
 
     public Completes<OpenApiEndpoint> getOpenApiEndpoint() {

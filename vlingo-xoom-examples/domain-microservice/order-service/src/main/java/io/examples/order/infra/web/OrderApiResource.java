@@ -5,7 +5,7 @@ import io.examples.order.application.OrderService;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.resource.Endpoint;
 
 import javax.inject.Provider;

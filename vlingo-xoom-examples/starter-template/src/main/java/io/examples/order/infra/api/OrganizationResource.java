@@ -5,7 +5,7 @@ import io.examples.order.domain.OrganizationService;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.RequestHandler;
-import io.vlingo.xoom.annotations.Resource;
+import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.resource.Endpoint;
 
 import static io.vlingo.http.Response.Status.Created;

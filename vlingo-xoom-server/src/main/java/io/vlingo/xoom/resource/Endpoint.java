@@ -1,9 +1,11 @@
 package io.vlingo.xoom.resource;
 
 import com.google.gson.GsonBuilder;
+import io.vlingo.http.Version;
+import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.xoom.VlingoServer;
 import io.vlingo.common.Completes;
-import io.vlingo.xoom.error.ErrorInfo;
+import io.vlingo.xoom.resource.error.ErrorInfo;
 import io.vlingo.http.Header;
 import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;
@@ -20,7 +22,7 @@ import static io.vlingo.http.Response.of;
 
 /**
  * The {@link Endpoint} interface provides a way to implement an endpoint definition that can be annotated with
- * {@link io.vlingo.xoom.annotations.Resource} and mounted to an embeddable {@link VlingoServer}. Methods contained
+ * {@link io.vlingo.xoom.resource.annotations.Resource} and mounted to an embeddable {@link VlingoServer}. Methods contained
  * in this interface provide default configurations for how {@link VlingoServer} serializes HTTP responses.
  * <p>
  * An {@link Endpoint} is a versioned definition of a set of request/response handlers that forms an anti-corruption
@@ -28,6 +30,7 @@ import static io.vlingo.http.Response.of;
  * versions of your internal services.
  */
 public interface Endpoint {
+
     String getName();
 
     String getVersion();
@@ -45,6 +48,15 @@ public interface Endpoint {
                 .andThen(this::serialize)
                 .andThen((body) -> of(status, Header.Headers.of(getContentTypeResponseHeader()), body));
     }
+
+    @SuppressWarnings("unchecked")
+    default <T> Completes<ObjectResponse<T>> responseWithBody(Response.Status status, Completes<T> handle) {
+        return handle
+                .andThen(this::serialize)
+                .andThen((body) -> (ObjectResponse<T>) ObjectResponse
+                        .of(Version.Http1_1, status, Header.Headers.of(getContentTypeResponseHeader()), body));
+    }
+
 
     default Completes<Response> emptyResponse(Response.Status status, Completes<Procedure> handle) {
         return handle.andThen(procedure -> {

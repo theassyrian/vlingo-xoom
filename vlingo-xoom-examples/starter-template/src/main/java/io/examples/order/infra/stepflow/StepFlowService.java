@@ -4,7 +4,7 @@ import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.vlingo.xoom.VlingoServer;
 import io.vlingo.xoom.stepflow.StepFlow;
-import io.vlingo.xoom.stepflow.FlowCreatedEvent;
+import io.vlingo.xoom.events.FlowCreatedEvent;
 import io.vlingo.xoom.stepflow.State;
 
 import javax.inject.Singleton;
