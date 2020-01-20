@@ -96,8 +96,8 @@ public class OpenApiEndpoint {
                                 Optional.of(new MediaType()).map(mediaType -> {
                                     Schema schema = new Schema();
                                     schema.setType(convertTypeToSpecification(Optional.ofNullable(r.bodyType)
-                                            .map(Class::getSimpleName)
-                                            .orElse("string")));
+                                            .map(c -> c.getClass().getSimpleName())
+                                            .orElseGet(() -> "string")));
                                     mediaType.setSchema(schema);
                                     return mediaType;
                                 }).get());
