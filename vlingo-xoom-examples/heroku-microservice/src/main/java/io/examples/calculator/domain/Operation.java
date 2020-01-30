@@ -1,18 +1,30 @@
 package io.examples.calculator.domain;
 
+import java.util.function.Function;
+
+/**
+ * The {@code Operation} specifies the supported mathematical
+ * operations on {@link Calculator}.
+ *
+ * @author Danilo Ambrosio
+ */
 public enum Operation {
 
-    ADDITION,
-    SUBTRACTION,
-    MULTIPLICATION;
+    ADDITION(Calculator::sum),
+    SUBTRACTION(Calculator::subtract),
+    MULTIPLICATION(Calculator::multiply);
+
+    private final Function<Calculator, CalculationResult> function;
+
+    Operation(final Function<Calculator, CalculationResult> function) {
+        this.function = function;
+    }
 
     public static Operation withName(final String operationName) {
-        final Operation operation = valueOf(operationName.toUpperCase());
+        return valueOf(operationName.toUpperCase());
+    }
 
-        if(operation == null) {
-            throw new IllegalArgumentException("Unknown operation");
-        }
-
-        return operation;
+    public CalculationResult perform(final Calculator calculator) {
+        return this.function.apply(calculator);
     }
 }
