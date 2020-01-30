@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: io.vlingo.example
+---
+testFramework: junit
+sourceLanguage: java
