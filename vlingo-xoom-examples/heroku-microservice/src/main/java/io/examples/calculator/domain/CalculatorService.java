@@ -28,7 +28,7 @@ public class CalculatorService {
         return Completes.withSuccess(result);
     }
 
-    public Completes<List<Operation>> availableOperations() {
+    public Completes<List<Operation>> retrieveSupportedOperations() {
         return Completes.withSuccess(Arrays.asList(Operation.values()));
     }
 

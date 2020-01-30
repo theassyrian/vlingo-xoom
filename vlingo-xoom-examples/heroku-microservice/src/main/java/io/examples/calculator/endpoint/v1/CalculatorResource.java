@@ -43,8 +43,8 @@ public class CalculatorResource implements CalculatorEndpoint {
     }
 
     @Override
-    public Completes<Response> availableOperations() {
-        return response(Ok, calculatorService.availableOperations());
+    public Completes<Response> retrieveSupportedOperations() {
+        return response(Ok, calculatorService.retrieveSupportedOperations());
     }
 
     public RequestHandler[] getHandlers() {
@@ -56,7 +56,7 @@ public class CalculatorResource implements CalculatorEndpoint {
                         .handle(this::calculate)
                         .onError(this::getErrorResponse),
                 ResourceBuilder.get("/v1/calculators/operations")
-                        .handle(this::availableOperations)
+                        .handle(this::retrieveSupportedOperations)
         };
     }
 

@@ -1,4 +1,4 @@
-package io.examples.calculator;
+package io.examples;
 
 import io.examples.calculator.domain.Calculator;
 import io.micronaut.runtime.Micronaut;

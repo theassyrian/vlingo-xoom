@@ -28,5 +28,5 @@ public interface CalculatorEndpoint extends Endpoint {
 
     Completes<Response> calculate(String operation, Integer firstOperand, Integer secondOperand);
 
-    Completes<Response> availableOperations();
+    Completes<Response> retrieveSupportedOperations();
 }

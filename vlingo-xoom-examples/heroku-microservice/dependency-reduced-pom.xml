@@ -199,7 +199,7 @@
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <exec.mainClass>io.examples.calculator.CalculatorApplication</exec.mainClass>
+    <exec.mainClass>io.examples.CalculatorApplication</exec.mainClass>
     <jdk.version>1.8</jdk.version>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
   </properties>
