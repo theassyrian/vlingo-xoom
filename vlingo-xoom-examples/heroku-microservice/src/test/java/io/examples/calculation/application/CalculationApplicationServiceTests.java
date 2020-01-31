@@ -1,4 +1,4 @@
-package io.examples;
+package io.examples.calculation.application;
 
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;

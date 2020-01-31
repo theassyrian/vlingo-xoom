@@ -1,10 +1,9 @@
 package io.examples.calculation.domain;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.lang.String.format;
 
 /**
  * The {@code Calculator} has been modeled to serve a basic mathematical calculation domain,
@@ -22,7 +21,9 @@ public class Calculation {
     private final Operation operation;
     private final List<Integer> operands = new ArrayList<>();
 
-    public static Calculation of(final Operation operation, final Integer anOperand, final Integer anotherOperand) {
+    public static Calculation of(final Operation operation,
+                                 final Integer anOperand,
+                                 final Integer anotherOperand) {
         return new Calculation(operation, anOperand, anotherOperand);
     }
 
@@ -42,15 +43,18 @@ public class Calculation {
     }
 
     protected Integer sum() {
-        return this.operands.stream().reduce(1, Math::addExact);
-    }
-
-    protected Integer subtract() {
-        return this.operands.stream().reduce(1, Math::subtractExact);
+        return this.operands.stream().reduce(0, Math::addExact);
     }
 
     protected Integer multiply() {
         return this.operands.stream().reduce(1, Math::multiplyExact);
     }
 
+    protected Integer subtract() {
+        return this.operands.stream().reduce(0, (a, b) -> Math.abs(a - b));
+    }
+
+    public Integer result() {
+        return result;
+    }
 }

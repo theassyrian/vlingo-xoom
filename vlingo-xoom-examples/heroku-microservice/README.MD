@@ -11,18 +11,21 @@ The following tree structure is from the project's `./src/main/java` directory. 
     .
     └── io
         └── examples
-            ├── CalculatorApplication.java
-            └── account
+            ├── CalculationApplication.java
+            └── calculation
                 ├── application
                 │   ├── CalculationApplicationService.java (Business Logic)
                 │   └── ExecuteCalculation.java (Command)
                 ├── domain
                 │   ├── Calculation.java (Aggregate)
                 │   └── Operation.java (Value Object)
+                ├── repository
+                │   ├── CalculationRepository.java 
+                │   └── InMemoryCalculationRepository.java
                 └── endpoint
-                    ├── CalculatorEndpoint.java (Anti-corruption Layer)
+                    ├── CalculationEndpoint.java (Anti-corruption Layer)
                     └── v1
-                        └── CalculatorResource.java
+                        └── CalculationResource.java
 
 
 In addition to the tree structure above, you will find `./src/main/tests` for unit tests and `./src/main/java/resources/application.yml` for externalized configuration.
@@ -66,9 +69,9 @@ This microservice example demonstrates the following capabilities that are enabl
 ## Heroku Deployment
 
 There are few steps to prepare a [vlingo/xoom](https://docs.vlingo.io/vlingo-xoom) app for a deployment on Heroku: 
--First, as mentioned in the [documentation](https://devcenter.heroku.com/articles/procfile), we need to add a Procfile in the app root folder containing command to execute the application jar
+-First, according to the Heroku [documentation](https://devcenter.heroku.com/articles/procfile), we need to add a Procfile in the app root folder containing command to execute the application jar
 
-    java -jar target/calculation-0.1.jar
+    java -jar target/heroku-microservice-0.1.jar
 
 -Since this application was generate by the [Micronaut CLI](https://docs.micronaut.io/latest/guide/index.html#buildCLI), the Maven Shade Plugin is used, by default, to manipulate the jar building. In order to avoid the invalid signature exception while executing the jar, the following transformers must be added into the pom configuration, specifically in the maven shade plugin section:
     
@@ -82,14 +85,14 @@ There are few steps to prepare a [vlingo/xoom](https://docs.vlingo.io/vlingo-xoo
       <resource>.RSA</resource>
     </transformer> 
 
--Finally, after the previous steps, the application is ready to be deployed using the [Heroku CLI](https://devcenter.heroku.com/articles/git), which is easy to use, or manually by adding the remote Heroku Git repository as follows:
+-Finally, after the previous steps, the application is ready to be deployed using the [Heroku CLI](https://devcenter.heroku.com/articles/git) or manually by adding the remote Heroku Git repository as follows:
 
     git remote add heroku https://heroku:[heroku-apy-key]@git.heroku.com/[heroku-app-name].git
     git push heroku [local-branch-name]:master   
 
 ### REST API
 
-- `method=GET, uri=/v1/calculations/?operation&firstOperand&secondOperand, to=performOperation(String operantion, Integer InfirstOperand, Integer secondOperand)`
+- `method=GET, uri=/v1/calculations, to=calculate(ExecuteCalculation executeCalculation)`
 - `method=GET, uri=/v1/calculations/operations, to=retrieveSupportedOperations()`
 
 ## Running the Example
@@ -100,7 +103,7 @@ To compile this example, clone this repository and execute the following command
 
 After you successfully compile the application, execute the next command to run the microservice.
 
-    $ ./java -jar target/*.jar
+    $ ./java -jar target/heroku-microservice-0.1.jar
 
 If everything was a success, you should see the following terminal output.
 
@@ -132,16 +135,21 @@ If everything was a success, you should see the following terminal output.
  
 ## Client Usage Examples
  
-Now that the server is running, you can execute the following `curl` commands to interact with the `Calculator` REST API.
+Now that the server is running, you can execute the following `curl` commands to interact with the `Calculation` REST API.
  
 ### Perform Operation
 
-Execute the following command to get an result from the `Calculator` operation.
+Execute the following command to get an result from the `Calculation` operation.
 
-    curl -X GET -H "Content-Type: application/json" "http://localhost:8080/v1/calculators?operation=addition&firstOperand=2&secondOperand=2" -i 
+    curl -X POST http://localhost:8080/v1/calculations" -H "Content-Type: application/json" -d \
+    '{
+       "operationName": "addition",
+       "fisrtOperand": "3",
+       "secondOperand": "2"
+     }' -i
 
 ### Retrieve Supported Operations
 
 Execute the following command to get all `Operation`.
 
-    curl -X GET -H "Content-Type: application/json" http://localhost:8080/v1/calculators/operations -i 
+    curl -X GET -H "Content-Type: application/json" http://localhost:8080/v1/calculations/operations -i 

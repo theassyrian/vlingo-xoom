@@ -52,6 +52,7 @@ public class CalculationResource implements CalculationEndpoint {
                         .onError(this::getErrorResponse),
                 ResourceBuilder.get("/v1/calculations/operations")
                         .handle(this::retrieveSupportedOperations)
+                        .onError(this::getErrorResponse)
         };
     }
 
