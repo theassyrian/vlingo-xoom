@@ -13,7 +13,7 @@ import io.vlingo.xoom.resource.annotations.Resource;
 import static io.vlingo.http.Response.Status.Ok;
 
 /**
- * This {@code CalculatorResource} exposes a REST API that maps resource HTTP request-response handlers to operations
+ * This {@code CalculationResource} exposes a REST API that maps resource HTTP request-response handlers to operations
  * contained in the {@link CalculationApplicationService}. This {@link Endpoint} implementation forms an anti-corruption layer between
  * consuming services and this microservice's {@link CalculationApplicationService} API.
  * <p>

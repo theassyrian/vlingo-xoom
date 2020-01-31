@@ -1,12 +1,11 @@
 package io.examples.calculation.domain;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * The {@code Calculator} has been modeled to serve a basic mathematical calculation domain,
+ * The {@code Calculation} has been modeled to serve a basic mathematical domain,
  * being able to calculate the following operations:
  *
  * <li>{@link Operation#ADDITION}</li>
