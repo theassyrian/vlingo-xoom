@@ -25,7 +25,6 @@ public class CalculationEndPointTests {
     HttpClient client;
 
     @Test
-    @Ignore
     public void testOperationsRetrieval() {
         final HttpRequest request = HttpRequest.GET("/calculations/operations");
         final HttpResponse<List<Operation>> response = client.toBlocking().exchange(request, Argument.listOf(Operation.class));
