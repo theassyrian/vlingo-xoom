@@ -1,8 +1,10 @@
 package io.examples.calculation.domain;
 
+import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+@MicronautTest
 public class CalculationTests {
 
     @Test

@@ -46,11 +46,7 @@ dependencies {
     implementation "io.micronaut:micronaut-runtime"
     implementation "io.vlingo:vlingo-xoom-server:$xoomVersion"
 
-    compile 'io.micronaut.data:micronaut-data-hibernate-jpa:1.0.0.M4'
-
-    runtime "io.micronaut.configuration:micronaut-jdbc-hikari"
     runtime "ch.qos.logback:logback-classic:1.2.3"
-    runtime "com.h2database:h2"
 
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
@@ -62,7 +58,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "io.examples.CalculationAPplication"
+mainClassName = "io.examples.CalculationApplication"
 applicationName = "$projectName"
 // use JUnit 5 platform
 test {
