@@ -6,18 +6,19 @@ In this example application, you'll be introduced to how implement a microservic
 
 The following tree structure is from the project's `./src/main/java` directory. Here we can see the domain model and the endpoint definition. 
 
-`Calculator Microservice`
+`Calculation Microservice`
 
     .
     └── io
         └── examples
             ├── CalculatorApplication.java
             └── account
+                ├── application
+                │   ├── CalculationApplicationService.java (Business Logic)
+                │   └── ExecuteCalculation.java (Command)
                 ├── domain
-                │   ├── CalculationResult.java
-                │   ├── Calculator.java (Aggregate)
-                │   ├── CalculatorService.java (Business Logic)
-                │   └── Operation.java
+                │   ├── Calculation.java (Aggregate)
+                │   └── Operation.java (Value Object)
                 └── endpoint
                     ├── CalculatorEndpoint.java (Anti-corruption Layer)
                     └── v1
@@ -55,7 +56,7 @@ Vlingo provides a high-performance reactive toolkit for the JVM that is based on
 
 This microservice example demonstrates the following capabilities that are enabled by [vlingo/platform](http://docs.vlingo.io).
 
-- Deployment Heroku Cloud Application Platform 
+- Deployment on Heroku Cloud Platform 
 - Reactive Client-Server Framework with [vlingo/http](https://docs.vlingo.io/vlingo-http)
 - Domain-Driven Design (DDD)
   - Building an anti-corruption layer
@@ -67,7 +68,7 @@ This microservice example demonstrates the following capabilities that are enabl
 There are few steps to prepare a [vlingo/xoom](https://docs.vlingo.io/vlingo-xoom) app for a deployment on Heroku: 
 -First, as mentioned in the [documentation](https://devcenter.heroku.com/articles/procfile), we need to add a Procfile in the app root folder containing command to execute the application jar
 
-    java -jar target/calculator-0.1.jar
+    java -jar target/calculation-0.1.jar
 
 -Since this application was generate by the [Micronaut CLI](https://docs.micronaut.io/latest/guide/index.html#buildCLI), the Maven Shade Plugin is used, by default, to manipulate the jar building. In order to avoid the invalid signature exception while executing the jar, the following transformers must be added into the pom configuration, specifically in the maven shade plugin section:
     
@@ -88,8 +89,8 @@ There are few steps to prepare a [vlingo/xoom](https://docs.vlingo.io/vlingo-xoo
 
 ### REST API
 
-- `method=GET, uri=/v1/calculators/?operation&firstOperand&secondOperand, to=performOperation(String operantion, Integer InfirstOperand, Integer secondOperand)`
-- `method=GET, uri=/v1/calculators/operations, to=retrieveSupportedOperations()`
+- `method=GET, uri=/v1/calculations/?operation&firstOperand&secondOperand, to=performOperation(String operantion, Integer InfirstOperand, Integer secondOperand)`
+- `method=GET, uri=/v1/calculations/operations, to=retrieveSupportedOperations()`
 
 ## Running the Example
 

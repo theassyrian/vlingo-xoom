@@ -1,5 +1,5 @@
 micronaut:
   application:
-    name: calculator
+    name: heroku-microservice
   server:
     port: 8080

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>io.vlingo.example</groupId>
-  <artifactId>calculator</artifactId>
+  <groupId>io.examples</groupId>
+  <artifactId>heroku-microservice</artifactId>
   <version>0.1</version>
   <build>
     <pluginManagement>
@@ -199,7 +199,7 @@
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <exec.mainClass>io.examples.CalculatorApplication</exec.mainClass>
+    <exec.mainClass>io.examples.CalculationApplication</exec.mainClass>
     <jdk.version>1.8</jdk.version>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
   </properties>
