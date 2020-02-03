@@ -1,6 +1,8 @@
 package io.vlingo.xoom.stepflow;
 
-public abstract class Event implements Transition {
+import io.vlingo.symbio.Source;
+
+public abstract class Event extends Source<Event> implements Transition {
 
     private String sourceName = "";
     private String targetName = "";

@@ -8,8 +8,8 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.7.3"
-    id "maven-publish"
     id 'maven'
+    id "maven-publish"
     id "java"
 }
 
@@ -22,15 +22,7 @@ repositories {
 version = '1.0.0'
 
 task buildAll {
-
-    dependsOn(":assemble")
-    subprojects {
-        assemble
-    }
-
-    tasks.findByName(":assemble")
-
-
+    clean
+    assemble
+    publishToMavenLocal
 }
-
-
