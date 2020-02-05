@@ -123,8 +123,8 @@ public class CalculationEndPointTests {
     }
 
     private static String createCalculationPayload(final String operationName,
-                                                           final Integer firstOperand,
-                                                           final Integer secondOperand) {
+                                                   final Integer firstOperand,
+                                                   final Integer secondOperand) {
         final ObjectNode node = MAPPER.createObjectNode();
         node.put("operationName", operationName);
         node.put("firstOperand", firstOperand);
