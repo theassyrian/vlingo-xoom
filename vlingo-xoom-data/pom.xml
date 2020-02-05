@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>advanced-microservice</artifactId>
+    <artifactId>vlingo-xoom-data</artifactId>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>io.vlingo</groupId>
-        <artifactId>vlingo-xoom-examples</artifactId>
+        <artifactId>vlingo-xoom-parent</artifactId>
         <version>1.0.0-RC1</version>
     </parent>
 
@@ -19,9 +19,7 @@
     </properties>
 
     <modules>
-        <module>api-gateway</module>
-        <module>discovery-service</module>
-        <module>account-service</module>
+        <module>vlingo-xoom-data-jpa</module>
     </modules>
 
 </project>

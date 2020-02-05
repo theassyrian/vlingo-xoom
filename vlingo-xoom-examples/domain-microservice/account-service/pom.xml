@@ -9,12 +9,11 @@
 
     <parent>
         <groupId>io.vlingo</groupId>
-        <artifactId>domain-microservice</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <artifactId>vlingo-xoom-examples</artifactId>
+        <version>1.0.0-RC1</version>
     </parent>
 
     <properties>
-        <micronaut.version>1.2.6</micronaut.version>
         <jdk.version>1.8</jdk.version>
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <maven.compiler.source>${jdk.version}</maven.compiler.source>
@@ -79,7 +78,7 @@
         <dependency>
             <groupId>io.vlingo</groupId>
             <artifactId>vlingo-xoom-server</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
+            <version>${vlingo.xoom.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

@@ -6,10 +6,13 @@
 
     <groupId>io.vlingo</groupId>
     <artifactId>vlingo-xoom-parent</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>1.0.0-RC1</version>
     <packaging>pom</packaging>
 
     <properties>
+        <vlingo.platform.version>1.1.0</vlingo.platform.version>
+        <vlingo.xoom.version>1.0.0-RC1</vlingo.xoom.version>
+        <micronaut.version>1.2.7</micronaut.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +21,7 @@
 
     <modules>
         <module>vlingo-xoom-server</module>
-        <module>vlingo-xoom-examples</module>
+        <module>vlingo-xoom-data</module>
     </modules>
 
 </project>
