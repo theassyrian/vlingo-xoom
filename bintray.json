@@ -27,7 +27,7 @@
         },
         {
             "includePattern": "vlingo-xoom-server/pom.xml",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.1.0-RC1/vlingo-xoom-server-1.1.0-RC1.pom",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.0.0-RC1/vlingo-xoom-server-1.0.0-RC1.pom",
             "matrixParams": {
                 "override": 1
             }
@@ -41,7 +41,7 @@
         },
         {
             "includePattern": "vlingo-xoom-data/vlingo-xoom-data-jpa/pom.xml",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.1.0-RC1/vlingo-xoom-server-1.1.0-RC1.pom",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.0.0-RC1/vlingo-xoom-server-1.0.0-RC1.pom",
             "matrixParams": {
                 "override": 1
             }
