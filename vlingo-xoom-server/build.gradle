@@ -18,7 +18,7 @@ repositories {
     maven { url "https://jcenter.bintray.com" }
 }
 group = 'io.vlingo'
-version = '1.0.0-RC1'
+version = '1.2.0'
 
 dependencies {
     annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
@@ -82,7 +82,7 @@ publishing {
             from components.java
             groupId 'io.vlingo'
             artifactId 'vlingo-xoom-server'
-            version '1.0.0-RC1'
+            version '1.2.0'
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', 'Reactive, scalable, and resilient HTTP servers and RESTful services running on vlingo/cluster and vlingo/actors.')
