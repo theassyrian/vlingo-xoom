@@ -17,7 +17,8 @@ before_install:
   - cd vlingo-http && mvn install -DskipTests=true
   - cd ${TRAVIS_BUILD_DIR}
 script:
-- ./gradlew buildAll
+- ./gradlew -p vlingo-xoom-server clean assemble
+- ./gradlew -p vlingo-xoom-data/vlingo-xoom-data-jpa clean assemble
 deploy:
   provider: bintray
   file: bintray.json
