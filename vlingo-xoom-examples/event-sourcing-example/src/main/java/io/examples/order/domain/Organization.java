@@ -29,8 +29,7 @@ public class Organization extends Identity {
         return sendEvent(processor, definedEvent, stateTransition -> {
             // Then accept the state transition
             apply(stateTransition.getTo()).accept(stateTransition);
-            journal.append("organization", 1, definedEvent, new OrganizationInterest(), this);
-
+            journal.append("organization-" + getId(), 1, definedEvent, new OrganizationInterest(), this);
         });
     }
 
@@ -39,7 +38,7 @@ public class Organization extends Identity {
         return sendEvent(processor, confirmEvent, stateTransition -> {
             // Then accept the state transition
             apply(stateTransition.getTo()).accept(stateTransition);
-            journal.append("organization", 1, confirmEvent, new OrganizationInterest(), this);
+            journal.append("organization-" + getId(), 1, confirmEvent, new OrganizationInterest(), this);
 
         });
     }

@@ -41,6 +41,10 @@ public class OrganizationResource implements Endpoint {
                 patch("/organizations/{id}/disable")
                         .param(Long.class)
                         .handle(this::disableOrganization)
+                        .onError(this::getErrorResponse),
+                get("/organizations/{id}/events")
+                        .param(Long.class)
+                        .handle(this::queryOrganizationEvents)
                         .onError(this::getErrorResponse)
         };
     }
@@ -59,6 +63,10 @@ public class OrganizationResource implements Endpoint {
 
     public Completes<Response> disableOrganization(Long id) {
         return response(Created, organizationService.disableOrganization(id));
+    }
+
+    public Completes<Response> queryOrganizationEvents(Long id) {
+        return response(Ok, organizationService.queryOrganizationEvents(id));
     }
 
     @Override

@@ -69,4 +69,10 @@ public class OrganizationService {
                     return organization;
                 });
     }
+
+    public Completes<Object> queryOrganizationEvents(Long id) {
+        return journalService.getOrganizationJournal()
+                .journalReader("organization-" + id)
+                .andThen(entryJournalReader -> entryJournalReader.readNext(5).await());
+    }
 }
