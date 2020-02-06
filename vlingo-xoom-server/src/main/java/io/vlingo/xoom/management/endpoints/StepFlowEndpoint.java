@@ -76,6 +76,6 @@ public class StepFlowEndpoint implements ApplicationEventListener<FlowCreatedEve
 
     @Override
     public void onApplicationEvent(FlowCreatedEvent event) {
-        stepFlow.put(event.getProcessorName(), event.getSource());
+        stepFlow.put(event.getFlowName(), event.getSource());
     }
 }
