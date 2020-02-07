@@ -13,21 +13,35 @@
     },
 
     "version": {
-        "name": "0.1.1-SNAPSHOT",
+        "name": "1.2.0",
         "gpgSign": true
     },
 
     "files": [
         {
-            "includePattern": "build/libs/(.*).jar",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/0.1.1-SNAPSHOT/$1.jar",
+            "includePattern": "vlingo-xoom-server/build/libs/(.*).jar",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.2.0/$1.jar",
             "matrixParams": {
                 "override": 1
             }
         },
         {
-            "includePattern": "build/poms/pom(.*).xml",
-            "uploadPattern": "/io/vlingo/vlingo-xoom-server/0.1.1-SNAPSHOT/vlingo-xoom-server-0.1.1-SNAPSHOT.pom",
+            "includePattern": "vlingo-xoom-server/pom.xml",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-server/1.2.0/vlingo-xoom-server-1.2.0.pom",
+            "matrixParams": {
+                "override": 1
+            }
+        },
+        {
+            "includePattern": "vlingo-xoom-data/vlingo-xoom-data-jpa/build/libs/(.*).jar",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-data/1.2.0/$1.jar",
+            "matrixParams": {
+                "override": 1
+            }
+        },
+        {
+            "includePattern": "vlingo-xoom-data/vlingo-xoom-data-jpa/pom.xml",
+            "uploadPattern": "/io/vlingo/vlingo-xoom-data/1.2.0/vlingo-xoom-data-jpa-1.2.0.pom",
             "matrixParams": {
                 "override": 1
             }

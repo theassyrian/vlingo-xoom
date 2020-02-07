@@ -1,0 +1,9 @@
+include "starter-template"
+include "event-sourcing-example"
+include "basic-microservice"
+include "advanced-microservice:account-service"
+include "advanced-microservice:api-gateway"
+include "advanced-microservice:discovery-service"
+include "domain-microservice:account-service"
+include "domain-microservice:order-service"
+

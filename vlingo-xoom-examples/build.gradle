@@ -1,15 +1,36 @@
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-}
-subprojects { project ->
-    apply plugin: "java"
-
-    repositories {
         mavenLocal()
+        mavenCentral()
         jcenter()
     }
 }
+
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+    id "maven-publish"
+    id 'maven'
+    id "java"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+version = '1.0.0'
+
+task buildAll {
+
+    dependsOn(":assemble")
+    subprojects {
+        assemble
+    }
+
+    tasks.findByName(":assemble")
+
+
+}
+
+

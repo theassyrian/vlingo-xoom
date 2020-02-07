@@ -85,9 +85,6 @@ public interface StepFlow extends Stoppable {
 
     Completes<StateTransition> applyEvent(Event event);
 
-    /**
-     * Answer a new {@code Processor} with the given configuration and characteristics.
-     */
     static <A extends Actor> StepFlow startWith(Stage stage, Class<A> clazz, String actorName) {
         return startWith(stage, clazz, actorName, Definition.NoParameters);
     }
@@ -105,9 +102,6 @@ public interface StepFlow extends Stoppable {
         return processor;
     }
 
-    /**
-     * Answer a new {@code Processor} with the given configuration and characteristics.
-     */
     @SuppressWarnings("unchecked")
     public static <A extends Actor, P> StepFlow startWith(Stage stage, Class<A> clazz, String actorName,
                                                           List<Object> params) {

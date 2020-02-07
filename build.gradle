@@ -9,6 +9,7 @@ buildscript {
 plugins {
     id "com.jfrog.bintray" version "1.7.3"
     id "maven-publish"
+    id "maven"
     id "java"
 }
 
@@ -20,4 +21,11 @@ repositories {
 
 version = '1.0.0'
 
+task buildAll {
+//    dependsOn gradle.includedBuild("vlingo-xoom-examples").task(':clean')
+//    dependsOn gradle.includedBuild("vlingo-xoom-examples").task(':assemble')
+    dependsOn gradle.includedBuilds*.task(':clean')
+    dependsOn gradle.includedBuilds*.task(':assemble')
+    dependsOn gradle.includedBuilds*.task(':buildAll')
+}
 
