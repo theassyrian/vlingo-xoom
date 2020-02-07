@@ -7,6 +7,14 @@ import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Once it is not intended to add any database on this application,
+ * the {@code InMemoryCalculationRepository} is the basic and unique
+ * implementation for {@link CalculationRepository} keeping the
+ * {@link Calculation} data in memory.
+ *
+ * @author Danilo Ambrosio
+ */
 @Singleton
 public class InMemoryCalculationRepository implements CalculationRepository {
 
